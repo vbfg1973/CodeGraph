@@ -7,4 +7,8 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\CodeGraph.Domain\CodeGraph.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

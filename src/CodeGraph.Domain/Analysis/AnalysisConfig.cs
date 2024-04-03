@@ -7,6 +7,6 @@
             Solution = solution;
         }
 
-        public string Solution  { get; }
+        public string Solution { get; }
     }
 }
