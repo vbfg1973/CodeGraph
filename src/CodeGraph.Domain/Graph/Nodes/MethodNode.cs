@@ -5,7 +5,7 @@ namespace CodeGraph.Domain.Graph.Nodes
     public class MethodNode : CodeNode
     {
         public MethodNode(string fullName, string name, (string name, string type)[] args, string returnType,
-            string[] modifiers = null)
+            string[] modifiers = null!)
             : base(fullName, name, modifiers)
         {
             Arguments = string.Join(", ", args.Select(x => $"{x.type} {x.name}"));
@@ -24,7 +24,7 @@ namespace CodeGraph.Domain.Graph.Nodes
             return $"{base.Set(node)}, {node}.returnType = \"{ReturnType}\", {node}.arguments = \"{Arguments}\"";
         }
 
-        protected override void SetPrimaryKey()
+        protected sealed override void SetPrimaryKey()
         {
             Pk = $"{FullName}{Arguments}{ReturnType}".GetHashCode().ToString();
         }

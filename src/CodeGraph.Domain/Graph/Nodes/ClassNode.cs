@@ -2,7 +2,7 @@
 {
     public class ClassNode : TypeNode
     {
-        public ClassNode(string fullName, string name, string[] modifiers = null)
+        public ClassNode(string fullName, string name, string[] modifiers = null!)
             : base(fullName, name, modifiers)
         {
         }

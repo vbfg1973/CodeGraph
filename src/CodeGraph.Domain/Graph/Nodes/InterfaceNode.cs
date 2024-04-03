@@ -2,7 +2,7 @@
 {
     public class InterfaceNode : TypeNode
     {
-        public InterfaceNode(string fullName, string name, string[] modifiers = null)
+        public InterfaceNode(string fullName, string name, string[] modifiers = null!)
             : base(fullName, name, modifiers)
         {
         }

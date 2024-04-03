@@ -16,7 +16,7 @@
         /// <summary>
         ///     Used to compare matching nodes on merge operations
         /// </summary>
-        public virtual string Pk { get; protected set; }
+        public virtual string Pk { get; protected set; } = null!;
 
         protected virtual void SetPrimaryKey()
         {
