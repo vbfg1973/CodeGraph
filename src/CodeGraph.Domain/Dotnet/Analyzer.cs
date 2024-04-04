@@ -65,7 +65,7 @@ namespace CodeGraph.Domain.Dotnet
             {
                 Console.WriteLine($"\tProjectReference: {GetProjectNameFromPath(projectReference)}");
                 yield return new DataDto(
-                    Path.GetFileName(_analysisConfig.Solution),
+                    _analysisConfig.Solution,
                     GetProjectNameFromPath(projectBuild.ProjectFilePath),
                     GetProjectNameFromPath(projectReference),
                     "Package");
@@ -85,7 +85,7 @@ namespace CodeGraph.Domain.Dotnet
                 Console.WriteLine($"\tPackageReference: {name} ({version})");
 
                 yield return new DataDto(
-                    Path.GetFileName(_analysisConfig.Solution),
+                    _analysisConfig.Solution,
                     GetProjectNameFromPath(projectBuild.ProjectFilePath),
                     packageReference.Key,
                     "Package",
