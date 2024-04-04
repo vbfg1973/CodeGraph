@@ -9,6 +9,7 @@
     <ItemGroup>
         <PackageReference Include="Buildalyzer" Version="6.0.4"/>
         <PackageReference Include="Buildalyzer.Workspaces" Version="6.0.4"/>
+        <PackageReference Include="CsvHelper" Version="31.0.3"/>
         <PackageReference Include="Microsoft.CodeAnalysis" Version="4.9.2"/>
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.2"/>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2"/>

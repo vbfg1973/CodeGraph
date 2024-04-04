@@ -1,6 +1,8 @@
-﻿using Buildalyzer;
+﻿using System.Collections;
+using System.Globalization;
+using Buildalyzer;
 using Buildalyzer.Workspaces;
-using CodeGraph.Domain.Analysis;
+using CsvHelper;
 using Microsoft.CodeAnalysis;
 
 namespace CodeGraph.Domain.Dotnet
@@ -29,10 +31,17 @@ namespace CodeGraph.Domain.Dotnet
                 projects.Add((project, projectAnalyzer));
             }
 
-            for (var i = 0; i < projects.Count; i++) AnalyzeProject(i + 1, projects[i]);
+            List<DataDto> dataDtos = new();
+            for (var i = 0; i < projects.Count; i++)
+            {
+                var list = AnalyzeProject(i + 1, projects[i]);
+                dataDtos.AddRange(list);
+            }
+
+            WriteCsv(_analysisConfig.CsvFile, dataDtos);
         }
 
-        private void AnalyzeProject(int index,
+        private IList<DataDto> AnalyzeProject(int index,
             (Microsoft.CodeAnalysis.Project Project, IProjectAnalyzer ProjectAnalyzer) projectTuple)
         {
             var projectName = GetProjectNameFromPath(projectTuple.Project.FilePath);
@@ -40,23 +49,33 @@ namespace CodeGraph.Domain.Dotnet
 
             var projectBuild = projectTuple.ProjectAnalyzer.Build().FirstOrDefault();
 
-            ProjectReferences(projectBuild);
-            PackageReferences(projectBuild);
+            List<DataDto> dataDtos = new();
+            // dataDtos.AddRange(ProjectReferences(projectBuild));
+            dataDtos.AddRange(PackageReferences(projectBuild));
+
+            return dataDtos;
         }
 
-        private static void ProjectReferences(IAnalyzerResult? projectBuild)
+        private IEnumerable<DataDto> ProjectReferences(IAnalyzerResult? projectBuild)
         {
             if (projectBuild == null)
-                return;
+                yield break;
 
             foreach (var projectReference in projectBuild.ProjectReferences)
+            {
                 Console.WriteLine($"\tProjectReference: {GetProjectNameFromPath(projectReference)}");
+                yield return new DataDto(
+                    Path.GetFileName(_analysisConfig.Solution),
+                    GetProjectNameFromPath(projectBuild.ProjectFilePath),
+                    GetProjectNameFromPath(projectReference),
+                    "Package");
+            }
         }
 
-        private static void PackageReferences(IAnalyzerResult? projectBuild)
+        private IEnumerable<DataDto> PackageReferences(IAnalyzerResult? projectBuild)
         {
             if (projectBuild == null)
-                return;
+                yield break;
 
             foreach (var packageReference in projectBuild.PackageReferences)
             {
@@ -64,6 +83,13 @@ namespace CodeGraph.Domain.Dotnet
                 var name = packageReference.Key;
 
                 Console.WriteLine($"\tPackageReference: {name} ({version})");
+
+                yield return new DataDto(
+                    Path.GetFileName(_analysisConfig.Solution),
+                    GetProjectNameFromPath(projectBuild.ProjectFilePath),
+                    packageReference.Key,
+                    "Package",
+                    version);
             }
         }
 
@@ -78,5 +104,19 @@ namespace CodeGraph.Domain.Dotnet
 
             return fileName;
         }
+
+        private static void WriteCsv<T>(string path, IEnumerable<T> records)
+        {
+            using var writer = new StreamWriter(path);
+            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            csv.WriteRecords(records);
+        }
+
+        public record DataDto(
+            string Solution,
+            string Project,
+            string RefersTo,
+            string ReferenceType,
+            string Version = "");
     }
 }
