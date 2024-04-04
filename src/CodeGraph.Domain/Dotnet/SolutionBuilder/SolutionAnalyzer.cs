@@ -1,6 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.MSBuild;
-using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Dotnet.SolutionBuilder
 {
