@@ -1,7 +1,9 @@
-﻿using System.Collections;
-using System.Globalization;
+﻿using System.Globalization;
+using System.Text.Json;
 using Buildalyzer;
 using Buildalyzer.Workspaces;
+using CodeGraph.Domain.Dotnet.Analyzers;
+using CodeGraph.Domain.Graph.Triples.Abstract;
 using CsvHelper;
 using Microsoft.CodeAnalysis;
 
@@ -20,34 +22,41 @@ namespace CodeGraph.Domain.Dotnet
 
         public void Analyze()
         {
-            var projectAnalyzers = _analyzerManager.Projects.Values;
+            IEnumerable<IProjectAnalyzer> projectAnalyzers = _analyzerManager.Projects.Values;
 
-            var workspace = new AdhocWorkspace();
-            var projects = new List<(Project, IProjectAnalyzer)>();
+            AdhocWorkspace workspace = new AdhocWorkspace();
+            List<(Project, IProjectAnalyzer)> projects = new List<(Project, IProjectAnalyzer)>();
 
-            foreach (var projectAnalyzer in projectAnalyzers)
+            foreach (IProjectAnalyzer? projectAnalyzer in projectAnalyzers)
             {
-                var project = projectAnalyzer.AddToWorkspace(workspace);
+                Project? project = projectAnalyzer.AddToWorkspace(workspace);
                 projects.Add((project, projectAnalyzer));
             }
 
-            List<DataDto> dataDtos = new();
-            for (var i = 0; i < projects.Count; i++)
-            {
-                var list = AnalyzeProject(i + 1, projects[i]);
-                dataDtos.AddRange(list);
-            }
+            // List<DataDto> dataDtos = new();
+            // for (var i = 0; i < projects.Count; i++)
+            // {
+            //     var list = AnalyzeProject(i + 1, projects[i]);
+            //     dataDtos.AddRange(list);
+            // }
+            // WriteCsv(_analysisConfig.CsvFile, dataDtos);
 
-            WriteCsv(_analysisConfig.CsvFile, dataDtos);
+            FileSystemAnalyzer fileSystemAnalyzer = new FileSystemAnalyzer();
+            List<Triple> triples = fileSystemAnalyzer.FileSystemTriplesFromProjects(projects).ToList();
+
+            foreach (Triple triple in triples)
+            {
+                Console.WriteLine(JsonSerializer.Serialize(triple, new JsonSerializerOptions { WriteIndented = true }));
+            }
         }
 
         private IList<DataDto> AnalyzeProject(int index,
             (Microsoft.CodeAnalysis.Project Project, IProjectAnalyzer ProjectAnalyzer) projectTuple)
         {
-            var projectName = GetProjectNameFromPath(projectTuple.Project.FilePath);
+            string projectName = GetProjectNameFromPath(projectTuple.Project.FilePath);
             Console.Error.WriteLine($"{index} {projectName}");
 
-            var projectBuild = projectTuple.ProjectAnalyzer.Build().FirstOrDefault();
+            IAnalyzerResult? projectBuild = projectTuple.ProjectAnalyzer.Build().FirstOrDefault();
 
             List<DataDto> dataDtos = new();
             // dataDtos.AddRange(ProjectReferences(projectBuild));
@@ -59,9 +68,11 @@ namespace CodeGraph.Domain.Dotnet
         private IEnumerable<DataDto> ProjectReferences(IAnalyzerResult? projectBuild)
         {
             if (projectBuild == null)
+            {
                 yield break;
+            }
 
-            foreach (var projectReference in projectBuild.ProjectReferences)
+            foreach (string? projectReference in projectBuild.ProjectReferences)
             {
                 Console.WriteLine($"\tProjectReference: {GetProjectNameFromPath(projectReference)}");
                 yield return new DataDto(
@@ -75,12 +86,15 @@ namespace CodeGraph.Domain.Dotnet
         private IEnumerable<DataDto> PackageReferences(IAnalyzerResult? projectBuild)
         {
             if (projectBuild == null)
-                yield break;
-
-            foreach (var packageReference in projectBuild.PackageReferences)
             {
-                var version = packageReference.Value.Values.FirstOrDefault(v => v.Contains('.')) ?? "Unknown";
-                var name = packageReference.Key;
+                yield break;
+            }
+
+            foreach (KeyValuePair<string, IReadOnlyDictionary<string, string>> packageReference in projectBuild
+                         .PackageReferences)
+            {
+                string version = packageReference.Value.Values.FirstOrDefault(v => v.Contains('.')) ?? "Unknown";
+                string? name = packageReference.Key;
 
                 Console.WriteLine($"\tPackageReference: {name} ({version})");
 
@@ -96,9 +110,12 @@ namespace CodeGraph.Domain.Dotnet
         private static string GetProjectNameFromPath(string? projectPath)
         {
             if (projectPath == null)
+            {
                 return string.Empty;
+            }
 
-            var fileName = projectPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries).Last();
+            string fileName = projectPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries)
+                .Last();
             fileName = fileName.Replace(".csproj", "");
             fileName = fileName.Replace(".vbproj", "");
 
@@ -107,8 +124,8 @@ namespace CodeGraph.Domain.Dotnet
 
         private static void WriteCsv<T>(string path, IEnumerable<T> records)
         {
-            using var writer = new StreamWriter(path);
-            using var csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            using StreamWriter writer = new StreamWriter(path);
+            using CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
             csv.WriteRecords(records);
         }
 
