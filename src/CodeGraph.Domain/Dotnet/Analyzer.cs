@@ -1,9 +1,8 @@
-﻿using System.Collections;
-using System.Globalization;
+﻿using System.Globalization;
+using System.Text.Json;
 using Buildalyzer;
 using Buildalyzer.Workspaces;
 using CodeGraph.Domain.Dotnet.Analyzers;
-using CodeGraph.Domain.Graph.Triples.Abstract;
 using CsvHelper;
 using Microsoft.CodeAnalysis;
 
@@ -41,25 +40,12 @@ namespace CodeGraph.Domain.Dotnet
             // }
             // WriteCsv(_analysisConfig.CsvFile, dataDtos);
 
-            FileSystemTriples(projects);
-        }
+            var fileSystemAnalyzer = new FileSystemAnalyzer();
+            var triples = fileSystemAnalyzer.FileSystemTriplesFromProjects(projects).ToList();
 
-        private static IEnumerable<Triple> FileSystemTriples(List<(Project, IProjectAnalyzer)> projects)
-        {
-            var allDocumentFilePaths = projects
-                .Select(tuple => tuple.Item1)
-                .Select(p => p.Documents)
-                .SelectMany(documents => documents.Select(document => document.FilePath))
-                .Where(filePath => !string.IsNullOrEmpty(filePath))
-                .Where(filePath => !filePath!.Contains("obj"))
-                .ToList();
-
-            foreach (var filepath in allDocumentFilePaths)
+            foreach (var triple in triples)
             {
-                foreach (var triple in FileSystemHelpers.GetFileSystemChain(filepath!).ToList())
-                {
-                    yield return triple;
-                }
+                Console.WriteLine(JsonSerializer.Serialize(triple, new JsonSerializerOptions() { WriteIndented = true }));
             }
         }
 
