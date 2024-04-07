@@ -2,14 +2,17 @@
 using System.Text.Json;
 using Buildalyzer;
 using Buildalyzer.Workspaces;
-using CodeGraph.Domain.Dotnet.Analyzers;
+using CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp;
+using CodeGraph.Domain.Dotnet.Analyzers.FileSystem;
+using CodeGraph.Domain.Graph.Nodes;
+using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using CsvHelper;
 using Microsoft.CodeAnalysis;
 
-namespace CodeGraph.Domain.Dotnet
+namespace CodeGraph.Domain.Dotnet.Analyzers
 {
-    public class Analyzer
+    public class Analyzer : IAnalyzer
     {
         private readonly AnalysisConfig _analysisConfig;
         private readonly AnalyzerManager _analyzerManager;
@@ -20,12 +23,13 @@ namespace CodeGraph.Domain.Dotnet
             _analyzerManager = new AnalyzerManager(_analysisConfig.Solution);
         }
 
-        public void Analyze()
+        public async Task<IList<Triple>> Analyze()
         {
+            List<Triple> triples = new();
             IEnumerable<IProjectAnalyzer> projectAnalyzers = _analyzerManager.Projects.Values;
 
-            AdhocWorkspace workspace = new AdhocWorkspace();
-            List<(Project, IProjectAnalyzer)> projects = new List<(Project, IProjectAnalyzer)>();
+            AdhocWorkspace workspace = new();
+            List<(Project, IProjectAnalyzer)> projects = new();
 
             foreach (IProjectAnalyzer? projectAnalyzer in projectAnalyzers)
             {
@@ -41,14 +45,35 @@ namespace CodeGraph.Domain.Dotnet
             // }
             // WriteCsv(_analysisConfig.CsvFile, dataDtos);
 
-            FileSystemAnalyzer fileSystemAnalyzer = new FileSystemAnalyzer();
-            List<Triple> triples = fileSystemAnalyzer.FileSystemTriplesFromProjects(projects).ToList();
-
-            foreach (Triple triple in triples)
+            foreach ((Project, IProjectAnalyzer) proj in projects.Where(x => x.Item1.SupportsCompilation))
             {
-                Console.WriteLine(JsonSerializer.Serialize(triple, new JsonSerializerOptions { WriteIndented = true }));
+                Console.Error.WriteLine($"{proj.Item1.Name}");
+                Compilation? compilation = await proj.Item1.GetCompilationAsync();
+
+                if (compilation == null) continue;
+
+                IEnumerable<SyntaxTree> syntaxTrees =
+                    compilation
+                        .SyntaxTrees
+                        .Where(x => !x.FilePath.Contains("obj"));
+
+                FileSystemAnalyzer fileSystemAnalyzer = new();
+                foreach (SyntaxTree st in syntaxTrees)
+                {
+                    IList<Triple> fileSystemTriples = await fileSystemAnalyzer.GetFileSystemChain(st.FilePath);
+                    TripleIncludedIn? fileTriple = fileSystemTriples.Last() as TripleIncludedIn;
+                    FileNode? fileNode = fileTriple!.NodeA as FileNode;
+                    triples.AddRange(fileSystemTriples);
+
+                    SemanticModel sem = compilation.GetSemanticModel(st);
+                    CSharpCodeAnalyzer csharpCodeAnalyzer = new(st, sem, fileNode!);
+                    triples.AddRange(await csharpCodeAnalyzer.Analyze());
+                }
             }
+
+            return triples;
         }
+
 
         private IList<DataDto> AnalyzeProject(int index,
             (Microsoft.CodeAnalysis.Project Project, IProjectAnalyzer ProjectAnalyzer) projectTuple)
@@ -67,10 +92,7 @@ namespace CodeGraph.Domain.Dotnet
 
         private IEnumerable<DataDto> ProjectReferences(IAnalyzerResult? projectBuild)
         {
-            if (projectBuild == null)
-            {
-                yield break;
-            }
+            if (projectBuild == null) yield break;
 
             foreach (string? projectReference in projectBuild.ProjectReferences)
             {
@@ -85,10 +107,7 @@ namespace CodeGraph.Domain.Dotnet
 
         private IEnumerable<DataDto> PackageReferences(IAnalyzerResult? projectBuild)
         {
-            if (projectBuild == null)
-            {
-                yield break;
-            }
+            if (projectBuild == null) yield break;
 
             foreach (KeyValuePair<string, IReadOnlyDictionary<string, string>> packageReference in projectBuild
                          .PackageReferences)
@@ -109,10 +128,7 @@ namespace CodeGraph.Domain.Dotnet
 
         private static string GetProjectNameFromPath(string? projectPath)
         {
-            if (projectPath == null)
-            {
-                return string.Empty;
-            }
+            if (projectPath == null) return string.Empty;
 
             string fileName = projectPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries)
                 .Last();
@@ -124,8 +140,8 @@ namespace CodeGraph.Domain.Dotnet
 
         private static void WriteCsv<T>(string path, IEnumerable<T> records)
         {
-            using StreamWriter writer = new StreamWriter(path);
-            using CsvWriter csv = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            using StreamWriter writer = new(path);
+            using CsvWriter csv = new(writer, CultureInfo.InvariantCulture);
             csv.WriteRecords(records);
         }
 
