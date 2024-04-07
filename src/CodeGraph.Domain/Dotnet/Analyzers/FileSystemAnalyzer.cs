@@ -52,7 +52,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
 
                 if (i < chain.Length - 1)
                 {
-                    FolderNode currNode = new FolderNode(Path.Combine(chain[..rangeEnd]), chain[i]);
+                    FolderNode currNode = new(Path.Combine(chain[..rangeEnd]), chain[i]);
 
                     if (prevNode != default)
                     {
@@ -65,7 +65,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
 
                 else if (i == chain.Length - 1 && fileName == chain[i])
                 {
-                    FileNode currNode = new FileNode(Path.Combine(chain[..rangeEnd]), chain[i]);
+                    FileNode currNode = new(Path.Combine(chain[..rangeEnd]), chain[i]);
 
                     if (prevNode == default)
                     {

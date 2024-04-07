@@ -1,8 +1,4 @@
-﻿using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
-using CodeGraph.Domain.Graph.Triples.Abstract;
-
-namespace CodeGraph.Domain.Dotnet.Analyzers
+﻿namespace CodeGraph.Domain.Dotnet.Analyzers
 {
     public static class FileSystemHelpers
     {
@@ -27,7 +23,5 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
         {
             throw new NotImplementedException();
         }
-
-       
     }
 }
