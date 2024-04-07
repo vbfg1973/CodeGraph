@@ -2,6 +2,8 @@
 using System.Globalization;
 using Buildalyzer;
 using Buildalyzer.Workspaces;
+using CodeGraph.Domain.Dotnet.Analyzers;
+using CodeGraph.Domain.Graph.Triples.Abstract;
 using CsvHelper;
 using Microsoft.CodeAnalysis;
 
@@ -31,14 +33,34 @@ namespace CodeGraph.Domain.Dotnet
                 projects.Add((project, projectAnalyzer));
             }
 
-            List<DataDto> dataDtos = new();
-            for (var i = 0; i < projects.Count; i++)
-            {
-                var list = AnalyzeProject(i + 1, projects[i]);
-                dataDtos.AddRange(list);
-            }
+            // List<DataDto> dataDtos = new();
+            // for (var i = 0; i < projects.Count; i++)
+            // {
+            //     var list = AnalyzeProject(i + 1, projects[i]);
+            //     dataDtos.AddRange(list);
+            // }
+            // WriteCsv(_analysisConfig.CsvFile, dataDtos);
 
-            WriteCsv(_analysisConfig.CsvFile, dataDtos);
+            FileSystemTriples(projects);
+        }
+
+        private static IEnumerable<Triple> FileSystemTriples(List<(Project, IProjectAnalyzer)> projects)
+        {
+            var allDocumentFilePaths = projects
+                .Select(tuple => tuple.Item1)
+                .Select(p => p.Documents)
+                .SelectMany(documents => documents.Select(document => document.FilePath))
+                .Where(filePath => !string.IsNullOrEmpty(filePath))
+                .Where(filePath => !filePath!.Contains("obj"))
+                .ToList();
+
+            foreach (var filepath in allDocumentFilePaths)
+            {
+                foreach (var triple in FileSystemHelpers.GetFileSystemChain(filepath!).ToList())
+                {
+                    yield return triple;
+                }
+            }
         }
 
         private IList<DataDto> AnalyzeProject(int index,
