@@ -2,10 +2,6 @@
 using System.Text.Json;
 using Buildalyzer;
 using Buildalyzer.Workspaces;
-using CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp;
-using CodeGraph.Domain.Dotnet.Analyzers.FileSystem;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using CsvHelper;
 using Microsoft.CodeAnalysis;
@@ -29,114 +25,54 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
             IEnumerable<IProjectAnalyzer> projectAnalyzers = _analyzerManager.Projects.Values;
 
             AdhocWorkspace workspace = new();
-            List<(Project, IProjectAnalyzer)> projects = new();
+            List<(Project, IProjectAnalyzer, IAnalyzerResult)> projects = new();
 
             foreach (IProjectAnalyzer? projectAnalyzer in projectAnalyzers)
             {
                 Project? project = projectAnalyzer.AddToWorkspace(workspace);
-                projects.Add((project, projectAnalyzer));
+                IAnalyzerResult? analyzerResult = projectAnalyzer.Build().First();
+                projects.Add((project, projectAnalyzer, analyzerResult));
+
+                ProjectReferenceAnalyzer projectReferenceAnalyzer = new(project, projectAnalyzer, analyzerResult);
+
+                IList<Triple> projectTriples = await projectReferenceAnalyzer.Analyze();
+                Console.WriteLine(JsonSerializer.Serialize(projectTriples,
+                    new JsonSerializerOptions { WriteIndented = true }));
+
+                triples.AddRange(projectTriples);
             }
 
-            // List<DataDto> dataDtos = new();
-            // for (var i = 0; i < projects.Count; i++)
+
+            // foreach ((Project, IProjectAnalyzer, IAnalyzerResult) proj in projects.Where(x =>
+            //              x.Item1.SupportsCompilation))
             // {
-            //     var list = AnalyzeProject(i + 1, projects[i]);
-            //     dataDtos.AddRange(list);
+            //     Console.Error.WriteLine($"{proj.Item1.Name}");
+            //     Compilation? compilation = await proj.Item1.GetCompilationAsync();
+            //
+            //     if (compilation == null) continue;
+            //
+            //     IEnumerable<SyntaxTree> syntaxTrees =
+            //         compilation
+            //             .SyntaxTrees
+            //             .Where(x => !x.FilePath.Contains("obj"));
+            //
+            //     FileSystemAnalyzer fileSystemAnalyzer = new();
+            //     foreach (SyntaxTree st in syntaxTrees)
+            //     {
+            //         IList<Triple> fileSystemTriples = await fileSystemAnalyzer.GetFileSystemChain(st.FilePath);
+            //         TripleIncludedIn? fileTriple = fileSystemTriples.Last() as TripleIncludedIn;
+            //         FileNode? fileNode = fileTriple!.NodeA as FileNode;
+            //         triples.AddRange(fileSystemTriples);
+            //
+            //         SemanticModel sem = compilation.GetSemanticModel(st);
+            //         CSharpCodeAnalyzer csharpCodeAnalyzer = new(st, sem, fileNode!);
+            //         triples.AddRange(await csharpCodeAnalyzer.Analyze());
+            //     }
             // }
-            // WriteCsv(_analysisConfig.CsvFile, dataDtos);
-
-            foreach ((Project, IProjectAnalyzer) proj in projects.Where(x => x.Item1.SupportsCompilation))
-            {
-                Console.Error.WriteLine($"{proj.Item1.Name}");
-                Compilation? compilation = await proj.Item1.GetCompilationAsync();
-
-                if (compilation == null) continue;
-
-                IEnumerable<SyntaxTree> syntaxTrees =
-                    compilation
-                        .SyntaxTrees
-                        .Where(x => !x.FilePath.Contains("obj"));
-
-                FileSystemAnalyzer fileSystemAnalyzer = new();
-                foreach (SyntaxTree st in syntaxTrees)
-                {
-                    IList<Triple> fileSystemTriples = await fileSystemAnalyzer.GetFileSystemChain(st.FilePath);
-                    TripleIncludedIn? fileTriple = fileSystemTriples.Last() as TripleIncludedIn;
-                    FileNode? fileNode = fileTriple!.NodeA as FileNode;
-                    triples.AddRange(fileSystemTriples);
-
-                    SemanticModel sem = compilation.GetSemanticModel(st);
-                    CSharpCodeAnalyzer csharpCodeAnalyzer = new(st, sem, fileNode!);
-                    triples.AddRange(await csharpCodeAnalyzer.Analyze());
-                }
-            }
 
             return triples;
         }
 
-
-        private IList<DataDto> AnalyzeProject(int index,
-            (Microsoft.CodeAnalysis.Project Project, IProjectAnalyzer ProjectAnalyzer) projectTuple)
-        {
-            string projectName = GetProjectNameFromPath(projectTuple.Project.FilePath);
-            Console.Error.WriteLine($"{index} {projectName}");
-
-            IAnalyzerResult? projectBuild = projectTuple.ProjectAnalyzer.Build().FirstOrDefault();
-
-            List<DataDto> dataDtos = new();
-            // dataDtos.AddRange(ProjectReferences(projectBuild));
-            dataDtos.AddRange(PackageReferences(projectBuild));
-
-            return dataDtos;
-        }
-
-        private IEnumerable<DataDto> ProjectReferences(IAnalyzerResult? projectBuild)
-        {
-            if (projectBuild == null) yield break;
-
-            foreach (string? projectReference in projectBuild.ProjectReferences)
-            {
-                Console.WriteLine($"\tProjectReference: {GetProjectNameFromPath(projectReference)}");
-                yield return new DataDto(
-                    _analysisConfig.Solution,
-                    GetProjectNameFromPath(projectBuild.ProjectFilePath),
-                    GetProjectNameFromPath(projectReference),
-                    "Package");
-            }
-        }
-
-        private IEnumerable<DataDto> PackageReferences(IAnalyzerResult? projectBuild)
-        {
-            if (projectBuild == null) yield break;
-
-            foreach (KeyValuePair<string, IReadOnlyDictionary<string, string>> packageReference in projectBuild
-                         .PackageReferences)
-            {
-                string version = packageReference.Value.Values.FirstOrDefault(v => v.Contains('.')) ?? "Unknown";
-                string? name = packageReference.Key;
-
-                Console.WriteLine($"\tPackageReference: {name} ({version})");
-
-                yield return new DataDto(
-                    _analysisConfig.Solution,
-                    GetProjectNameFromPath(projectBuild.ProjectFilePath),
-                    packageReference.Key,
-                    "Package",
-                    version);
-            }
-        }
-
-        private static string GetProjectNameFromPath(string? projectPath)
-        {
-            if (projectPath == null) return string.Empty;
-
-            string fileName = projectPath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries)
-                .Last();
-            fileName = fileName.Replace(".csproj", "");
-            fileName = fileName.Replace(".vbproj", "");
-
-            return fileName;
-        }
 
         private static void WriteCsv<T>(string path, IEnumerable<T> records)
         {
