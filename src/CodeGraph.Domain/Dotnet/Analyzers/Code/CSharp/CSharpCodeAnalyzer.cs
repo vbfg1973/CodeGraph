@@ -92,7 +92,8 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
 
             foreach (BaseTypeSyntax baseTypeSyntax in declaration.BaseList.Types)
             {
-                TypeNode parentNode = sem.GetTypeInfo(baseTypeSyntax.Type).CreateTypeNode();
+                var baseType = baseTypeSyntax.Type;
+                TypeNode parentNode = sem.GetTypeInfo(baseType).CreateTypeNode();
                 switch (node)
                 {
                     case ClassNode classNode:
