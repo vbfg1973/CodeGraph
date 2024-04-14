@@ -5,7 +5,7 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
-namespace CodeGraph.Domain.Tests
+namespace CodeGraph.Domain.Tests.CodeAnalyzers
 {
     public class CSharpCodeAnalyzerTests
     {
