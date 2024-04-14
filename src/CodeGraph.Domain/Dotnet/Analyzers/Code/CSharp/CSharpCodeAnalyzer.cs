@@ -41,6 +41,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
 
                 triples.Add(new TripleDeclaredAt(node!, fileNode));
                 triples.AddRange(GetInherits(dec, semanticModel, node!));
+                triples.AddRange(GetMethodsAll(dec, semanticModel, node));
             }
 
             return triples;
@@ -51,12 +52,12 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
             List<Triple> triples = new();
 
             SyntaxNode root = await syntaxTree.GetRootAsync();
-            IEnumerable<ClassDeclarationSyntax> declarations =
+            IEnumerable<ClassDeclarationSyntax> classDeclarations =
                 root
                     .DescendantNodes()
                     .OfType<ClassDeclarationSyntax>();
 
-            foreach (ClassDeclarationSyntax dec in declarations)
+            foreach (ClassDeclarationSyntax dec in classDeclarations)
             {
                 ISymbol? symbol = semanticModel.GetDeclaredSymbol(dec);
                 if (symbol == null) continue;
@@ -67,7 +68,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
 
                 triples.Add(new TripleDeclaredAt(node!, fileNode));
                 triples.AddRange(GetInherits(dec, semanticModel, node));
-                // triples.AddRange(GetMethodsAll(dec, semanticModel, node));
+                triples.AddRange(GetMethodsAll(dec, semanticModel, node));
             }
 
             return triples;
@@ -118,15 +119,15 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
                 MethodNode methodNode = CreateMethodNode(methodSymbol, method);
                 yield return new TripleHave(node, methodNode);
 
-                List<ExpressionSyntax> expressions = method
-                    .DescendantNodes()
-                    .OfType<ExpressionSyntax>()
-                    .ToList();
-
-                foreach (ExpressionSyntax syntax in expressions)
-                {
-                    if (TryGetExpressionInvocation(sem, syntax, methodNode, out Triple triple)) yield return triple;
-                }
+                // List<ExpressionSyntax> expressions = method
+                //     .DescendantNodes()
+                //     .OfType<ExpressionSyntax>()
+                //     .ToList();
+                //
+                // foreach (ExpressionSyntax syntax in expressions)
+                // {
+                //     if (TryGetExpressionInvocation(sem, syntax, methodNode, out Triple triple)) yield return triple;
+                // }
             }
         }
 
