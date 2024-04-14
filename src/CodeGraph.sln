@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph", "CodeGraph\Code
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain", "CodeGraph.Domain\CodeGraph.Domain.csproj", "{CFFE2396-27E4-4B6D-9D87-40CAD37E3B9B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Tests", "CodeGraph.Domain.Tests\CodeGraph.Domain.Tests.csproj", "{FF530E09-5626-472D-80A4-AF9D747E6E79}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{CFFE2396-27E4-4B6D-9D87-40CAD37E3B9B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CFFE2396-27E4-4B6D-9D87-40CAD37E3B9B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CFFE2396-27E4-4B6D-9D87-40CAD37E3B9B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF530E09-5626-472D-80A4-AF9D747E6E79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF530E09-5626-472D-80A4-AF9D747E6E79}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF530E09-5626-472D-80A4-AF9D747E6E79}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF530E09-5626-472D-80A4-AF9D747E6E79}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

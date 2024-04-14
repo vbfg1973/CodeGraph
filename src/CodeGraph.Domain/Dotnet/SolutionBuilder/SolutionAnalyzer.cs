@@ -37,10 +37,7 @@ namespace CodeGraph.Domain.Dotnet.SolutionBuilder
         public bool TryGetCompilation(string projectName, out Compilation compilation)
         {
             compilation = null!;
-            if (!_compilations.TryGetValue(projectName, out Compilation? value))
-            {
-                return false;
-            }
+            if (!_compilations.TryGetValue(projectName, out Compilation? value)) return false;
 
             compilation = value;
             return true;
@@ -56,10 +53,7 @@ namespace CodeGraph.Domain.Dotnet.SolutionBuilder
         {
             documents = ArraySegment<Document>.Empty;
 
-            if (!_projects.TryGetValue(projectName, out Project? enumerable))
-            {
-                return false;
-            }
+            if (!_projects.TryGetValue(projectName, out Project? enumerable)) return false;
 
             documents = enumerable.Documents;
             return true;
@@ -72,10 +66,7 @@ namespace CodeGraph.Domain.Dotnet.SolutionBuilder
                 await Console.Error.WriteLineAsync($"Building: {project.Name}");
                 Compilation? compilation = await project.GetCompilationAsync();
 
-                if (compilation == null)
-                {
-                    continue;
-                }
+                if (compilation == null) continue;
 
                 _compilations[project.Name] = compilation;
                 _projects[project.Name] = project;

@@ -37,7 +37,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
         {
             foreach (string analyzerResultProjectReference in analyzerResult.ProjectReferences)
             {
-                var node = new ProjectNode(GetProjectNameFromPath(analyzerResultProjectReference));
+                ProjectNode node = new ProjectNode(GetProjectNameFromPath(analyzerResultProjectReference));
                 yield return new TripleDependsOnProject(projectNode, node);
             }
         }
@@ -48,7 +48,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
                          .ToList())
             {
                 string version = x.Value.Values.FirstOrDefault(x => x.Contains('.')) ?? "none";
-                PackageNode packageNode = new PackageNode(x.Key, x.Key, version);
+                PackageNode packageNode = new(x.Key, x.Key, version);
                 yield return new TripleDependsOnPackage(projectNode, packageNode);
             }
         }

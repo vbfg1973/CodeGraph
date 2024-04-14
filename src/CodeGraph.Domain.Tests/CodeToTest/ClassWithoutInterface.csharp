@@ -1,0 +1,7 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest
+{
+    public class ClassWithoutInterface
+    {
+        
+    }
+}

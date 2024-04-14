@@ -1,5 +1,4 @@
 ﻿using System.Globalization;
-using System.Text.Json;
 using Buildalyzer;
 using Buildalyzer.Workspaces;
 using CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp;
@@ -36,7 +35,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
                 Project? project = projectAnalyzer.AddToWorkspace(workspace);
                 IAnalyzerResult? analyzerResult = projectAnalyzer.Build().First();
                 projects.Add((project, projectAnalyzer, analyzerResult));
-                
+
                 await Console.Error.WriteLineAsync($"Project analysis: {project.Name}");
 
                 ProjectReferenceAnalyzer projectReferenceAnalyzer = new(project, projectAnalyzer, analyzerResult);
@@ -54,14 +53,14 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
             {
                 await Console.Error.WriteLineAsync($"Code analysis: {proj.Item1.Name}");
                 Compilation? compilation = await proj.Item1.GetCompilationAsync();
-            
+
                 if (compilation == null) continue;
-            
+
                 IEnumerable<SyntaxTree> syntaxTrees =
                     compilation
                         .SyntaxTrees
                         .Where(x => !x.FilePath.Contains("obj"));
-            
+
                 FileSystemAnalyzer fileSystemAnalyzer = new();
                 foreach (SyntaxTree st in syntaxTrees)
                 {
@@ -69,7 +68,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
                     TripleIncludedIn? fileTriple = fileSystemTriples.Last() as TripleIncludedIn;
                     FileNode? fileNode = fileTriple!.NodeA as FileNode;
                     triples.AddRange(fileSystemTriples);
-            
+
                     SemanticModel sem = compilation.GetSemanticModel(st);
                     CSharpCodeAnalyzer csharpCodeAnalyzer = new(st, sem, fileNode!);
                     triples.AddRange(await csharpCodeAnalyzer.Analyze());

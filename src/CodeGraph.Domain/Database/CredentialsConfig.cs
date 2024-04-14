@@ -2,10 +2,6 @@
 {
     public class CredentialsConfig
     {
-        public string Database { get; }
-        public string User { get; }
-        public string Password { get; }
-
         public CredentialsConfig(string credentials)
         {
             if (string.IsNullOrEmpty(credentials)) return;
@@ -15,5 +11,9 @@
             User = args[1];
             Password = args[2];
         }
+
+        public string Database { get; }
+        public string User { get; }
+        public string Password { get; }
     }
 }

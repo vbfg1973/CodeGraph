@@ -68,10 +68,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.FileSystem
                 {
                     FileNode currNode = new(Path.Combine(chain[..rangeEnd]), chain[i]);
 
-                    if (prevNode == default)
-                    {
-                        continue;
-                    }
+                    if (prevNode == default) continue;
 
                     triple = new TripleIncludedIn(currNode, prevNode);
                     triples.Add(triple);

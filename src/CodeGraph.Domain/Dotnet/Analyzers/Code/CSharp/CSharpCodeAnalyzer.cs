@@ -90,9 +90,9 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
         {
             if (declaration.BaseList == null) yield break;
 
-            foreach (TypeNode parentNode in declaration.BaseList.Types.Select(baseTypeSyntax =>
-                         sem.GetTypeInfo(baseTypeSyntax.Type).CreateTypeNode()))
+            foreach (BaseTypeSyntax baseTypeSyntax in declaration.BaseList.Types)
             {
+                TypeNode parentNode = sem.GetTypeInfo(baseTypeSyntax.Type).CreateTypeNode();
                 switch (node)
                 {
                     case ClassNode classNode:
@@ -121,22 +121,20 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
                     .DescendantNodes()
                     .OfType<ExpressionSyntax>()
                     .ToList();
-                
+
                 foreach (ExpressionSyntax syntax in expressions)
                 {
-                    if (TryGetExpressionInvocation(sem, syntax, methodNode, out Triple triple))
-                    {
-                        yield return triple;
-                    }
+                    if (TryGetExpressionInvocation(sem, syntax, methodNode, out Triple triple)) yield return triple;
                 }
             }
         }
 
-        private static bool TryGetExpressionInvocation(SemanticModel sem, ExpressionSyntax syntax, MethodNode methodNode,
+        private static bool TryGetExpressionInvocation(SemanticModel sem, ExpressionSyntax syntax,
+            MethodNode methodNode,
             out Triple triple)
         {
             triple = null!;
-            
+
             switch (syntax)
             {
                 case ObjectCreationExpressionSyntax creation:
