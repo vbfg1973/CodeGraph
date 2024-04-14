@@ -9,7 +9,7 @@ namespace CodeGraph.Domain.Graph.Triples
         public TripleUsesWord(TypeNode nodeA, WordNode nodeB) : base(nodeA, nodeB, new HasWordInNameRelationship())
         {
         }
-        
+
         public TripleUsesWord(MethodNode nodeA, WordNode nodeB) : base(nodeA, nodeB, new HasWordInNameRelationship())
         {
         }
