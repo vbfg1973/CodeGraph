@@ -4,6 +4,12 @@ namespace CodeGraph.Domain
 {
     public static partial class StringExtensions
     {
+        /// <summary>
+        ///     Splits string on capitals. Will honour consecutive capitals such as "USA" as full
+        ///     words and not split on those
+        /// </summary>
+        /// <param name="str"></param>
+        /// <returns></returns>
         public static IEnumerable<string> SplitStringOnCapitals(this string str)
         {
             Regex regex = SplitStringRegex();
