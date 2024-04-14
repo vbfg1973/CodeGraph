@@ -36,12 +36,14 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
                 Project? project = projectAnalyzer.AddToWorkspace(workspace);
                 IAnalyzerResult? analyzerResult = projectAnalyzer.Build().First();
                 projects.Add((project, projectAnalyzer, analyzerResult));
+                
+                await Console.Error.WriteLineAsync($"Project analysis: {project.Name}");
 
                 ProjectReferenceAnalyzer projectReferenceAnalyzer = new(project, projectAnalyzer, analyzerResult);
 
                 IList<Triple> projectTriples = await projectReferenceAnalyzer.Analyze();
-                Console.WriteLine(JsonSerializer.Serialize(projectTriples,
-                    new JsonSerializerOptions { WriteIndented = true }));
+                // Console.WriteLine(JsonSerializer.Serialize(projectTriples,
+                //     new JsonSerializerOptions { WriteIndented = true }));
 
                 triples.AddRange(projectTriples);
             }
@@ -50,7 +52,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
             foreach ((Project, IProjectAnalyzer, IAnalyzerResult) proj in projects.Where(x =>
                          x.Item1.SupportsCompilation))
             {
-                Console.Error.WriteLine($"{proj.Item1.Name}");
+                await Console.Error.WriteLineAsync($"Code analysis: {proj.Item1.Name}");
                 Compilation? compilation = await proj.Item1.GetCompilationAsync();
             
                 if (compilation == null) continue;

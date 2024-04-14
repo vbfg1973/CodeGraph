@@ -1,4 +1,5 @@
-﻿using CodeGraph.Domain.Graph.Triples.Abstract;
+﻿using System.Text.Json;
+using CodeGraph.Domain.Graph.Triples.Abstract;
 using Neo4j.Driver;
 
 namespace CodeGraph.Domain.Database
@@ -26,6 +27,7 @@ namespace CodeGraph.Domain.Database
                 Console.WriteLine($"Processing {triples.Count} triples...");
                 foreach (Triple triple in triples)
                 {
+                    await Console.Error.WriteLineAsync(JsonSerializer.Serialize(triple));
                     await session.RunAsync(triple.ToString());
                 }
 
@@ -33,7 +35,7 @@ namespace CodeGraph.Domain.Database
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                Console.WriteLine(ex);
             }
             finally
             {
