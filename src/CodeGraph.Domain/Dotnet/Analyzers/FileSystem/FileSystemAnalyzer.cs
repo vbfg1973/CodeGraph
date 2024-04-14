@@ -4,7 +4,7 @@ using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers
+namespace CodeGraph.Domain.Dotnet.Analyzers.FileSystem
 {
     public class FileSystemAnalyzer
     {
@@ -13,8 +13,9 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
         /// </summary>
         /// <param name="projects"></param>
         /// <returns></returns>
-        public IEnumerable<Triple> FileSystemTriplesFromProjects(List<(Project, IProjectAnalyzer)> projects)
+        public async Task<IList<Triple>> FileSystemTriplesFromProjects(List<(Project, IProjectAnalyzer)> projects)
         {
+            List<Triple> triples = new();
             List<string?> allDocumentFilePaths = projects
                 .Select(tuple => tuple.Item1)
                 .Select(p => p.Documents)
@@ -25,11 +26,10 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
 
             foreach (string? filepath in allDocumentFilePaths)
             {
-                foreach (Triple triple in GetFileSystemChain(filepath!).ToList())
-                {
-                    yield return triple;
-                }
+                triples.AddRange(await GetFileSystemChain(filepath!));
             }
+
+            return triples;
         }
 
         /// <summary>
@@ -38,8 +38,9 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
         /// <param name="filePath"></param>
         /// <returns></returns>
         /// <exception cref="ArgumentException"></exception>
-        public IEnumerable<Triple> GetFileSystemChain(string filePath)
+        public async Task<IList<Triple>> GetFileSystemChain(string filePath)
         {
+            List<Triple> triples = new();
             string[] chain = filePath.Split(Path.DirectorySeparatorChar, StringSplitOptions.RemoveEmptyEntries);
 
             string fileName = Path.GetFileName(filePath);
@@ -57,7 +58,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
                     if (prevNode != default)
                     {
                         triple = new TripleIncludedIn(currNode, prevNode);
-                        yield return triple;
+                        triples.Add(triple);
                     }
 
                     prevNode = currNode;
@@ -73,15 +74,17 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
                     }
 
                     triple = new TripleIncludedIn(currNode, prevNode);
-                    yield return triple;
+                    triples.Add(triple);
                 }
 
                 else
                 {
-                    Console.Error.WriteLine($"{i} : {chain[i]} : {filePath}");
+                    await Console.Error.WriteLineAsync($"{i} : {chain[i]} : {filePath}");
                     throw new ArgumentException("Something went wrong figuring out file system chain", filePath);
                 }
             }
+
+            return triples;
         }
     }
 }

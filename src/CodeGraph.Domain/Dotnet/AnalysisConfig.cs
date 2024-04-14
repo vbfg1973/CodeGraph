@@ -2,13 +2,11 @@
 {
     public class AnalysisConfig
     {
-        public AnalysisConfig(string solution, string csvFile)
+        public AnalysisConfig(string solution)
         {
             Solution = solution;
-            CsvFile = csvFile;
         }
 
         public string Solution { get; }
-        public string CsvFile { get; }
     }
 }
