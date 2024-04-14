@@ -2,6 +2,10 @@
 using System.Text.Json;
 using Buildalyzer;
 using Buildalyzer.Workspaces;
+using CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp;
+using CodeGraph.Domain.Dotnet.Analyzers.FileSystem;
+using CodeGraph.Domain.Graph.Nodes;
+using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using CsvHelper;
 using Microsoft.CodeAnalysis;
@@ -43,32 +47,32 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
             }
 
 
-            // foreach ((Project, IProjectAnalyzer, IAnalyzerResult) proj in projects.Where(x =>
-            //              x.Item1.SupportsCompilation))
-            // {
-            //     Console.Error.WriteLine($"{proj.Item1.Name}");
-            //     Compilation? compilation = await proj.Item1.GetCompilationAsync();
-            //
-            //     if (compilation == null) continue;
-            //
-            //     IEnumerable<SyntaxTree> syntaxTrees =
-            //         compilation
-            //             .SyntaxTrees
-            //             .Where(x => !x.FilePath.Contains("obj"));
-            //
-            //     FileSystemAnalyzer fileSystemAnalyzer = new();
-            //     foreach (SyntaxTree st in syntaxTrees)
-            //     {
-            //         IList<Triple> fileSystemTriples = await fileSystemAnalyzer.GetFileSystemChain(st.FilePath);
-            //         TripleIncludedIn? fileTriple = fileSystemTriples.Last() as TripleIncludedIn;
-            //         FileNode? fileNode = fileTriple!.NodeA as FileNode;
-            //         triples.AddRange(fileSystemTriples);
-            //
-            //         SemanticModel sem = compilation.GetSemanticModel(st);
-            //         CSharpCodeAnalyzer csharpCodeAnalyzer = new(st, sem, fileNode!);
-            //         triples.AddRange(await csharpCodeAnalyzer.Analyze());
-            //     }
-            // }
+            foreach ((Project, IProjectAnalyzer, IAnalyzerResult) proj in projects.Where(x =>
+                         x.Item1.SupportsCompilation))
+            {
+                Console.Error.WriteLine($"{proj.Item1.Name}");
+                Compilation? compilation = await proj.Item1.GetCompilationAsync();
+            
+                if (compilation == null) continue;
+            
+                IEnumerable<SyntaxTree> syntaxTrees =
+                    compilation
+                        .SyntaxTrees
+                        .Where(x => !x.FilePath.Contains("obj"));
+            
+                FileSystemAnalyzer fileSystemAnalyzer = new();
+                foreach (SyntaxTree st in syntaxTrees)
+                {
+                    IList<Triple> fileSystemTriples = await fileSystemAnalyzer.GetFileSystemChain(st.FilePath);
+                    TripleIncludedIn? fileTriple = fileSystemTriples.Last() as TripleIncludedIn;
+                    FileNode? fileNode = fileTriple!.NodeA as FileNode;
+                    triples.AddRange(fileSystemTriples);
+            
+                    SemanticModel sem = compilation.GetSemanticModel(st);
+                    CSharpCodeAnalyzer csharpCodeAnalyzer = new(st, sem, fileNode!);
+                    triples.AddRange(await csharpCodeAnalyzer.Analyze());
+                }
+            }
 
             return triples;
         }
