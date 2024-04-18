@@ -9,12 +9,13 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.Abstract
         private readonly Compilation _compilation;
         private readonly Document _document;
 
-        protected AbstractVisualBasicCSharpWalker(ICodeWalkerFactory codeWalkerFactory, Document document, Compilation compilation)
+        protected AbstractVisualBasicCSharpWalker(ICodeWalkerFactory codeWalkerFactory, Document document,
+            Compilation compilation)
         {
             _document = document;
             _compilation = compilation;
         }
-        
+
         public abstract IEnumerable<Triple> Walk();
     }
 }

@@ -4,7 +4,7 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace CodeGraph.Domain.Dotnet.Analyzers.Code.Abstract
 {
-    public abstract class AbstractCSharpWalker : CSharpSyntaxWalker, ICodeWalker
+    public abstract class AbstractCSharpWalker : CSharpSyntaxWalker, ICSharpCodeWalker
     {
         private readonly Compilation _compilation;
         private readonly Document _document;
@@ -14,7 +14,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.Abstract
             _document = document;
             _compilation = compilation;
         }
-        
+
         public abstract IEnumerable<Triple> Walk();
     }
 }

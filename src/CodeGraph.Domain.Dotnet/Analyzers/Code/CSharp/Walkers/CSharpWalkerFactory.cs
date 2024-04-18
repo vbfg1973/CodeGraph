@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 
 namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp.Walkers
 {
-    public class CSharpWalkerFactory : ICodeWalkerFactory
+    public class CSharpWalkerFactory : ICSharpCodeWalkerFactory
     {
         public ICodeWalker GetWalker(Document document, Compilation compilation, CodeWalkerType codeWalkerType)
         {

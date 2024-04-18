@@ -7,19 +7,19 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="CommandLineParser" Version="2.9.1" />
-      <PackageReference Include="Microsoft.CodeAnalysis" Version="4.9.2" />
-      <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.2" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2" />
-      <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2" />
-      <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.9.2" />
-      <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.9.2" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1" />
+        <PackageReference Include="CommandLineParser" Version="2.9.1"/>
+        <PackageReference Include="Microsoft.CodeAnalysis" Version="4.9.2"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.2"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.9.2"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.9.2"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.9.2"/>
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="8.0.1"/>
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\CodeGraph.Domain.Common\CodeGraph.Domain.Common.csproj" />
-      <ProjectReference Include="..\CodeGraph.Domain.Graph\CodeGraph.Domain.Graph.csproj" />
+        <ProjectReference Include="..\CodeGraph.Domain.Common\CodeGraph.Domain.Common.csproj"/>
+        <ProjectReference Include="..\CodeGraph.Domain.Graph\CodeGraph.Domain.Graph.csproj"/>
     </ItemGroup>
 
 </Project>

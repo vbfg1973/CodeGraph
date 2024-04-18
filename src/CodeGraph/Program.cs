@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
-using CodeGraph.Domain.Dotnet;
-using CodeGraph.Domain.Dotnet.Analyzers;
+﻿using CodeGraph.Domain.Dotnet;
 using CodeGraph.Domain.Dotnet.OriginalImplementation;
+using CodeGraph.Domain.Features.Solution;
 using CodeGraph.Domain.Graph.Database;
 using CodeGraph.Domain.Graph.Triples.Abstract;
+using CommandLine;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Serilog;
@@ -30,6 +30,16 @@ namespace CodeGraph
 
         private static void ParseCommandLine(string[] args)
         {
+            Parser.Default
+                .ParseArguments<
+                    ImportSolutionOptions
+                >(args)
+                .WithParsed<ImportSolutionOptions>(options =>
+                {
+                    ImportSolutionVerb? verb = s_serviceProvider.GetService<ImportSolutionVerb>();
+
+                    verb?.Run(options).Wait();
+                });
         }
 
         private static void ConfigureServices()
@@ -41,10 +51,11 @@ namespace CodeGraph
 
             s_serviceCollection.AddLogging(configure => configure.AddSerilog());
 
+            s_serviceCollection.AddTransient<ImportSolutionVerb>();
 
             s_serviceProvider = s_serviceCollection.BuildServiceProvider();
         }
-        
+
         private static void BuildConfiguration()
         {
             ConfigurationBuilder configuration = new();

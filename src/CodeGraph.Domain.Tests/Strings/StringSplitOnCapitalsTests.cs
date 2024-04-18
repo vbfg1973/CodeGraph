@@ -13,6 +13,6 @@ namespace CodeGraph.Domain.Tests.Strings
         {
             List<string> elements = str.SplitStringOnCapitals().ToList();
             elements.Count.Should().Be(expectedCount);
-        } 
+        }
     }
 }

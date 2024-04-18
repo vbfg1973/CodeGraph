@@ -1,4 +1,3 @@
-using CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp;
 using CodeGraph.Domain.Dotnet.OriginalImplementation;
 using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples.Abstract;
@@ -10,7 +9,6 @@ namespace CodeGraph.Domain.Tests.CodeAnalyzers
 {
     public class CSharpCodeAnalyzerTests
     {
-
         [Theory]
         [InlineData("ClassWithoutInterface.csharp")]
         [InlineData("ClassWithInterface.csharp")]
@@ -32,7 +30,6 @@ namespace CodeGraph.Domain.Tests.CodeAnalyzers
         [InlineData("HasGenericCustomInterface.csharp", 3)]
         [InlineData("HasGenericInBuiltInterface.csharp", 7)]
         [InlineData("ClassWithInterfaceDefinedMethods.csharp", 5)]
-
         public async Task Given_Code_Analysis_Triples_Count_Is_Correct(string fileName, int tripleCount)
         {
             CSharpCodeAnalyzer codeAnalyser = GetCodeAnalyzer(fileName);
@@ -43,14 +40,13 @@ namespace CodeGraph.Domain.Tests.CodeAnalyzers
 
             triples.Count.Should().Be(tripleCount);
         }
-        
+
         [Theory]
         [InlineData("ClassWithInterface.csharp")]
         [InlineData("ClassWithoutInterface.csharp")]
         [InlineData("HasGenericCustomInterface.csharp")]
         [InlineData("HasGenericInBuiltInterface.csharp")]
         [InlineData("ClassWithInterfaceDefinedMethods.csharp")]
-
         public async Task Given_Code_Analysis_No_Node_Is_Null(string fileName)
         {
             CSharpCodeAnalyzer codeAnalyser = GetCodeAnalyzer(fileName);
@@ -61,7 +57,7 @@ namespace CodeGraph.Domain.Tests.CodeAnalyzers
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             triples.All(x => x.NodeA != null).Should().BeTrue();
-            
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             triples.All(x => x.NodeB != null).Should().BeTrue();
         }
@@ -73,7 +69,7 @@ namespace CodeGraph.Domain.Tests.CodeAnalyzers
                 .AddReferences(MetadataReference.CreateFromFile(typeof(string).Assembly.Location))
                 .AddSyntaxTrees(tree);
             SemanticModel model = compilation.GetSemanticModel(tree);
-            FileNode fileNode = new FileNode(GetPath(fileName), fileName);
+            FileNode fileNode = new(GetPath(fileName), fileName);
 
             return new CSharpCodeAnalyzer(tree, model, fileNode);
         }
