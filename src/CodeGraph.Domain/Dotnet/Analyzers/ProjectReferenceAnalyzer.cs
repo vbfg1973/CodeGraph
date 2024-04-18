@@ -37,7 +37,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers
         {
             foreach (string analyzerResultProjectReference in analyzerResult.ProjectReferences)
             {
-                ProjectNode node = new ProjectNode(GetProjectNameFromPath(analyzerResultProjectReference));
+                ProjectNode node = new(GetProjectNameFromPath(analyzerResultProjectReference));
                 yield return new TripleDependsOnProject(projectNode, node);
             }
         }

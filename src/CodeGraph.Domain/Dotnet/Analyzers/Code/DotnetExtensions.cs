@@ -7,12 +7,13 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code
     {
         public static TypeNode CreateTypeNode(this TypeInfo typeInfo)
         {
-            var t = typeInfo;
-            var typeKind = typeInfo.ConvertedType.TypeKind; 
+            TypeInfo t = typeInfo;
+            TypeKind typeKind = typeInfo.ConvertedType.TypeKind;
             return typeKind switch
             {
                 TypeKind.Interface => CreateInterfaceNode(typeInfo),
-                TypeKind.Error => CreateInterfaceNode(typeInfo), // TODO This is not really correct. Better strategy need here for in-built types
+                TypeKind.Error => CreateInterfaceNode(
+                    typeInfo), // TODO This is not really correct. Better strategy need here for in-built types
                 TypeKind.Class => CreateClassNode(typeInfo),
                 _ => null
             };
