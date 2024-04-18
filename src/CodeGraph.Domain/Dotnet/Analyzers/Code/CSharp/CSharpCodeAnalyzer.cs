@@ -1,4 +1,5 @@
-﻿using CodeGraph.Domain.Graph.Nodes;
+﻿using Annytab.Stemmer;
+using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using Microsoft.CodeAnalysis;
@@ -9,7 +10,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
 {
     public class CSharpCodeAnalyzer(SyntaxTree syntaxTree, SemanticModel semanticModel, FileNode fileNode) : IAnalyzer
     {
-        private readonly FileNode _fileNode = fileNode;
+        private readonly IStemmer _stemmer = new EnglishStemmer();
 
         public async Task<IList<Triple>> Analyze()
         {
@@ -40,12 +41,14 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
                     symbol?.Name!);
 
                 triples.Add(new TripleDeclaredAt(node!, fileNode));
+                triples.AddRange(WordTriples(name, node));
                 triples.AddRange(GetInherits(dec, semanticModel, node!));
                 triples.AddRange(GetMethodsAll(dec, semanticModel, node));
             }
 
             return triples;
         }
+
 
         private async Task<IList<Triple>> AnalyzeClasses()
         {
@@ -67,6 +70,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
                     symbol?.Name!);
 
                 triples.Add(new TripleDeclaredAt(node!, fileNode));
+                triples.AddRange(WordTriples(name, node));
                 triples.AddRange(GetInherits(dec, semanticModel, node));
                 triples.AddRange(GetMethodsAll(dec, semanticModel, node));
             }
@@ -93,7 +97,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
 
             foreach (BaseTypeSyntax baseTypeSyntax in declaration.BaseList.Types)
             {
-                var baseType = baseTypeSyntax.Type;
+                TypeSyntax baseType = baseTypeSyntax.Type;
                 TypeNode parentNode = sem.GetTypeInfo(baseType).CreateTypeNode();
                 switch (node)
                 {
@@ -107,7 +111,7 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
             }
         }
 
-        private static IEnumerable<Triple> GetMethodsAll(TypeDeclarationSyntax declaration,
+        private IEnumerable<Triple> GetMethodsAll(TypeDeclarationSyntax declaration,
             SemanticModel sem,
             TypeNode node)
         {
@@ -117,6 +121,12 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
             {
                 IMethodSymbol methodSymbol = CSharpExtensions.GetDeclaredSymbol(sem, method)!;
                 MethodNode methodNode = CreateMethodNode(methodSymbol, method);
+
+                foreach (Triple wordTriple in WordTriples(methodNode.Name, methodNode))
+                {
+                    yield return wordTriple;
+                }
+
                 yield return new TripleHave(node, methodNode);
 
                 // List<ExpressionSyntax> expressions = method
@@ -177,6 +187,34 @@ namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
         private static string[] MapModifiers(SyntaxTokenList syntaxTokens)
         {
             return syntaxTokens.Select(x => x.ValueText).ToArray();
+        }
+
+        private IEnumerable<Triple> WordTriples(string name, TypeNode? node)
+        {
+            IEnumerable<string> words = name.SplitStringOnCapitals();
+
+            foreach (string word in words.Select(w => w.ToLower()))
+            {
+                WordNode wordNode = new(word, word);
+                yield return new TripleUsesWord(node, wordNode);
+
+                string root = (_stemmer.GetSteamWord(word) ?? word).ToLower();
+                yield return new TripleWordDerivation(wordNode, new WordRootNode(root, root));
+            }
+        }
+
+        private IEnumerable<Triple> WordTriples(string name, MethodNode? node)
+        {
+            IEnumerable<string> words = name.SplitStringOnCapitals();
+
+            foreach (string word in words.Select(w => w.ToLower()))
+            {
+                WordNode wordNode = new(word, word);
+                yield return new TripleUsesWord(node, wordNode);
+
+                string root = (_stemmer.GetSteamWord(word) ?? word).ToLower();
+                yield return new TripleWordDerivation(wordNode, new WordRootNode(root, root));
+            }
         }
     }
 }
