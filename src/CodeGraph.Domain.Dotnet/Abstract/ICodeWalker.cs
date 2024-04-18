@@ -1,6 +1,6 @@
 ﻿using CodeGraph.Domain.Graph.Triples.Abstract;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers.Code.Abstract
+namespace CodeGraph.Domain.Dotnet.Abstract
 {
     public interface ICodeWalker
     {

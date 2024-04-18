@@ -38,7 +38,8 @@ namespace CodeGraph
                 {
                     ImportSolutionVerb? verb = s_serviceProvider.GetService<ImportSolutionVerb>();
 
-                    verb?.Run(options).Wait();
+                    verb?.Run(options)
+                        .Wait();
                 });
         }
 

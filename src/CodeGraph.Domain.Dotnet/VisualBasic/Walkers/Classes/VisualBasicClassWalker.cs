@@ -1,8 +1,8 @@
-﻿using CodeGraph.Domain.Dotnet.Analyzers.Code.Abstract;
+﻿using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers.Code.VisualBasic.Walkers.Classes
+namespace CodeGraph.Domain.Dotnet.VisualBasic.Walkers.Classes
 {
     public class VisualBasicClassWalker : AbstractVisualBasicCSharpWalker
     {

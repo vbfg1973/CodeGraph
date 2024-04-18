@@ -1,9 +1,9 @@
-﻿using CodeGraph.Domain.Dotnet.Analyzers.Code.Abstract;
+﻿using CodeGraph.Domain.Dotnet.Abstract;
 using Microsoft.CodeAnalysis;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp.Walkers
+namespace CodeGraph.Domain.Dotnet.VisualBasic
 {
-    public class CSharpWalkerFactory : ICSharpCodeWalkerFactory
+    public class VisualBasicWalkerFactory : ICodeWalkerFactory
     {
         public ICodeWalker GetWalker(Document document, Compilation compilation, CodeWalkerType codeWalkerType)
         {

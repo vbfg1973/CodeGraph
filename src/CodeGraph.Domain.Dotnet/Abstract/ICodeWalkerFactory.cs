@@ -1,6 +1,6 @@
 using Microsoft.CodeAnalysis;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers.Code.Abstract
+namespace CodeGraph.Domain.Dotnet.Abstract
 {
     public interface ICodeWalkerFactory
     {
