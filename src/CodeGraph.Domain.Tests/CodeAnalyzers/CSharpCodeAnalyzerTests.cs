@@ -1,4 +1,5 @@
 using CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp;
+using CodeGraph.Domain.Dotnet.OriginalImplementation;
 using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using FluentAssertions;

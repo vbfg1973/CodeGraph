@@ -2,5 +2,10 @@
 {
     public enum CodeWalkerType
     {
+        Class,
+        Interface,
+        Method,
+        MethodInvocations,
+        Property
     }
 }

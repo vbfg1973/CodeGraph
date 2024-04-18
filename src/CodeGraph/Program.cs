@@ -2,6 +2,7 @@
 using CodeGraph.Domain.Database;
 using CodeGraph.Domain.Dotnet;
 using CodeGraph.Domain.Dotnet.Analyzers;
+using CodeGraph.Domain.Dotnet.OriginalImplementation;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 
 namespace CodeGraph

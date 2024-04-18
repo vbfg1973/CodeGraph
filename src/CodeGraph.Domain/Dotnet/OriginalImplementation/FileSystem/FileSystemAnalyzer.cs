@@ -4,7 +4,7 @@ using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers.FileSystem
+namespace CodeGraph.Domain.Dotnet.OriginalImplementation.FileSystem
 {
     public class FileSystemAnalyzer
     {

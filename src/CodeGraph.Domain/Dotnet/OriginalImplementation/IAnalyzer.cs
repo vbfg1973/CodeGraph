@@ -1,6 +1,6 @@
 ﻿using CodeGraph.Domain.Graph.Triples.Abstract;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers
+namespace CodeGraph.Domain.Dotnet.OriginalImplementation
 {
     public interface IAnalyzer
     {

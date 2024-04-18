@@ -1,11 +1,11 @@
 ﻿using Buildalyzer;
-using CodeGraph.Domain.Dotnet.Analyzers.FileSystem;
+using CodeGraph.Domain.Dotnet.OriginalImplementation.FileSystem;
 using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers
+namespace CodeGraph.Domain.Dotnet.OriginalImplementation
 {
     public class ProjectReferenceAnalyzer(
         Project project,

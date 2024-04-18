@@ -6,7 +6,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp
+namespace CodeGraph.Domain.Dotnet.OriginalImplementation
 {
     public class CSharpCodeAnalyzer(SyntaxTree syntaxTree, SemanticModel semanticModel, FileNode fileNode) : IAnalyzer
     {

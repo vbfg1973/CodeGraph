@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Dotnet.Analyzers.FileSystem
+﻿namespace CodeGraph.Domain.Dotnet.OriginalImplementation.FileSystem
 {
     public static class FileSystemHelpers
     {

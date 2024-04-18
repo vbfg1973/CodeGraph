@@ -1,7 +1,7 @@
 ﻿using CodeGraph.Domain.Graph.Nodes;
 using Microsoft.CodeAnalysis;
 
-namespace CodeGraph.Domain.Dotnet.Analyzers.Code
+namespace CodeGraph.Domain.Dotnet.OriginalImplementation
 {
     public static class DotnetExtensions
     {
