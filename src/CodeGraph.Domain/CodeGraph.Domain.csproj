@@ -20,4 +20,9 @@
         <PackageReference Include="Neo4j.Driver" Version="5.18.1"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\CodeGraph.Domain.Dotnet\CodeGraph.Domain.Dotnet.csproj" />
+      <ProjectReference Include="..\CodeGraph.Domain.Graph\CodeGraph.Domain.Graph.csproj" />
+    </ItemGroup>
+
 </Project>

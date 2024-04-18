@@ -2,7 +2,7 @@
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using Neo4j.Driver;
 
-namespace CodeGraph.Domain.Database
+namespace CodeGraph.Domain.Graph.Database
 {
     public static class DbManager
     {

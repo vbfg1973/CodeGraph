@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CodeGraph.Domain
+namespace CodeGraph.Domain.Common
 {
     public static partial class StringExtensions
     {
@@ -14,7 +14,7 @@ namespace CodeGraph.Domain
         {
             Regex regex = SplitStringRegex();
 
-            return regex.Replace(str, "---").Split("---");
+            return regex.Replace(str, "---").Split("---", StringSplitOptions.RemoveEmptyEntries);
         }
 
         [GeneratedRegex(@"

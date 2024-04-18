@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using CodeGraph.Domain.Common;
+using FluentAssertions;
 
 namespace CodeGraph.Domain.Tests.Strings
 {

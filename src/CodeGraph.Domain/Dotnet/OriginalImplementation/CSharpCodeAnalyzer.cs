@@ -1,4 +1,5 @@
 ﻿using Annytab.Stemmer;
+using CodeGraph.Domain.Common;
 using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;

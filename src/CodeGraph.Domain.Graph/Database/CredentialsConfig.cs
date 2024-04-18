@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Database
+﻿namespace CodeGraph.Domain.Graph.Database
 {
     public class CredentialsConfig
     {
