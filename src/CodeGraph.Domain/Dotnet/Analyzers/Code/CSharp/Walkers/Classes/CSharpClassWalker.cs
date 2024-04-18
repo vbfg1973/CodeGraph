@@ -5,18 +5,13 @@ using Microsoft.CodeAnalysis.CSharp;
 
 namespace CodeGraph.Domain.Dotnet.Analyzers.Code.CSharp.Walkers.Classes
 {
-    public class CSharpClassWalker : CSharpSyntaxWalker, ICodeWalker
+    public class CSharpClassWalker : AbstractCSharpWalker
     {
-        private readonly Compilation _compilation;
-        private readonly Document _document;
-
-        public CSharpClassWalker(ICodeWalkerFactory codeWalkerFactory, Document document, Compilation compilation)
+        public CSharpClassWalker(ICodeWalkerFactory codeWalkerFactory, Document document, Compilation compilation) : base(codeWalkerFactory, document, compilation)
         {
-            _document = document;
-            _compilation = compilation;
         }
 
-        public IEnumerable<Triple> Walk()
+        public override IEnumerable<Triple> Walk()
         {
             throw new NotImplementedException();
         }
