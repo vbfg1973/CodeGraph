@@ -12,6 +12,13 @@ namespace CodeGraph.Domain.Graph.Triples
             : base(classA, typeB, new OfTypeRelationship())
         {
         }
+        
+        public TripleOfType(
+            RecordNode recordA,
+            TypeNode typeB)
+            : base(recordA, typeB, new OfTypeRelationship())
+        {
+        }
 
         public TripleOfType(
             InterfaceNode interfaceA,

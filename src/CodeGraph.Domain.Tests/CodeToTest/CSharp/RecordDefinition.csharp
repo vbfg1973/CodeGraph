@@ -1,0 +1,4 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp
+{
+    public record RecordDefinition(string StringProperty);
+}

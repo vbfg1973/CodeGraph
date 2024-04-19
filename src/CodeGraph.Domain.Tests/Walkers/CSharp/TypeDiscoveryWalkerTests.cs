@@ -24,6 +24,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         [InlineData("ClassWithInterfaceDefinedMethods.csharp")]
         [InlineData("HasGenericCustomInterface.csharp")]
         [InlineData("HasGenericInBuiltInterface.csharp")]
+        [InlineData("RecordDefinition.csharp")]
         public async Task Given_File_With_Class_Definition_At_Least_One_TripleDeclaredAt(string fileName)
         {
             // Arrange
@@ -44,6 +45,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         [InlineData("ClassWithInterfaceDefinedMethods.csharp")]
         [InlineData("HasGenericCustomInterface.csharp")]
         [InlineData("HasGenericInBuiltInterface.csharp")]
+        [InlineData("RecordDefinition.csharp")]
         public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fileName)
         {
             // Arrange
