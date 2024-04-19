@@ -90,6 +90,8 @@ namespace CodeGraph.Domain.Dotnet.OriginalImplementation
             };
         }
 
+        
+        
         private static IEnumerable<Triple> GetInherits(TypeDeclarationSyntax declaration,
             SemanticModel sem,
             TypeNode node)
