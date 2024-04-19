@@ -27,23 +27,8 @@
     </ItemGroup>
 
     <ItemGroup>
-        <None Update="CodeToTest\*.csharp">
+        <None Update="CodeToTest\**\*.csharp">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\ClassWithInterface.csharp">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\ClassWithInterfaceDefinedMethods.csharp">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\ClassWithoutInterface.csharp">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\HasGenericCustomInterface.csharp">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\HasGenericInBuiltInterface.csharp">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

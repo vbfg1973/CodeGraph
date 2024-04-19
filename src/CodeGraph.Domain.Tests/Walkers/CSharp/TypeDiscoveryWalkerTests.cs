@@ -18,6 +18,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         };
         
         [Theory]
+        [InlineData("ClassWithAbstractBaseClass.csharp")]
         [InlineData("ClassWithoutInterface.csharp")]
         [InlineData("ClassWithInterface.csharp")]
         [InlineData("ClassWithInterfaceDefinedMethods.csharp")]
@@ -37,12 +38,13 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         }
         
         [Theory]
+        [InlineData("ClassWithAbstractBaseClass.csharp")]
         [InlineData("ClassWithoutInterface.csharp")]
         [InlineData("ClassWithInterface.csharp")]
         [InlineData("ClassWithInterfaceDefinedMethods.csharp")]
         [InlineData("HasGenericCustomInterface.csharp")]
         [InlineData("HasGenericInBuiltInterface.csharp")]
-        public async Task Given_File_No_Triples_Have_Null_Nodes(string fileName)
+        public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fileName)
         {
             // Arrange
             (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
