@@ -1,15 +1,15 @@
-﻿namespace CodeGraph.Domain.Graph.Nodes
+namespace CodeGraph.Domain.Graph.Nodes
 {
-    public class ClassNode : TypeNode, IEquatable<ClassNode>
+    public class RecordNode : TypeNode, IEquatable<RecordNode>
     {
-        public ClassNode(string fullName, string name, string[] modifiers = null!)
+        public RecordNode(string fullName, string name, string[] modifiers = null!)
             : base(fullName, name, modifiers)
         {
         }
 
-        public override string Label { get; } = "Class";
+        public override string Label { get; } = "Record";
 
-        public bool Equals(ClassNode? other)
+        public bool Equals(RecordNode? other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
@@ -20,7 +20,7 @@
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == this.GetType() && Equals((ClassNode)obj);
+            return obj.GetType() == this.GetType() && Equals((RecordNode)obj);
         }
 
         public override int GetHashCode()
@@ -28,12 +28,12 @@
             return HashCode.Combine(base.GetHashCode(), Label);
         }
 
-        public static bool operator ==(ClassNode? left, ClassNode? right)
+        public static bool operator ==(RecordNode? left, RecordNode? right)
         {
             return Equals(left, right);
         }
 
-        public static bool operator !=(ClassNode? left, ClassNode? right)
+        public static bool operator !=(RecordNode? left, RecordNode? right)
         {
             return !Equals(left, right);
         }

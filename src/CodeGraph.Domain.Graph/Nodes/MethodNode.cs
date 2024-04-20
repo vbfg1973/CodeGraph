@@ -2,7 +2,7 @@
 
 namespace CodeGraph.Domain.Graph.Nodes
 {
-    public class MethodNode : CodeNode
+    public class MethodNode : CodeNode, IEquatable<MethodNode>
     {
         public MethodNode(string fullName, string name, (string name, string type)[] args, string returnType,
             string[] modifiers = null!)
@@ -27,6 +27,35 @@ namespace CodeGraph.Domain.Graph.Nodes
         protected sealed override void SetPrimaryKey()
         {
             Pk = $"{FullName}{Arguments}{ReturnType}".GetHashCode().ToString();
+        }
+
+        public bool Equals(MethodNode? other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals(other) && Label == other.Label && Arguments == other.Arguments && ReturnType == other.ReturnType;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == this.GetType() && Equals((MethodNode)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Label, Arguments, ReturnType);
+        }
+
+        public static bool operator ==(MethodNode? left, MethodNode? right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(MethodNode? left, MethodNode? right)
+        {
+            return !Equals(left, right);
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace CodeGraph.Domain.Graph.Nodes
 {
-    public class PackageNode : Node
+    public class PackageNode : Node, IEquatable<PackageNode>
     {
         public PackageNode(string fullName, string name, string version)
             : base(fullName, name)
@@ -23,6 +23,35 @@ namespace CodeGraph.Domain.Graph.Nodes
         protected override void SetPrimaryKey()
         {
             Pk = $"{FullName}{Version}".GetHashCode().ToString();
+        }
+
+        public bool Equals(PackageNode? other)
+        {
+            if (ReferenceEquals(null, other)) return false;
+            if (ReferenceEquals(this, other)) return true;
+            return base.Equals(other) && Label == other.Label && Version == other.Version;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            return obj.GetType() == this.GetType() && Equals((PackageNode)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(base.GetHashCode(), Label, Version);
+        }
+
+        public static bool operator ==(PackageNode? left, PackageNode? right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(PackageNode? left, PackageNode? right)
+        {
+            return !Equals(left, right);
         }
     }
 }
