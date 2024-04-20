@@ -33,7 +33,6 @@ namespace CodeGraph.Domain.Dotnet.Extensions
         public static MethodNode CreateMethodNode(this IMethodSymbol symbol,
             MethodDeclarationSyntax declaration = null!)
         {
-            string temp = $"{symbol.ContainingType}.{symbol.Name}";
             string fullName =
                 symbol.ContainingNamespace.GetNamespaceName($"{symbol.ContainingType.Name}.{symbol.Name}");
             (string name, string? type)[] args = symbol.Parameters.Select(x => (name: x.Name, type: x.Type.ToString()))
@@ -49,7 +48,6 @@ namespace CodeGraph.Domain.Dotnet.Extensions
         public static PropertyNode CreatePropertyNode(this IPropertySymbol symbol,
             PropertyDeclarationSyntax declaration = null!)
         {
-            string temp = $"{symbol.ContainingType}.{symbol.Name}";
             string fullName =
                 symbol.ContainingNamespace.GetNamespaceName($"{symbol.ContainingType.Name}.{symbol.Name}");
             
