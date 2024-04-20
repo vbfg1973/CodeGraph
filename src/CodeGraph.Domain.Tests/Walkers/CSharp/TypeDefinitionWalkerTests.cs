@@ -2,6 +2,7 @@
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
 using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples;
+using CodeGraph.Domain.Graph.Triples.Abstract;
 using CodeGraph.Domain.Tests.TestHelpers;
 using FakeItEasy;
 using FluentAssertions;
@@ -65,6 +66,34 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
             propertyNodes.First().ReturnType.Should().Be(expectedPropertyType);
         }
 
+        [Theory]
+        [InlineData("ClassWithProperties.csharp")]
+        [InlineData("ClassWithCustomPropertyTypes.csharp")]
+        public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fileName)
+        {
+            // Arrange
+            (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
+
+            // Act
+            CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
+            List<Triple> results = walker.Walk().ToList();
+
+            // Assert
+            results.Should().NotBeEmpty();
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            results.Select(x => x.NodeA).Any(x => x == null).Should().BeFalse();
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            results.Select(x => x.NodeB).Any(x => x == null).Should().BeFalse();
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            results.Select(x => x.NodeA).Any(x => x.Label == null).Should().BeFalse();
+            
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            results.Select(x => x.NodeB).Any(x => x.Label == null).Should().BeFalse();
+        }
+        
         private (WalkerOptions, FileNode) GetWalkerOptions(string fileName)
         {
             (DotnetOptions dotnetOptions, FileNode fileNode) =

@@ -65,6 +65,12 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             results.Select(x => x.NodeB).Any(x => x == null).Should().BeFalse();
+
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            results.Select(x => x.NodeA).Any(x => x.Label == null).Should().BeFalse();
+            
+            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+            results.Select(x => x.NodeB).Any(x => x.Label == null).Should().BeFalse();
         }
 
         [Theory]
