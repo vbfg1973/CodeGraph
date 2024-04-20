@@ -5,19 +5,22 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 {
-    public class CSharpClassWalker(ClassDeclarationSyntax classDeclarationSyntax, WalkerOptions walkerOptions)
+    public class CSharpTypeDefinitionWalker(TypeDeclarationSyntax typeDeclarationSyntax, WalkerOptions walkerOptions)
         : CSharpSyntaxWalker, ICodeWalker
     {
-        public ClassDeclarationSyntax ClassDeclarationSyntax { get; } = classDeclarationSyntax;
-        public WalkerOptions WalkerOptions { get; } = walkerOptions;
-
+        private readonly List<Triple> _triples = new();
+        
         public IEnumerable<Triple> Walk()
         {
-            throw new NotImplementedException();
+            base.Visit(typeDeclarationSyntax);
+
+            return _triples;
         }
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
+            var a = node.Arity;
+
             base.VisitMethodDeclaration(node);
         }
 
@@ -28,6 +31,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public override void VisitBaseExpression(BaseExpressionSyntax node)
         {
+            var a = node.Token;
             base.VisitBaseExpression(node);
         }
     }

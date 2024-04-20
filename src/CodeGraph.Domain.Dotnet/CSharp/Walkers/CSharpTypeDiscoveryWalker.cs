@@ -1,4 +1,5 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
+using CodeGraph.Domain.Dotnet.Extensions;
 using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
@@ -29,6 +30,8 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
             _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
 
+            _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
+            
             base.VisitClassDeclaration(node);
         }
 
@@ -41,6 +44,9 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                 .CreateTypeNode(node);
 
             _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
+            
+            _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
+            
             base.VisitInterfaceDeclaration(node);
         }
 
@@ -53,6 +59,9 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                 .CreateTypeNode(node);
 
             _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
+            
+            _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
+            
             base.VisitRecordDeclaration(node);
         }
     }

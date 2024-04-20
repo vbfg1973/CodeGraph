@@ -1,0 +1,11 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp
+{
+    public interface IBaseInterface
+    {
+    }
+
+    public interface IInterface : IBaseInterface
+    {
+        
+    }
+}

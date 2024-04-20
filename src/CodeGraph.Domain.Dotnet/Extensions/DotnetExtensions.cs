@@ -2,7 +2,7 @@
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CodeGraph.Domain.Dotnet
+namespace CodeGraph.Domain.Dotnet.Extensions
 {
     public static class DotnetExtensions
     {

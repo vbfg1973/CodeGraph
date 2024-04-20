@@ -4,7 +4,7 @@ using CodeGraph.Domain.Graph.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CodeGraph.Domain.Dotnet
+namespace CodeGraph.Domain.Dotnet.Extensions
 {
     public static class TypeExtensions
     {
@@ -16,18 +16,20 @@ namespace CodeGraph.Domain.Dotnet
                 ClassDeclarationSyntax _ => new ClassNode(fullName, name, declaration.Modifiers.MapModifiers()),
                 InterfaceDeclarationSyntax _ => new InterfaceNode(fullName, name, declaration.Modifiers.MapModifiers()),
                 RecordDeclarationSyntax _ => new RecordNode(fullName, name, declaration.Modifiers.MapModifiers()),
-                _ => throw new ArgumentOutOfRangeException(nameof(declaration), "Invalid TypeDeclarationSyntax in CreateTypeNode")
+                _ => throw new ArgumentOutOfRangeException(nameof(declaration),
+                    "Invalid TypeDeclarationSyntax in CreateTypeNode")
             };
         }
 
-        public static IEnumerable<Triple> GetInherits(this TypeDeclarationSyntax typeDeclarationSyntax, TypeNode node, SemanticModel semanticModel)
+        public static IEnumerable<Triple> GetInherits(this TypeDeclarationSyntax typeDeclarationSyntax, TypeNode node,
+            SemanticModel semanticModel)
         {
             if (typeDeclarationSyntax.BaseList == null) yield break;
 
             foreach (BaseTypeSyntax baseTypeSyntax in typeDeclarationSyntax.BaseList.Types)
             {
                 TypeSyntax baseType = baseTypeSyntax.Type;
-                TypeNode parentNode = semanticModel.GetTypeInfo(baseType).CreateTypeNode();
+                TypeNode parentNode = baseType.CreateTypeNode(semanticModel);
 
                 switch (node)
                 {
@@ -44,17 +46,22 @@ namespace CodeGraph.Domain.Dotnet
             }
         }
 
-        public static TypeNode CreateTypeNode(this TypeInfo typeInfo)
+        public static TypeNode CreateTypeNode(this TypeSyntax syntaxNode, SemanticModel semanticModel)
         {
-            return typeInfo.ConvertedType.TypeKind switch
+            TypeInfo identifiedType = semanticModel.GetTypeInfo(syntaxNode);
+
+            if (identifiedType.ConvertedType is not INamedTypeSymbol namedType) return null!;
+            
+            return namedType.TypeKind switch
             {
-                TypeKind.Interface => typeInfo.CreateInterfaceNode(),
-                TypeKind.Class => typeInfo.CreateClassNode(),
-                // Maybe records show as classes? No TypeKind for them!
-                _ => null
+                TypeKind.Interface => identifiedType.CreateInterfaceNode(),
+                TypeKind.Class => identifiedType.CreateClassNode(),
+                TypeKind.Error  => identifiedType.CreateInterfaceNode(), // TODO - In built generic interface types. This must be wrong, but why?!?!? 
+                // Maybe records show as classes? No TypeKind for them! Makes sense if syntactical sugar
+                _ => null!
             };
         }
-        
+
         public static ClassNode CreateClassNode(this TypeInfo typeInfo)
         {
             return new ClassNode(typeInfo.GetFullName(), typeInfo.GetName());
@@ -64,7 +71,7 @@ namespace CodeGraph.Domain.Dotnet
         {
             return new InterfaceNode(typeInfo.GetFullName(), typeInfo.GetName());
         }
-        
+
         public static RecordNode CreateRecordNode(this TypeInfo typeInfo)
         {
             return new RecordNode(typeInfo.GetFullName(), typeInfo.GetName());

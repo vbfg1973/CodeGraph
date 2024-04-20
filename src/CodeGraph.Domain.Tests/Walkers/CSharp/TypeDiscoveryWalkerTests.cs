@@ -16,7 +16,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         {
             "CodeToTest", "CSharp"
         };
-        
+
         [Theory]
         [InlineData("ClassWithAbstractBaseClass.csharp")]
         [InlineData("ClassWithoutInterface.csharp")]
@@ -25,11 +25,12 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         [InlineData("HasGenericCustomInterface.csharp")]
         [InlineData("HasGenericInBuiltInterface.csharp")]
         [InlineData("RecordDefinition.csharp")]
+        [InlineData("InterfaceDerivingFromInterface.csharp")]
         public async Task Given_File_With_Class_Definition_At_Least_One_TripleDeclaredAt(string fileName)
         {
             // Arrange
             (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
-            
+
             // Act
             CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
             List<TripleDeclaredAt> results = walker.Walk().OfType<TripleDeclaredAt>().ToList();
@@ -37,7 +38,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
             // Assert
             results.Should().NotBeEmpty();
         }
-        
+
         [Theory]
         [InlineData("ClassWithAbstractBaseClass.csharp")]
         [InlineData("ClassWithoutInterface.csharp")]
@@ -46,11 +47,12 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         [InlineData("HasGenericCustomInterface.csharp")]
         [InlineData("HasGenericInBuiltInterface.csharp")]
         [InlineData("RecordDefinition.csharp")]
+        [InlineData("InterfaceDerivingFromInterface.csharp")]
         public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fileName)
         {
             // Arrange
             (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
-            
+
             // Act
             CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
             List<Triple> results = walker.Walk().ToList();
@@ -60,9 +62,33 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             results.Select(x => x.NodeA).Any(x => x == null).Should().BeFalse();
-            
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             results.Select(x => x.NodeB).Any(x => x == null).Should().BeFalse();
+        }
+
+        [Theory]
+        [InlineData("ClassWithAbstractBaseClass.csharp", "Class", "Class")]
+        [InlineData("ClassWithInterface.csharp", "Class", "Interface")]
+        [InlineData("ClassWithInterfaceDefinedMethods.csharp", "Class", "Interface")]
+        [InlineData("HasGenericCustomInterface.csharp", "Class", "Interface")]
+        [InlineData("HasGenericInBuiltInterface.csharp", "Class", "Interface")]
+        [InlineData("InterfaceDerivingFromInterface.csharp", "Interface", "Interface")]
+        public async Task Given_File_With_Class_Definition_Derived_From_BaseType_Found_BaseType_Is_Correct(
+            string fileName, string subType, string parentType)
+        {
+            // Arrange
+            (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
+
+            // Act
+            CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
+            List<TripleOfType> results = walker.Walk().OfType<TripleOfType>().ToList();
+
+            // Assert
+            results.Count.Should().Be(1);
+
+            results.First().NodeA.Label.Should().Be(subType);
+            results.First().NodeB.Label.Should().Be(parentType);
         }
 
         private (WalkerOptions, FileNode) GetWalkerOptions(string fileName)
