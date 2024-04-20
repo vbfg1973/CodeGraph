@@ -28,11 +28,5 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
         {
             base.VisitPropertyDeclaration(node);
         }
-
-        public override void VisitBaseExpression(BaseExpressionSyntax node)
-        {
-            var a = node.Token;
-            base.VisitBaseExpression(node);
-        }
     }
 }

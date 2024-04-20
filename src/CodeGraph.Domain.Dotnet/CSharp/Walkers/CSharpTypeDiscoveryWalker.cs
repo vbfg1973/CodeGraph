@@ -11,7 +11,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
     public class CSharpTypeDiscoveryWalker(FileNode fileNode, WalkerOptions walkerOptions)
         : CSharpSyntaxWalker, ICodeWalker
     {
-        private List<Triple> _triples = new();
+        private readonly List<Triple> _triples = new();
 
         public IEnumerable<Triple> Walk()
         {
@@ -22,47 +22,53 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
-            TypeNode typeNode = walkerOptions
-                .DotnetOptions
-                .SemanticModel
-                .GetDeclaredSymbol(node)!
-                .CreateTypeNode(node);
+            GetTypeDeclarationTriples(node);
 
-            _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
-
-            _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
-            
             base.VisitClassDeclaration(node);
         }
 
         public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
         {
-            TypeNode typeNode = walkerOptions
-                .DotnetOptions
-                .SemanticModel
-                .GetDeclaredSymbol(node)!
-                .CreateTypeNode(node);
+            GetTypeDeclarationTriples(node);
 
-            _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
-            
-            _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
-            
             base.VisitInterfaceDeclaration(node);
         }
 
         public override void VisitRecordDeclaration(RecordDeclarationSyntax node)
         {
-            TypeNode typeNode = walkerOptions
+            GetTypeDeclarationTriples(node);
+
+            base.VisitRecordDeclaration(node);
+        }
+
+        public override void VisitStructDeclaration(StructDeclarationSyntax node)
+        {
+            GetTypeDeclarationTriples(node);
+            
+            base.VisitStructDeclaration(node);
+        }
+
+        private void GetTypeDeclarationTriples(TypeDeclarationSyntax node)
+        {
+            TypeNode typeNode = GetTypeNode(node);
+
+            _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
+
+            _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
+
+            if (!walkerOptions.DescendIntoSubWalkers) return;
+            
+            CSharpTypeDefinitionWalker typeDefinitionWalker = new CSharpTypeDefinitionWalker(node, walkerOptions);
+            _triples.AddRange(typeDefinitionWalker.Walk());
+        }
+
+        private TypeNode GetTypeNode(TypeDeclarationSyntax node)
+        {
+            return walkerOptions
                 .DotnetOptions
                 .SemanticModel
                 .GetDeclaredSymbol(node)!
                 .CreateTypeNode(node);
-
-            _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
-            
-            _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
-            
-            base.VisitRecordDeclaration(node);
         }
     }
 }
