@@ -130,7 +130,7 @@ namespace CodeGraph.Domain.Dotnet.OriginalImplementation
                     yield return wordTriple;
                 }
 
-                yield return new TripleHave(node, methodNode);
+                yield return new TripleHas(node, methodNode);
 
                 // List<ExpressionSyntax> expressions = method
                 //     .DescendantNodes()

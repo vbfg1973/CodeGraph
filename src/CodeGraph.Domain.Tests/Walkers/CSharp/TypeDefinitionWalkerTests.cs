@@ -1,8 +1,10 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
 using CodeGraph.Domain.Graph.Nodes;
+using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Tests.TestHelpers;
 using FakeItEasy;
+using FluentAssertions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 
@@ -12,12 +14,13 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
     {
         private readonly string[] _path =
         {
-            "CodeToTest", "CSharp"
+            "CodeToTest", "CSharp", "TypeDefinition"
         };
 
         [Theory]
-        [InlineData("ClassWithInterfaceDefinedMethods.csharp")]
-        public async Task Given(string fileName)
+        [InlineData("ClassWithProperties.csharp", 1)]
+        [InlineData("ClassWithCustomPropertyTypes.csharp", 1)]
+        public async Task Given_Class_With_Properties_Correct_Number_Found(string fileName, int expectedPropertyCount)
         {
             // Arrange
             (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
@@ -29,9 +32,37 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
                 .OfType<ClassDeclarationSyntax>()
                 .First();
 
-            var walker = new CSharpTypeDefinitionWalker(declaration, walkerOptions);
+            CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions);
+            List<TripleHas> results = walker.Walk().OfType<TripleHas>().Where(x => x.NodeB is PropertyNode).ToList();
+            results.Count().Should().Be(expectedPropertyCount);
+        }
 
-            var results = walker.Walk();
+        [Theory]
+        [InlineData("ClassWithProperties.csharp", "string")]
+        [InlineData("ClassWithCustomPropertyTypes.csharp",
+            "CodeGraph.Domain.Tests.CodeToTest.CSharp.CustomPropertyType")]
+        public async Task Given_Class_With_Properties_Correct_Return_Types(string fileName, string expectedPropertyType)
+        {
+            // Arrange
+            (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
+            TypeDeclarationSyntax declaration = (await walkerOptions
+                    .DotnetOptions
+                    .SyntaxTree
+                    .GetRootAsync())
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .First();
+
+            CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions);
+            List<PropertyNode> propertyNodes = walker.Walk()
+                .OfType<TripleHas>()
+                // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
+                .Where(x => x.NodeB != null)
+                .Where(x => x.NodeB is PropertyNode)
+                .Select(x => x.NodeB as PropertyNode)
+                .ToList()!;
+
+            propertyNodes.First().ReturnType.Should().Be(expectedPropertyType);
         }
 
         private (WalkerOptions, FileNode) GetWalkerOptions(string fileName)

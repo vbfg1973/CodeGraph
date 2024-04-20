@@ -2,6 +2,19 @@
 
 namespace CodeGraph.Domain.Graph.Nodes
 {
+
+    public class PropertyNode : CodeNode
+    {
+        public PropertyNode(string fullName, string name, string returnType, string[] modifiers) : base(fullName, name, modifiers)
+        {
+            ReturnType = returnType;
+        }
+
+        public string ReturnType { get; }
+
+        public override string Label { get; } = "Property";
+    }
+    
     public class MethodNode : CodeNode, IEquatable<MethodNode>
     {
         public MethodNode(string fullName, string name, (string name, string type)[] args, string returnType,
@@ -21,7 +34,7 @@ namespace CodeGraph.Domain.Graph.Nodes
 
         public override string Set(string node)
         {
-            return $"{base.Set(node)}, {node}.returnType = \"{ReturnType}\", {node}.arguments = \"{Arguments}\"";
+            return $"{base.Set(node)}, {node}.returnType = \"{ReturnType}\"";
         }
 
         protected sealed override void SetPrimaryKey()

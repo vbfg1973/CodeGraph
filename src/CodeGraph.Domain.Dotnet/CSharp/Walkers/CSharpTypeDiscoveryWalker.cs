@@ -8,10 +8,10 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 {
-    public class CSharpTypeDiscoveryWalker(FileNode fileNode, WalkerOptions walkerOptions)
-        : CSharpSyntaxWalker, ICodeWalker
+    public class CSharpTypeDiscoveryWalker(FileNode fileNode, WalkerOptions walkerOptions) : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
         private readonly List<Triple> _triples = new();
+
 
         public IEnumerable<Triple> Walk()
         {
@@ -60,15 +60,6 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             
             CSharpTypeDefinitionWalker typeDefinitionWalker = new CSharpTypeDefinitionWalker(node, walkerOptions);
             _triples.AddRange(typeDefinitionWalker.Walk());
-        }
-
-        private TypeNode GetTypeNode(TypeDeclarationSyntax node)
-        {
-            return walkerOptions
-                .DotnetOptions
-                .SemanticModel
-                .GetDeclaredSymbol(node)!
-                .CreateTypeNode(node);
         }
     }
 }

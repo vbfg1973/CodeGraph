@@ -30,6 +30,36 @@
         <None Update="CodeToTest\**\*.csharp">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="CodeToTest\CSharp\MethodsAndProperties\ClassWithProperties.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\MethodsAndProperties\ClassWithCustomPropertyTypes.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\TypeDefinitions\ClassWithAbstractBaseClass.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\TypeDefinitions\ClassWithInterface.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\TypeDefinitions\ClassWithInterfaceDefinedMethods.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\TypeDefinitions\ClassWithoutInterface.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\TypeDefinitions\HasGenericCustomInterface.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\TypeDefinitions\HasGenericInBuiltInterface.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\TypeDefinitions\InterfaceDerivingFromInterface.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\TypeDefinitions\RecordDefinition.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
     <ItemGroup>

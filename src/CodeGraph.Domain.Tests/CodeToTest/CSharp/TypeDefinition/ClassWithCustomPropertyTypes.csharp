@@ -1,0 +1,11 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp
+{
+    public class ClassWithProperties
+    {
+        public CustomPropertyType CustomPropertyType { get; } = null!;
+    }
+    
+    public class CustomPropertyType 
+    {
+    }
+}

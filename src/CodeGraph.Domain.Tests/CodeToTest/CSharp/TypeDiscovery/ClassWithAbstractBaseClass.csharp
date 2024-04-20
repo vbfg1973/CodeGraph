@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Tests.CodeToTest
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp
 {
     public abstract class BaseClass
     {

@@ -14,7 +14,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
     {
         private readonly string[] _path =
         {
-            "CodeToTest", "CSharp"
+            "CodeToTest", "CSharp", "TypeDiscovery"
         };
 
         [Theory]

@@ -30,20 +30,35 @@ namespace CodeGraph.Domain.Dotnet.Extensions
                 : GetNamespaceName(namespaceSymbol.ContainingNamespace, $"{nextName}.{name}");
         }
 
-        private static MethodNode CreateMethodNode(this IMethodSymbol symbol,
-            MethodDeclarationSyntax declaration = null)
+        public static MethodNode CreateMethodNode(this IMethodSymbol symbol,
+            MethodDeclarationSyntax declaration = null!)
         {
             string temp = $"{symbol.ContainingType}.{symbol.Name}";
             string fullName =
                 symbol.ContainingNamespace.GetNamespaceName($"{symbol.ContainingType.Name}.{symbol.Name}");
             (string name, string? type)[] args = symbol.Parameters.Select(x => (name: x.Name, type: x.Type.ToString()))
                 .ToArray();
-            string? returnType = symbol.ReturnType.ToString();
+            string returnType = symbol.ReturnType.ToString() ?? "Unknown";
             return new MethodNode(fullName,
                 symbol.Name,
                 args,
                 returnType,
-                declaration?.Modifiers.MapModifiers());
+                declaration.Modifiers.MapModifiers());
+        }
+
+        public static PropertyNode CreatePropertyNode(this IPropertySymbol symbol,
+            PropertyDeclarationSyntax declaration = null!)
+        {
+            string temp = $"{symbol.ContainingType}.{symbol.Name}";
+            string fullName =
+                symbol.ContainingNamespace.GetNamespaceName($"{symbol.ContainingType.Name}.{symbol.Name}");
+            
+            string returnType = symbol.Type.ToString() ?? "Unknown";
+            
+            return new PropertyNode(fullName,
+                symbol.Name,
+                returnType,
+                declaration.Modifiers.MapModifiers());
         }
     }
 }
