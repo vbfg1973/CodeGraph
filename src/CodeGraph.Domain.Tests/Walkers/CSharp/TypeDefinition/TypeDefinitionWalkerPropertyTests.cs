@@ -40,7 +40,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
         [Theory]
         [InlineData("ClassWithProperties.csharp", "string")]
         [InlineData("ClassWithCustomPropertyTypes.csharp",
-            "CodeGraph.Domain.Tests.CodeToTest.CSharp.CustomPropertyType")]
+            "CodeGraph.Domain.Tests.CodeToTest.CSharp.TypeDefinition.CustomPropertyType")]
         public async Task Given_Class_With_Properties_Correct_Return_Types(string fileName, string expectedPropertyType)
         {
             // Arrange
@@ -64,35 +64,6 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
                 .ToList()!;
 
             propertyNodes.First().ReturnType.Should().Be(expectedPropertyType);
-        }
-
-        [Theory]
-        [InlineData("ClassWithProperties.csharp")]
-        [InlineData("ClassWithCustomPropertyTypes.csharp")]
-        public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fileName)
-        {
-            // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) =
-                await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
-
-            // Act
-            CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
-            List<Triple> results = walker.Walk().ToList();
-
-            // Assert
-            results.Should().NotBeEmpty();
-
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            results.Select(x => x.NodeA).Any(x => x == null).Should().BeFalse();
-
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            results.Select(x => x.NodeB).Any(x => x == null).Should().BeFalse();
-
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            results.Select(x => x.NodeA).Any(x => x.Label == null).Should().BeFalse();
-
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            results.Select(x => x.NodeB).Any(x => x.Label == null).Should().BeFalse();
         }
     }
 }

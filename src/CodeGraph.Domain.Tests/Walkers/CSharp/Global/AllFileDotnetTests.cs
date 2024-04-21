@@ -26,7 +26,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.Global
 
         [Theory]
         [ClassData(typeof(CSharpFileDiscoveryClassData))]
-        public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fullPath)
+        public async Task Given_CSharp_File_No_Triples_Have_Null_Nodes(string fullPath)
         {
             // Arrange
             (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(fullPath, descendIntoSubWalkers: true);

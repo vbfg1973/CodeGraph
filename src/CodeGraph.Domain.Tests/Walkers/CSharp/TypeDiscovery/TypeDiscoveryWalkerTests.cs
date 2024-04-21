@@ -39,41 +39,6 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDiscovery
         }
 
         [Theory]
-        [InlineData("ClassWithAbstractBaseClass.csharp")]
-        [InlineData("ClassWithoutInterface.csharp")]
-        [InlineData("ClassWithInterface.csharp")]
-        [InlineData("ClassWithInterfaceDefinedMethods.csharp")]
-        [InlineData("HasGenericCustomInterface.csharp")]
-        [InlineData("HasGenericInBuiltInterface.csharp")]
-        [InlineData("RecordDefinition.csharp")]
-        [InlineData("InterfaceDerivingFromInterface.csharp")]
-        public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fileName)
-        {
-            // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) =
-                await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
-
-            // Act
-            CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
-            List<Triple> results = walker.Walk().ToList();
-
-            // Assert
-            results.Should().NotBeEmpty();
-
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            results.Select(x => x.NodeA).Any(x => x == null).Should().BeFalse();
-
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            results.Select(x => x.NodeB).Any(x => x == null).Should().BeFalse();
-
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            results.Select(x => x.NodeA).Any(x => x.Label == null).Should().BeFalse();
-
-            // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
-            results.Select(x => x.NodeB).Any(x => x.Label == null).Should().BeFalse();
-        }
-
-        [Theory]
         [InlineData("ClassWithAbstractBaseClass.csharp", "Class", "Class")]
         [InlineData("ClassWithInterface.csharp", "Class", "Interface")]
         [InlineData("ClassWithInterfaceDefinedMethods.csharp", "Class", "Interface")]

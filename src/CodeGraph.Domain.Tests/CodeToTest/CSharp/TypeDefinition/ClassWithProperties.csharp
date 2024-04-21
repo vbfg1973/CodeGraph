@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp.TypeDefinition
 {
     public class ClassWithProperties
     {
