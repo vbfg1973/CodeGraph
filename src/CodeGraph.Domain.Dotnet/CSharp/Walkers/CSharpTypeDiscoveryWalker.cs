@@ -1,5 +1,4 @@
-﻿using CodeGraph.Domain.Common;
-using CodeGraph.Domain.Dotnet.Abstract;
+﻿using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.Extensions;
 using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples;

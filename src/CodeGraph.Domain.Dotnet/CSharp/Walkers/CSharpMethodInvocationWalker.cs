@@ -39,7 +39,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                         break;
                 }
             }
-            
+
             base.VisitMethodDeclaration(node);
         }
 
@@ -47,7 +47,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
         {
             return _walkerOptions.DotnetOptions.SemanticModel.GetTypeInfo(creationExpressionSyntax).CreateClassNode();
         }
-        
+
         private void AddInvokedMethodTriple(InvocationExpressionSyntax invocation, MethodNode parentMethodNode)
         {
             ISymbol? symbol = _walkerOptions
@@ -60,9 +60,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
             if (invokedMethodSymbol.TryCreateMethodNode(_walkerOptions.DotnetOptions.SemanticModel,
                     out MethodNode? invokedMethod))
-            {
                 _triples.Add(new TripleInvoke(parentMethodNode, invokedMethod!));
-            }
         }
     }
 }

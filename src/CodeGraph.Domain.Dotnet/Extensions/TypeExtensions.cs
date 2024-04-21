@@ -51,12 +51,13 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             TypeInfo identifiedType = semanticModel.GetTypeInfo(syntaxNode);
 
             if (identifiedType.ConvertedType is not INamedTypeSymbol namedType) return null!;
-            
+
             return namedType.TypeKind switch
             {
                 TypeKind.Interface => identifiedType.CreateInterfaceNode(),
                 TypeKind.Class => identifiedType.CreateClassNode(),
-                TypeKind.Error  => identifiedType.CreateInterfaceNode(), // TODO - In built generic interface types. This must be wrong, but why?!?!? 
+                TypeKind.Error => identifiedType
+                    .CreateInterfaceNode(), // TODO - In built generic interface types. This must be wrong, but why?!?!? 
                 // Maybe records show as classes? No TypeKind for them! Makes sense if syntactical sugar
                 _ => null!
             };

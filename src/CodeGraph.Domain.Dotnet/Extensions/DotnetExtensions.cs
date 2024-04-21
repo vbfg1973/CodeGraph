@@ -43,7 +43,7 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             if (syntaxReference == null) return false;
 
             MethodDeclarationSyntax declarationSyntax = (syntaxReference.GetSyntax() as MethodDeclarationSyntax)!;
-            IMethodSymbol symbol = (semanticModel.GetDeclaredSymbol(declarationSyntax))!;
+            IMethodSymbol symbol = semanticModel.GetDeclaredSymbol(declarationSyntax)!;
             methodNode = symbol.CreateMethodNode(declarationSyntax);
             return true;
         }

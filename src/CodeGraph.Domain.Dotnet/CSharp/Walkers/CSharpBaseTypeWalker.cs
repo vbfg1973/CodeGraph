@@ -13,8 +13,8 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 {
     public abstract class CSharpBaseTypeWalker(WalkerOptions walkerOptions) : CSharpSyntaxWalker
     {
-        protected readonly WalkerOptions _walkerOptions = walkerOptions;
         private readonly IStemmer _stemmer = new EnglishStemmer();
+        protected readonly WalkerOptions _walkerOptions = walkerOptions;
 
         protected TypeNode GetTypeNode(TypeDeclarationSyntax typeDeclarationSyntax)
         {
@@ -33,7 +33,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                 .GetDeclaredSymbol(methodDeclarationSyntax)!
                 .CreateMethodNode(methodDeclarationSyntax);
         }
-        
+
         protected PropertyNode GetPropertyNode(PropertyDeclarationSyntax propertyDeclarationSyntax)
         {
             return _walkerOptions
@@ -42,7 +42,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                 .GetDeclaredSymbol(propertyDeclarationSyntax)!
                 .CreatePropertyNode(propertyDeclarationSyntax);
         }
-        
+
         protected IEnumerable<Triple> WordTriples(CodeNode node)
         {
             IEnumerable<string> words = node.Name.SplitStringOnCapitals();
