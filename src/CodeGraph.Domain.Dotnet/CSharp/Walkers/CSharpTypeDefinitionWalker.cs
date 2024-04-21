@@ -41,6 +41,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             MethodNode methodNode = GetMethodNode(node);
             _triples.Add(new TripleHas(typeNode, methodNode));
+            _triples.AddRange(WordTriples(methodNode));
         }
         
         private void GetHasTriple(PropertyDeclarationSyntax node)
@@ -49,6 +50,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             IPropertySymbol propertySymbol = CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, node)!;
             PropertyNode propertyNode = propertySymbol.CreatePropertyNode(node);
             _triples.Add(new TripleHas(typeNode, propertyNode));
+            _triples.AddRange(WordTriples(propertyNode));
         }
     }
 }

@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Annytab.Stemmer" Version="1.2.4" />
         <PackageReference Include="CommandLineParser" Version="2.9.1"/>
         <PackageReference Include="Microsoft.CodeAnalysis" Version="4.9.2"/>
         <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="4.9.2"/>
