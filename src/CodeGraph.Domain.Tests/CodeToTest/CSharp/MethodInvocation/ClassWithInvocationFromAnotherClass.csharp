@@ -14,7 +14,16 @@
     {
         public void Method()
         {
-            throw new NotImplementedException();
+            var thirdClass = new ThirdClass();
+            
+            thirdClass.Method();
+        }
+    }
+    
+    public class ThirdClass 
+    {
+        public void Method()
+        {
         }
     }
 }

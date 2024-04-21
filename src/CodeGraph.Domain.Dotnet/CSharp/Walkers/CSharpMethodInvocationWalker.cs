@@ -17,7 +17,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public IEnumerable<Triple> Walk()
         {
-            base.Visit(walkerOptions.DotnetOptions.SyntaxTree.GetRoot());
+            base.Visit(_declarationSyntax);
 
             return _triples;
         }
@@ -31,6 +31,8 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                 switch (syntax)
                 {
                     case ObjectCreationExpressionSyntax creation:
+                        ClassNode classNode = GetTypeNodeFromInstantiation(creation);
+                        _triples.Add(new TripleConstruct(methodNode, classNode));
                         break;
                     case InvocationExpressionSyntax invocation:
                         AddInvokedMethodTriple(invocation, methodNode);
@@ -41,6 +43,11 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             base.VisitMethodDeclaration(node);
         }
 
+        private ClassNode GetTypeNodeFromInstantiation(ObjectCreationExpressionSyntax creationExpressionSyntax)
+        {
+            return _walkerOptions.DotnetOptions.SemanticModel.GetTypeInfo(creationExpressionSyntax).CreateClassNode();
+        }
+        
         private void AddInvokedMethodTriple(InvocationExpressionSyntax invocation, MethodNode parentMethodNode)
         {
             ISymbol? symbol = _walkerOptions

@@ -36,5 +36,25 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.MethodInvocation
             List<TripleInvoke> results = walker.Walk().OfType<TripleInvoke>().Where(x => x.NodeB is MethodNode).ToList();
             results.Count().Should().Be(expectedInvocationCount);
         }
+
+        [Theory]
+        [InlineData("ClassWithInvocationFromAnotherClass.csharp", 1)]
+        public async Task Given_Class_With_Object_Creations_Correct_Number_Is_Found(string fileName, int expectedObjectConstructions)
+        {
+            // Arrange
+            (WalkerOptions walkerOptions, FileNode fileNode) =
+                await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
+            TypeDeclarationSyntax declaration = (await walkerOptions
+                    .DotnetOptions
+                    .SyntaxTree
+                    .GetRootAsync())
+                .DescendantNodes()
+                .OfType<ClassDeclarationSyntax>()
+                .First();
+            
+            CSharpMethodInvocationWalker walker = new(declaration, walkerOptions);
+            var results = walker.Walk().OfType<TripleConstruct>().ToList();
+            results.Count().Should().Be(expectedObjectConstructions);
+        }
     }
 }
