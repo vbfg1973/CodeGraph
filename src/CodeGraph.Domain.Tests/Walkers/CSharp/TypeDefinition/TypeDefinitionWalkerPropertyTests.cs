@@ -9,9 +9,9 @@ using FluentAssertions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 
-namespace CodeGraph.Domain.Tests.Walkers.CSharp
+namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
 {
-    public class TypeDefinitionWalkerTests
+    public class TypeDefinitionWalkerPropertyTests
     {
         private readonly string[] _path =
         {
@@ -24,7 +24,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         public async Task Given_Class_With_Properties_Correct_Number_Found(string fileName, int expectedPropertyCount)
         {
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
+            (WalkerOptions walkerOptions, FileNode fileNode) = await GetWalkerOptions(fileName);
             TypeDeclarationSyntax declaration = (await walkerOptions
                     .DotnetOptions
                     .SyntaxTree
@@ -45,7 +45,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         public async Task Given_Class_With_Properties_Correct_Return_Types(string fileName, string expectedPropertyType)
         {
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
+            (WalkerOptions walkerOptions, FileNode fileNode) = await GetWalkerOptions(fileName);
             TypeDeclarationSyntax declaration = (await walkerOptions
                     .DotnetOptions
                     .SyntaxTree
@@ -72,7 +72,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
         public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fileName)
         {
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = GetWalkerOptions(fileName);
+            (WalkerOptions walkerOptions, FileNode fileNode) = await GetWalkerOptions(fileName);
 
             // Act
             CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
@@ -89,14 +89,14 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp
 
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             results.Select(x => x.NodeA).Any(x => x.Label == null).Should().BeFalse();
-            
+
             // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract
             results.Select(x => x.NodeB).Any(x => x.Label == null).Should().BeFalse();
         }
-        
-        private (WalkerOptions, FileNode) GetWalkerOptions(string fileName)
+
+        private async Task<(WalkerOptions, FileNode)> GetWalkerOptions(string fileName)
         {
-            (DotnetOptions dotnetOptions, FileNode fileNode) =
+            (DotnetOptions dotnetOptions, FileNode fileNode) = await
                 WalkerTestHelpers.GetCSharpCompilation(Path.Combine(Path.Combine(_path), fileName));
 
             ICodeWalkerFactory codeWalkerFactory = A.Fake<ICodeWalkerFactory>();
