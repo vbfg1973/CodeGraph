@@ -4,9 +4,7 @@ using CodeGraph.Domain.Graph.Nodes;
 using CodeGraph.Domain.Graph.Triples;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using CodeGraph.Domain.Tests.TestHelpers;
-using FakeItEasy;
 using FluentAssertions;
-using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDiscovery
 {
@@ -29,7 +27,8 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDiscovery
         public async Task Given_File_With_Class_Definition_At_Least_One_TripleDeclaredAt(string fileName)
         {
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = await GetWalkerOptions(fileName);
+            (WalkerOptions walkerOptions, FileNode fileNode) =
+                await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
 
             // Act
             CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
@@ -51,7 +50,8 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDiscovery
         public async Task Given_File_With_Class_Definition_No_Triples_Have_Null_Nodes(string fileName)
         {
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = await GetWalkerOptions(fileName);
+            (WalkerOptions walkerOptions, FileNode fileNode) =
+                await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
 
             // Act
             CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
@@ -84,7 +84,8 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDiscovery
             string fileName, string subType, string parentType)
         {
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = await GetWalkerOptions(fileName);
+            (WalkerOptions walkerOptions, FileNode fileNode) =
+                await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
 
             // Act
             CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
@@ -95,18 +96,6 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDiscovery
 
             results.First().NodeA.Label.Should().Be(subType);
             results.First().NodeB.Label.Should().Be(parentType);
-        }
-
-        private async Task<(WalkerOptions, FileNode)> GetWalkerOptions(string fileName)
-        {
-            (DotnetOptions dotnetOptions, FileNode fileNode) = await
-                WalkerTestHelpers.GetCSharpCompilation(Path.Combine(Path.Combine(_path), fileName));
-
-            ICodeWalkerFactory codeWalkerFactory = A.Fake<ICodeWalkerFactory>();
-            ILoggerFactory loggerFactory = A.Fake<ILoggerFactory>();
-            WalkerOptions walkerOptions = new(dotnetOptions, codeWalkerFactory, loggerFactory);
-
-            return (walkerOptions, fileNode);
         }
     }
 }

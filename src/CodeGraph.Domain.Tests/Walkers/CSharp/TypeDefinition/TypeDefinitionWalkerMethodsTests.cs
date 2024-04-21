@@ -9,7 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
 {
-    public class TypeDefinitionWalkerPropertyTests
+    public class TypeDefinitionWalkerMethodTests
     {
         private readonly string[] _path =
         {
