@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using CodeGraph.Domain.Common;
+using FluentAssertions;
 
 namespace CodeGraph.Domain.Tests.Strings
 {
@@ -12,6 +13,6 @@ namespace CodeGraph.Domain.Tests.Strings
         {
             List<string> elements = str.SplitStringOnCapitals().ToList();
             elements.Count.Should().Be(expectedCount);
-        } 
+        }
     }
 }

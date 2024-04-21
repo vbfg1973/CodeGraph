@@ -1,0 +1,12 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp
+{
+    public interface ICustomGenericInterface<T>
+    {
+        
+    } 
+    
+    public class HasGenericCustomInterface : ICustomGenericInterface<string>
+    {
+        
+    }
+}

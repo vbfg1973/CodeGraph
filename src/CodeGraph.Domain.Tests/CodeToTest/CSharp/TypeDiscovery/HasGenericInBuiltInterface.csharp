@@ -1,0 +1,43 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp
+{
+    public class SimpleClass
+    {
+        public string Property { get; set; } = null!;
+    }
+    
+    public class HasGenericInBuiltInterface : IEquatable<SimpleClass>
+    {
+        public bool Equals(HasInterface other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Equals(SimpleClass? other)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override bool Equals(object? obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((HasInterface)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            throw new NotImplementedException();
+        }
+
+        public static bool operator ==(HasInterface? left, HasInterface? right)
+        {
+            return Equals(left, right);
+        }
+
+        public static bool operator !=(HasInterface? left, HasInterface? right)
+        {
+            return !Equals(left, right);
+        }
+    }
+}

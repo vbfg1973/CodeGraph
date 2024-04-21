@@ -1,0 +1,7 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp.TypeDefinition
+{
+    public class ClassWithProperties
+    {
+        public string GetOnlyProperty { get; } = null!;
+    }
+}
