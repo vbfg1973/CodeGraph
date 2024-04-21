@@ -2,10 +2,10 @@
 {
     public class ClassWithProperties
     {
-        public CustomPropertyType CustomPropertyType { get; } = null!;
+        public CustomType CustomType { get; } = null!;
     }
     
-    public class CustomPropertyType 
+    public class CustomType 
     {
     }
 }

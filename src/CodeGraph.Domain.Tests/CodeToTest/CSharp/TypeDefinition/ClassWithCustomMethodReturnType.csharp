@@ -2,13 +2,13 @@
 {
     public class ClassWithCustomMethodReturnType
     {
-        public CustomPropertyType CustomMethodTypeWithNoArguments()
+        public CustomType CustomTypeWithNoArguments()
         {
             throw new NotImplementedException();
         }
     }
     
-    public class CustomPropertyType 
+    public class CustomType 
     {
     }
 }

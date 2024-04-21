@@ -1,5 +1,6 @@
 ﻿using CodeGraph.Domain.Graph.Nodes;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGraph.Domain.Dotnet.Extensions
@@ -30,19 +31,44 @@ namespace CodeGraph.Domain.Dotnet.Extensions
                 : GetNamespaceName(namespaceSymbol.ContainingNamespace, $"{nextName}.{name}");
         }
 
+        public static bool TryCreateMethodNode(this IMethodSymbol methodSymbol, SemanticModel semanticModel,
+            out MethodNode? methodNode)
+        {
+            methodNode = null;
+
+            SyntaxReference? syntaxReference = methodSymbol
+                .DeclaringSyntaxReferences
+                .FirstOrDefault();
+
+            if (syntaxReference == null) return false;
+
+            MethodDeclarationSyntax declarationSyntax = (syntaxReference.GetSyntax() as MethodDeclarationSyntax)!;
+            IMethodSymbol symbol = (semanticModel.GetDeclaredSymbol(declarationSyntax))!;
+            methodNode = symbol.CreateMethodNode(declarationSyntax);
+            return true;
+        }
+
         public static MethodNode CreateMethodNode(this IMethodSymbol symbol,
-            MethodDeclarationSyntax declaration = null!)
+            MethodDeclarationSyntax declaration)
         {
             string fullName =
                 symbol.ContainingNamespace.GetNamespaceName($"{symbol.ContainingType.Name}.{symbol.Name}");
-            (string name, string? type)[] args = symbol.Parameters.Select(x => (name: x.Name, type: x.Type.ToString()))
+
+            (string name, string? type)[] args = symbol
+                .Parameters
+                .Select(x => (name: x.Name, type: x.Type.ToString()))
                 .ToArray();
+
             string returnType = symbol.ReturnType.ToString() ?? "Unknown";
+
+            string symbolName = symbol.Name;
+            string[] modifiers = declaration.Modifiers.MapModifiers();
+
             return new MethodNode(fullName,
-                symbol.Name,
+                symbolName,
                 args,
                 returnType,
-                declaration.Modifiers.MapModifiers());
+                modifiers);
         }
 
         public static PropertyNode CreatePropertyNode(this IPropertySymbol symbol,
@@ -50,9 +76,9 @@ namespace CodeGraph.Domain.Dotnet.Extensions
         {
             string fullName =
                 symbol.ContainingNamespace.GetNamespaceName($"{symbol.ContainingType.Name}.{symbol.Name}");
-            
+
             string returnType = symbol.Type.ToString() ?? "Unknown";
-            
+
             return new PropertyNode(fullName,
                 symbol.Name,
                 returnType,

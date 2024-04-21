@@ -1,0 +1,16 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp.MethodInvocation
+{
+    public class ClassWithMultipleSelfInvocation
+    {
+        public static void Method()
+        {
+            PrivateMethod("Arg");
+            PrivateMethod("Arg");
+        }
+
+        private static void PrivateMethod(string arg)
+        {
+            
+        }
+    }
+}

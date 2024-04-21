@@ -60,10 +60,12 @@
         <None Update="CodeToTest\CSharp\TypeDefinitions\RecordDefinition.csharp">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-    </ItemGroup>
-
-    <ItemGroup>
-        <Folder Include="CodeAnalyzers\"/>
+        <None Update="CodeToTest\CSharp\MethodInvocation\ClassWithMultipleSelfInvocation.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="CodeToTest\CSharp\MethodInvocation\ClassWithInvocationFromAnotherClass.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
