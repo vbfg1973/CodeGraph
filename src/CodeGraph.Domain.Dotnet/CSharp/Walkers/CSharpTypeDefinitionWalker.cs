@@ -10,20 +10,14 @@ using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
 
 namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 {
-    public class CSharpTypeDefinitionWalker : CSharpBaseTypeWalker, ICodeWalker
+    public class CSharpTypeDefinitionWalker(TypeDeclarationSyntax typeDeclarationSyntax, WalkerOptions walkerOptions)
+        : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
         private readonly List<Triple> _triples = new();
-        private readonly TypeDeclarationSyntax _typeDeclarationSyntax;
-
-        public CSharpTypeDefinitionWalker(TypeDeclarationSyntax typeDeclarationSyntax, WalkerOptions walkerOptions) :
-            base(walkerOptions)
-        {
-            _typeDeclarationSyntax = typeDeclarationSyntax;
-        }
 
         public IEnumerable<Triple> Walk()
         {
-            base.Visit(_typeDeclarationSyntax);
+            base.Visit(typeDeclarationSyntax);
 
             return _triples;
         }
@@ -44,15 +38,14 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
         
         private void GetHasTriple(MethodDeclarationSyntax node)
         {
-            TypeNode typeNode = GetTypeNode(_typeDeclarationSyntax);
-            IMethodSymbol methodSymbol = CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, node)!;
-            MethodNode methodNode = methodSymbol.CreateMethodNode(node);
+            TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
+            MethodNode methodNode = GetMethodNode(node);
             _triples.Add(new TripleHas(typeNode, methodNode));
         }
         
         private void GetHasTriple(PropertyDeclarationSyntax node)
         {
-            TypeNode typeNode = GetTypeNode(_typeDeclarationSyntax);
+            TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             IPropertySymbol propertySymbol = CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, node)!;
             PropertyNode propertyNode = propertySymbol.CreatePropertyNode(node);
             _triples.Add(new TripleHas(typeNode, propertyNode));

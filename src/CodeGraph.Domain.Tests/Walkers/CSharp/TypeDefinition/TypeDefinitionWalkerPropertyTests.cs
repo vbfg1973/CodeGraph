@@ -40,7 +40,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
         [Theory]
         [InlineData("ClassWithProperties.csharp", "string")]
         [InlineData("ClassWithCustomPropertyTypes.csharp",
-            "CodeGraph.Domain.Tests.CodeToTest.CSharp.TypeDefinition.CustomPropertyType")]
+            "CodeGraph.Domain.Tests.CodeToTest.CSharp.TypeDefinition.CustomType")]
         public async Task Given_Class_With_Properties_Correct_Return_Types(string fileName, string expectedPropertyType)
         {
             // Arrange

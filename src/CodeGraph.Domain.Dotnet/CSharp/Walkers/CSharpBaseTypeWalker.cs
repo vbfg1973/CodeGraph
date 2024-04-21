@@ -10,13 +10,31 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
     {
         protected readonly WalkerOptions _walkerOptions = walkerOptions;
 
-        protected TypeNode GetTypeNode(TypeDeclarationSyntax node)
+        protected TypeNode GetTypeNode(TypeDeclarationSyntax typeDeclarationSyntax)
         {
             return _walkerOptions
                 .DotnetOptions
                 .SemanticModel
-                .GetDeclaredSymbol(node)!
-                .CreateTypeNode(node);
+                .GetDeclaredSymbol(typeDeclarationSyntax)!
+                .CreateTypeNode(typeDeclarationSyntax);
+        }
+
+        protected MethodNode GetMethodNode(MethodDeclarationSyntax methodDeclarationSyntax)
+        {
+            return _walkerOptions
+                .DotnetOptions
+                .SemanticModel
+                .GetDeclaredSymbol(methodDeclarationSyntax)!
+                .CreateMethodNode(methodDeclarationSyntax);
+        }
+        
+        protected PropertyNode GetPropertyNode(PropertyDeclarationSyntax propertyDeclarationSyntax)
+        {
+            return _walkerOptions
+                .DotnetOptions
+                .SemanticModel
+                .GetDeclaredSymbol(propertyDeclarationSyntax)!
+                .CreatePropertyNode(propertyDeclarationSyntax);
         }
     }
 }
