@@ -1,5 +1,5 @@
-﻿using CodeGraph.Domain.Dotnet;
-using CodeGraph.Domain.Dotnet.OriginalImplementation;
+﻿using CodeGraph.Domain.Analysis;
+using CodeGraph.Domain.Dotnet;
 using CodeGraph.Domain.Features.Solution;
 using CodeGraph.Domain.Graph.Database;
 using CodeGraph.Domain.Graph.Triples.Abstract;

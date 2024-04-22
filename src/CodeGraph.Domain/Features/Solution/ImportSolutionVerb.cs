@@ -1,19 +1,22 @@
+using CodeGraph.Domain.Analysis;
+using CodeGraph.Domain.Dotnet;
+using CodeGraph.Domain.Graph.Triples.Abstract;
 using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Features.Solution
 {
-    public class ImportSolutionVerb
+    public class ImportSolutionVerb(ILogger<ImportSolutionVerb> logger)
     {
-        private readonly ILogger<ImportSolutionVerb> _logger;
-
-        public ImportSolutionVerb(ILogger<ImportSolutionVerb> logger)
-        {
-            _logger = logger;
-        }
+        private readonly ILogger<ImportSolutionVerb> _logger = logger;
 
         public async Task Run(ImportSolutionOptions options)
         {
-            throw new NotImplementedException();
+            AnalysisConfig analysisConfig = new(options.Solution);
+            Analyzer ana = new(analysisConfig);
+
+            IList<Triple> triples = await ana.Analyze();
+
+            Console.WriteLine(string.Join("\n", triples));
         }
     }
 }
