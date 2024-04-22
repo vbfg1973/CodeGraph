@@ -25,4 +25,8 @@
         <ProjectReference Include="..\CodeGraph.Domain.Graph\CodeGraph.Domain.Graph.csproj"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Dotnet\OriginalImplementation\" />
+    </ItemGroup>
+
 </Project>

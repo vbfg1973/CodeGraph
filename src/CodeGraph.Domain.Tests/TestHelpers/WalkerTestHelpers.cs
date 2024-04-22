@@ -17,8 +17,7 @@ namespace CodeGraph.Domain.Tests.TestHelpers
 
             ICodeWalkerFactory codeWalkerFactory = A.Fake<ICodeWalkerFactory>();
             ILoggerFactory loggerFactory = A.Fake<ILoggerFactory>();
-            WalkerOptions walkerOptions = new(dotnetOptions, codeWalkerFactory, loggerFactory,
-                descendIntoSubWalkers);
+            WalkerOptions walkerOptions = new(dotnetOptions, descendIntoSubWalkers);
 
             return (walkerOptions, fileNode);
         }
@@ -31,8 +30,7 @@ namespace CodeGraph.Domain.Tests.TestHelpers
 
             ICodeWalkerFactory codeWalkerFactory = A.Fake<ICodeWalkerFactory>();
             ILoggerFactory loggerFactory = A.Fake<ILoggerFactory>();
-            WalkerOptions walkerOptions = new(dotnetOptions, codeWalkerFactory, loggerFactory,
-                descendIntoSubWalkers);
+            WalkerOptions walkerOptions = new(dotnetOptions, descendIntoSubWalkers);
 
             return (walkerOptions, fileNode);
         }
