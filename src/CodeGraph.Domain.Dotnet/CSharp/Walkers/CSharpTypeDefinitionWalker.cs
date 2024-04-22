@@ -32,23 +32,26 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax node)
         {
             GetHasTriple(node);
-            
+
             base.VisitPropertyDeclaration(node);
         }
-        
+
         private void GetHasTriple(MethodDeclarationSyntax node)
         {
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             MethodNode methodNode = GetMethodNode(node);
             _triples.Add(new TripleHas(typeNode, methodNode));
+            _triples.AddRange(WordTriples(methodNode));
         }
-        
+
         private void GetHasTriple(PropertyDeclarationSyntax node)
         {
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
-            IPropertySymbol propertySymbol = CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, node)!;
+            IPropertySymbol propertySymbol =
+                CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, node)!;
             PropertyNode propertyNode = propertySymbol.CreatePropertyNode(node);
             _triples.Add(new TripleHas(typeNode, propertyNode));
+            _triples.AddRange(WordTriples(propertyNode));
         }
     }
 }
