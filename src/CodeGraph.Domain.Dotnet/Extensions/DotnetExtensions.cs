@@ -1,7 +1,5 @@
 ﻿using CodeGraph.Domain.Graph.Nodes;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGraph.Domain.Dotnet.Extensions
 {
@@ -15,38 +13,20 @@ namespace CodeGraph.Domain.Dotnet.Extensions
         public static string[] MapModifiers(this ISymbol symbol)
         {
             List<string> list = new();
-        
+
             list.Add(symbol.DeclaredAccessibility.ToString().ToLower());
-            
-            if (symbol.IsAbstract)
-            {
-                list.Add("abstract");
-            }
 
-            if (symbol.IsStatic)
-            {
-                list.Add("static");
-            }
+            if (symbol.IsAbstract) list.Add("abstract");
 
-            if (symbol.IsOverride)
-            {
-                list.Add("override");
-            }
+            if (symbol.IsStatic) list.Add("static");
+            
+            if (symbol.IsSealed) list.Add("sealed");
 
-            if (symbol.IsVirtual)
-            {
-                list.Add("virtual");
-            }
-            
-            if (symbol.IsExtern)
-            {
-                list.Add("extern");
-            }
-            
-            if (symbol.IsSealed)
-            {
-                list.Add("sealed");
-            }
+            if (symbol.IsOverride) list.Add("override");
+
+            if (symbol.IsVirtual) list.Add("virtual");
+
+            if (symbol.IsExtern) list.Add("extern");
 
             return list.ToArray();
         }
