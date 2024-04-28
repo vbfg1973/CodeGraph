@@ -31,7 +31,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                 .DotnetOptions
                 .SemanticModel
                 .GetDeclaredSymbol(methodDeclarationSyntax)!
-                .CreateMethodNode(methodDeclarationSyntax);
+                .CreateMethodNode();
         }
 
         protected PropertyNode GetPropertyNode(PropertyDeclarationSyntax propertyDeclarationSyntax)
@@ -40,7 +40,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                 .DotnetOptions
                 .SemanticModel
                 .GetDeclaredSymbol(propertyDeclarationSyntax)!
-                .CreatePropertyNode(propertyDeclarationSyntax);
+                .CreatePropertyNode();
         }
 
         protected IEnumerable<Triple> WordTriples(CodeNode node)

@@ -1,7 +1,5 @@
 ﻿using CodeGraph.Domain.Graph.Nodes;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGraph.Domain.Dotnet.Extensions
 {
@@ -12,6 +10,26 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             return syntaxTokens.Select(x => x.ValueText).ToArray();
         }
 
+        public static string[] MapModifiers(this ISymbol symbol)
+        {
+            List<string> list = new();
+
+            list.Add(symbol.DeclaredAccessibility.ToString().ToLower());
+
+            if (symbol.IsAbstract) list.Add("abstract");
+
+            if (symbol.IsStatic) list.Add("static");
+            
+            if (symbol.IsSealed) list.Add("sealed");
+
+            if (symbol.IsOverride) list.Add("override");
+
+            if (symbol.IsVirtual) list.Add("virtual");
+
+            if (symbol.IsExtern) list.Add("extern");
+
+            return list.ToArray();
+        }
 
         public static string GetName(this TypeInfo typeInfo)
         {
@@ -36,20 +54,11 @@ namespace CodeGraph.Domain.Dotnet.Extensions
         {
             methodNode = null;
 
-            SyntaxReference? syntaxReference = methodSymbol
-                .DeclaringSyntaxReferences
-                .FirstOrDefault();
-
-            if (syntaxReference == null) return false;
-
-            MethodDeclarationSyntax declarationSyntax = (syntaxReference.GetSyntax() as MethodDeclarationSyntax)!;
-            IMethodSymbol symbol = semanticModel.GetDeclaredSymbol(declarationSyntax)!;
-            methodNode = symbol.CreateMethodNode(declarationSyntax);
+            methodNode = methodSymbol.CreateMethodNode();
             return true;
         }
 
-        public static MethodNode CreateMethodNode(this IMethodSymbol symbol,
-            MethodDeclarationSyntax declaration)
+        public static MethodNode CreateMethodNode(this IMethodSymbol symbol)
         {
             string fullName =
                 symbol.ContainingNamespace.GetNamespaceName($"{symbol.ContainingType.Name}.{symbol.Name}");
@@ -62,7 +71,7 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             string returnType = symbol.ReturnType.ToString() ?? "Unknown";
 
             string symbolName = symbol.Name;
-            string[] modifiers = declaration.Modifiers.MapModifiers();
+            string[] modifiers = symbol.MapModifiers();
 
             return new MethodNode(fullName,
                 symbolName,
@@ -71,8 +80,7 @@ namespace CodeGraph.Domain.Dotnet.Extensions
                 modifiers);
         }
 
-        public static PropertyNode CreatePropertyNode(this IPropertySymbol symbol,
-            PropertyDeclarationSyntax declaration = null!)
+        public static PropertyNode CreatePropertyNode(this IPropertySymbol symbol)
         {
             string fullName =
                 symbol.ContainingNamespace.GetNamespaceName($"{symbol.ContainingType.Name}.{symbol.Name}");
@@ -82,7 +90,7 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             return new PropertyNode(fullName,
                 symbol.Name,
                 returnType,
-                declaration.Modifiers.MapModifiers());
+                symbol.MapModifiers());
         }
     }
 }

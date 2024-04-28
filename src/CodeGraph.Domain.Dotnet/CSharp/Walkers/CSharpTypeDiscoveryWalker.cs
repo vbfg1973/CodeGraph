@@ -50,12 +50,12 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             base.VisitRecordDeclaration(node);
         }
 
-        public override void VisitStructDeclaration(StructDeclarationSyntax node)
-        {
-            GetTypeDeclarationTriples(node);
-
-            base.VisitStructDeclaration(node);
-        }
+        // public override void VisitStructDeclaration(StructDeclarationSyntax node)
+        // {
+        //     GetTypeDeclarationTriples(node);
+        //
+        //     base.VisitStructDeclaration(node);
+        // }
 
         private void GetTypeDeclarationTriples(TypeDeclarationSyntax node)
         {

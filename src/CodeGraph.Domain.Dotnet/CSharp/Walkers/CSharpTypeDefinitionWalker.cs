@@ -49,7 +49,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             IPropertySymbol propertySymbol =
                 CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, node)!;
-            PropertyNode propertyNode = propertySymbol.CreatePropertyNode(node);
+            PropertyNode propertyNode = propertySymbol.CreatePropertyNode();
             _triples.Add(new TripleHas(typeNode, propertyNode));
             _triples.AddRange(WordTriples(propertyNode));
         }
