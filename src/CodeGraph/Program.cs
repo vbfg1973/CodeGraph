@@ -66,28 +66,5 @@ namespace CodeGraph
                 .AddEnvironmentVariables()
                 .Build();
         }
-
-        private static async Task OldMain(string[] args)
-        {
-            string solutionPath = args[0];
-
-            try
-            {
-                AnalysisConfig analysisConfig = new(solutionPath);
-                Analyzer analyzer = new(analysisConfig);
-                IList<Triple> triples = await analyzer.Analyze();
-
-                // Console.WriteLine(JsonSerializer.Serialize(triples,
-                //     new JsonSerializerOptions { WriteIndented = true }));
-
-                CredentialsConfig creds = new("neo4j:neo4j:AdminPassword");
-                await DbManager.InsertData(triples, creds, true);
-            }
-
-            catch (Exception e)
-            {
-                Console.WriteLine(e);
-            }
-        }
     }
 }
