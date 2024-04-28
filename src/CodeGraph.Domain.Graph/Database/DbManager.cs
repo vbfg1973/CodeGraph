@@ -32,9 +32,9 @@ namespace CodeGraph.Domain.Graph.Database
                     await session.RunAsync(triple.ToString());
                     count++;
 
-                    if (count % 500 == 0)
+                    if (count % 50 == 0)
                     {
-                        await Console.Error.WriteAsync($"Inserting {triples.Count} triples\r");
+                        await Console.Error.WriteAsync($"Inserted {count} triples\r");
                     }
                 }
 
