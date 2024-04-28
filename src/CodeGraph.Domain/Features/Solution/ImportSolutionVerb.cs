@@ -1,5 +1,6 @@
 using CodeGraph.Domain.Analysis;
 using CodeGraph.Domain.Dotnet;
+using CodeGraph.Domain.Graph.Database;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using Microsoft.Extensions.Logging;
 
@@ -11,12 +12,21 @@ namespace CodeGraph.Domain.Features.Solution
 
         public async Task Run(ImportSolutionOptions options)
         {
-            AnalysisConfig analysisConfig = new(options.Solution);
-            Analyzer ana = new(analysisConfig);
+            try
+            {
+                AnalysisConfig analysisConfig = new(options.Solution);
+                Analyzer ana = new(analysisConfig);
 
-            IList<Triple> triples = await ana.Analyze();
+                IList<Triple> triples = await ana.Analyze();
 
-            Console.WriteLine(string.Join("\n", triples));
+                CredentialsConfig creds = new("neo4j:neo4j:AdminPassword");
+                await DbManager.InsertData(triples, creds, options.DeleteDatabaseContents);
+            }
+
+            catch (Exception e)
+            {
+                Console.WriteLine(e);
+            }
         }
     }
 }
