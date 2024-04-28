@@ -13,9 +13,9 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             (string fullName, string name) = (symbol.ContainingNamespace.ToString() + '.' + symbol.Name, symbol.Name);
             return declaration switch
             {
-                ClassDeclarationSyntax _ => new ClassNode(fullName, name, declaration.Modifiers.MapModifiers()),
-                InterfaceDeclarationSyntax _ => new InterfaceNode(fullName, name, declaration.Modifiers.MapModifiers()),
-                RecordDeclarationSyntax _ => new RecordNode(fullName, name, declaration.Modifiers.MapModifiers()),
+                ClassDeclarationSyntax _ => new ClassNode(fullName, name, symbol.MapModifiers()),
+                InterfaceDeclarationSyntax _ => new InterfaceNode(fullName, name, symbol.MapModifiers()),
+                RecordDeclarationSyntax _ => new RecordNode(fullName, name, symbol.MapModifiers()),
                 _ => throw new ArgumentOutOfRangeException(nameof(declaration),
                     "Invalid TypeDeclarationSyntax in CreateTypeNode")
             };
