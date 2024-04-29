@@ -25,6 +25,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
         public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
         {
             GetHasTriple(node);
+            GetImplementationOfTriples(node);
 
             base.VisitMethodDeclaration(node);
         }
@@ -36,22 +37,35 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             base.VisitPropertyDeclaration(node);
         }
 
-        private void GetHasTriple(MethodDeclarationSyntax node)
+        private void GetHasTriple(MethodDeclarationSyntax syntax)
         {
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
-            MethodNode methodNode = GetMethodNode(node);
+            MethodNode methodNode = GetMethodNode(syntax);
             _triples.Add(new TripleHas(typeNode, methodNode));
             _triples.AddRange(WordTriples(methodNode));
         }
 
-        private void GetHasTriple(PropertyDeclarationSyntax node)
+        private void GetHasTriple(PropertyDeclarationSyntax syntax)
         {
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             IPropertySymbol propertySymbol =
-                CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, node)!;
+                CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, syntax)!;
             PropertyNode propertyNode = propertySymbol.CreatePropertyNode();
             _triples.Add(new TripleHas(typeNode, propertyNode));
             _triples.AddRange(WordTriples(propertyNode));
+        }
+
+        private void GetImplementationOfTriples(MethodDeclarationSyntax syntax)
+        {
+            MethodNode methodNode = GetMethodNode(syntax);
+            IMethodSymbol methodSymbol =
+                CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, syntax)!;
+
+            if (methodSymbol.TryGetInterfaceMethodFromImplementation(_walkerOptions.DotnetOptions.SemanticModel,
+                    out MethodNode interfaceMethodNode))
+            {
+                _triples.Add(new TripleImplementationOf(methodNode, interfaceMethodNode));
+            }
         }
     }
 }

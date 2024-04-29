@@ -66,6 +66,9 @@
         <None Update="CodeToTest\CSharp\MethodInvocation\ClassWithInvocationFromAnotherClass.csharp">
           <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="CodeToTest\CSharp\TypeDefinition\ClassWithInterfaceDefinedMethods.csharp">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>
