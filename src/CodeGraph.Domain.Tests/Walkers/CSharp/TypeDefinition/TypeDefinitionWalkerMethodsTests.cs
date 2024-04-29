@@ -18,6 +18,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
         [Theory]
         [InlineData("ClassWithCustomMethodReturnType.csharp", 1)]
         [InlineData("ClassWithBuiltInMethodReturnType.csharp", 1)]
+        [InlineData("InterfaceWithMethod.csharp", 1)]
         public async Task Given_Class_With_Methods_Correct_Number_Found(string fileName, int expectedMethodCount)
         {
             // Arrange
@@ -28,7 +29,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
                     .SyntaxTree
                     .GetRootAsync())
                 .DescendantNodes()
-                .OfType<ClassDeclarationSyntax>()
+                .OfType<TypeDeclarationSyntax>()
                 .First();
 
             CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions);
@@ -49,7 +50,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
                     .SyntaxTree
                     .GetRootAsync())
                 .DescendantNodes()
-                .OfType<ClassDeclarationSyntax>()
+                .OfType<TypeDeclarationSyntax>()
                 .First();
 
             CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions);
@@ -78,7 +79,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
                     .SyntaxTree
                     .GetRootAsync())
                 .DescendantNodes()
-                .OfType<ClassDeclarationSyntax>()
+                .OfType<TypeDeclarationSyntax>()
                 .First();
 
             CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions);

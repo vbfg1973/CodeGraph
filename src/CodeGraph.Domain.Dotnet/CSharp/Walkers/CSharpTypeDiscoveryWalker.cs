@@ -24,28 +24,26 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
         {
             GetTypeDeclarationTriples(node);
 
-            if (_walkerOptions.DescendIntoSubWalkers)
-            {
-                CSharpTypeDefinitionWalker typeDefinitionWalker = new(node, _walkerOptions);
-                _triples.AddRange(typeDefinitionWalker.Walk().Distinct());
-
-                CSharpMethodInvocationWalker methodInvocationWalker = new(node, _walkerOptions);
-                _triples.AddRange(methodInvocationWalker.Walk().Distinct());
-            }
+            SubWalkers(node);
 
             base.VisitClassDeclaration(node);
         }
+
 
         public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
         {
             GetTypeDeclarationTriples(node);
 
+            SubWalkers(node);
+            
             base.VisitInterfaceDeclaration(node);
         }
 
         public override void VisitRecordDeclaration(RecordDeclarationSyntax node)
         {
             GetTypeDeclarationTriples(node);
+
+            SubWalkers(node);
 
             base.VisitRecordDeclaration(node);
         }
@@ -65,6 +63,17 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
             _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
             _triples.AddRange(WordTriples(typeNode));
+        }
+
+        private void SubWalkers(TypeDeclarationSyntax node)
+        {
+            if (!_walkerOptions.DescendIntoSubWalkers) return;
+
+            CSharpTypeDefinitionWalker typeDefinitionWalker = new(node, _walkerOptions);
+            _triples.AddRange(typeDefinitionWalker.Walk().Distinct());
+
+            CSharpMethodInvocationWalker methodInvocationWalker = new(node, _walkerOptions);
+            _triples.AddRange(methodInvocationWalker.Walk().Distinct());
         }
     }
 }
