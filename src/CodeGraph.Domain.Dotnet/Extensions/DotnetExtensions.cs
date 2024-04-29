@@ -1,4 +1,5 @@
-﻿using CodeGraph.Domain.Graph.Nodes;
+﻿using System.Collections.Immutable;
+using CodeGraph.Domain.Graph.Nodes;
 using Microsoft.CodeAnalysis;
 
 namespace CodeGraph.Domain.Dotnet.Extensions
@@ -19,7 +20,7 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             if (symbol.IsAbstract) list.Add("abstract");
 
             if (symbol.IsStatic) list.Add("static");
-            
+
             if (symbol.IsSealed) list.Add("sealed");
 
             if (symbol.IsOverride) list.Add("override");
@@ -56,6 +57,30 @@ namespace CodeGraph.Domain.Dotnet.Extensions
 
             methodNode = methodSymbol.CreateMethodNode();
             return true;
+        }
+
+        public static bool TryGetInterfaceMethodFromImplementation(this IMethodSymbol methodSymbol, SemanticModel semanticModel, out MethodNode methodNode)
+        {
+            methodNode = null!;
+            
+            ImmutableArray<INamedTypeSymbol> interfaces = methodSymbol.ContainingType.AllInterfaces; 
+            
+            foreach(INamedTypeSymbol @interface in interfaces)
+            {
+                foreach (IMethodSymbol interfaceMethod in @interface.GetMembers().OfType<IMethodSymbol>())
+                {
+                    if (!methodSymbol.ContainingType.FindImplementationForInterfaceMember(interfaceMethod)!
+                            .Equals(methodSymbol, SymbolEqualityComparer.Default)) continue;
+
+                    if (!interfaceMethod.TryCreateMethodNode(semanticModel, out var interfaceMethodNode)) continue;
+                    
+                    methodNode = interfaceMethodNode!;
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         public static MethodNode CreateMethodNode(this IMethodSymbol symbol)
