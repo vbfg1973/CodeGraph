@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using CodeGraph.Domain.Common;
 using CodeGraph.Domain.Graph.Triples.Abstract;
 using Neo4j.Driver;
 
@@ -7,7 +8,8 @@ namespace CodeGraph.Domain.Graph.Database
     public static class DbManager
     {
         private const string Connection = "neo4j://localhost:7687";
-
+        private const int BatchSize = 100;
+        
         public static async Task InsertData(IList<Triple> triples, CredentialsConfig credentials, bool isDelete)
         {
             if (credentials == null) throw new ArgumentException("Please, provide credentials.");
@@ -27,12 +29,18 @@ namespace CodeGraph.Domain.Graph.Database
                 await Console.Error.WriteLineAsync($"Inserting {triples.Count} triples...");
 
                 int count = 0;
-                foreach (Triple triple in triples)
+                foreach (IEnumerable<Triple> tripleBatch in triples.OrderBy(x => x.Relationship.Type).ThenBy(x => x.NodeA.FullName).ThenBy(x => x.NodeB.FullName).Batch(BatchSize))
                 {
-                    await session.RunAsync(triple.ToString());
-                    count++;
+                    await session.ExecuteWriteAsync(async tx =>
+                    {
+                        foreach (Triple triple in tripleBatch)
+                        {
+                            count++;
+                            await tx.RunAsync(triple.ToString());
+                        }
+                    });
 
-                    if (count % 50 == 0)
+                    if (count % BatchSize == 0)
                     {
                         await Console.Error.WriteAsync($"Inserted {count} triples\r");
                     }

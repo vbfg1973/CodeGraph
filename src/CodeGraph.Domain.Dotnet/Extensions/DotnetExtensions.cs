@@ -69,11 +69,12 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             {
                 foreach (IMethodSymbol interfaceMethod in @interface.GetMembers().OfType<IMethodSymbol>())
                 {
-                    if (!methodSymbol.ContainingType.FindImplementationForInterfaceMember(interfaceMethod)!
-                            .Equals(methodSymbol, SymbolEqualityComparer.Default)) continue;
-
-                    if (!interfaceMethod.TryCreateMethodNode(semanticModel, out var interfaceMethodNode)) continue;
+                    ISymbol? implementation = methodSymbol.ContainingType.FindImplementationForInterfaceMember(interfaceMethod);
+                    if (implementation == null) continue;
                     
+                    if (implementation.Equals(methodSymbol, SymbolEqualityComparer.Default)) continue;
+                    if (!interfaceMethod.TryCreateMethodNode(semanticModel, out var interfaceMethodNode)) continue;
+
                     methodNode = interfaceMethodNode!;
 
                     return true;

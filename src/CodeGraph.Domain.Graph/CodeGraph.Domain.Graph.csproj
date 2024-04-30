@@ -10,4 +10,8 @@
         <PackageReference Include="Neo4j.Driver" Version="5.18.1"/>
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\CodeGraph.Domain.Common\CodeGraph.Domain.Common.csproj" />
+    </ItemGroup>
+
 </Project>
