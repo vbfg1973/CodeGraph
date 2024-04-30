@@ -1,0 +1,17 @@
+
+-- Find methods that implement an interface method where the interface was defined within the codebase 
+MATCH (c)-[:HAS]-(classMethod:Method)-[:IMPLEMENTS]-(interfaceMethod:Method)-[:HAS]-(i:Interface)
+  RETURN c.name, classMethod.name, i.name
+  ORDER BY i.name, classMethod.name
+  
+-- Find invocations of methods that are defined within the codebase
+MATCH (c)-[:HAS]-(classMethod:Method)-[:INVOKES]-(invokedMethod:Method)-[:HAS]-(methodOwner) 
+  RETURN c.name AS ClassName, classMethod.name AS ClassMethod, methodOwner.name AS InvokedMethodOwnerName, invokedMethod.name AS InvokedMethodName
+  ORDER BY ClassName, ClassMethod, InvokedMethodOwnerName, InvokedMethodName
+  
+-- Find invocation chains from a nominated method to the surface
+   ...
+   
+-- Find invocation chains from the surface to their conclusion, generating PlantUML Sequence diagrams (Mermaid likely better in Blazor)
+   -- Resolve interface methods to those implemented in codebase
+   -- Allow ignoring of interface methods implemented in classes matching a supplied pattern - test project, namespaces, etc
