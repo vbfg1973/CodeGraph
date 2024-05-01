@@ -1,5 +1,5 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
-using CodeGraph.Domain.Graph.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
 using FakeItEasy;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;

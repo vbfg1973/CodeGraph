@@ -9,7 +9,9 @@ namespace CodeGraph.Domain.Dotnet.Abstract
         Project? project = null)
     {
         public SyntaxTree SyntaxTree { get; } = syntaxTree;
+
         public SemanticModel SemanticModel { get; } = semanticModel;
+
         // public Solution? Solution { get; } = solution;
         public Project? Project { get; } = project;
     }

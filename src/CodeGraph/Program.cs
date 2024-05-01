@@ -1,8 +1,4 @@
-﻿using CodeGraph.Domain.Analysis;
-using CodeGraph.Domain.Dotnet;
-using CodeGraph.Domain.Features.Solution;
-using CodeGraph.Domain.Graph.Database;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+﻿using CodeGraph.Domain.Features.Solution;
 using CommandLine;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -34,7 +30,7 @@ namespace CodeGraph
                 .ParseArguments<
                     ImportSolutionOptions
                 >(args)
-                .WithParsed<ImportSolutionOptions>(options =>
+                .WithParsed(options =>
                 {
                     ImportSolutionVerb? verb = s_serviceProvider.GetService<ImportSolutionVerb>();
 

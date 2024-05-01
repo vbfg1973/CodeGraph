@@ -14,4 +14,9 @@
       <ProjectReference Include="..\CodeGraph.Domain.Common\CodeGraph.Domain.Common.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Repositories\" />
+      <Folder Include="TripleDefinitions\" />
+    </ItemGroup>
+
 </Project>

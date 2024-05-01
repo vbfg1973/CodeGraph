@@ -4,9 +4,9 @@ using CodeGraph.Domain.Analysis.FileSystem;
 using CodeGraph.Domain.Dotnet;
 using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 
 namespace CodeGraph.Domain.Analysis
@@ -54,7 +54,8 @@ namespace CodeGraph.Domain.Analysis
             await CodeAnalysis(project, projectAnalyzer, analyzerResult);
         }
 
-        private async Task CodeAnalysis(Project project, IProjectAnalyzer projectAnalyzer, IAnalyzerResult analyzerResult)
+        private async Task CodeAnalysis(Project project, IProjectAnalyzer projectAnalyzer,
+            IAnalyzerResult analyzerResult)
         {
             await Console.Error.WriteLineAsync($"Code analysis: {project.Name}");
             Compilation? compilation = await project.GetCompilationAsync();
@@ -78,7 +79,7 @@ namespace CodeGraph.Domain.Analysis
                 _triples.AddRange(fileSystemTriples);
 
                 SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
-                
+
                 WalkerOptions walkerOptions = new(new DotnetOptions(syntaxTree, semanticModel, project), true);
                 CSharpTypeDiscoveryWalker walker = new(fileNode!, walkerOptions);
                 _triples.AddRange(walker.Walk());

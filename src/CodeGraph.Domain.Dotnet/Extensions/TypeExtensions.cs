@@ -1,6 +1,6 @@
-﻿using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+﻿using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -18,7 +18,7 @@ namespace CodeGraph.Domain.Dotnet.Extensions
                 InterfaceDeclarationSyntax _ => new InterfaceNode(fullName, name, symbol.MapModifiers()),
                 RecordDeclarationSyntax _ => new RecordNode(fullName, name, symbol.MapModifiers()),
                 _ => throw new ArgumentOutOfRangeException(nameof(declaration),
-                    $"Invalid TypeDeclarationSyntax in CreateTypeNode - ${declaration.GetType().ToString()}")
+                    $"Invalid TypeDeclarationSyntax in CreateTypeNode - ${declaration.GetType()}")
             };
         }
 

@@ -1,0 +1,16 @@
+﻿using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Relationships;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
+
+namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
+{
+    public class TripleDeclaredAt : Triple
+    {
+        public TripleDeclaredAt(
+            TypeNode typeA,
+            FileNode fileB)
+            : base(typeA, fileB, new DeclaredAtRelationship())
+        {
+        }
+    }
+}
