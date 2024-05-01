@@ -69,12 +69,13 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             {
                 foreach (IMethodSymbol interfaceMethod in @interface.GetMembers().OfType<IMethodSymbol>())
                 {
-                    ISymbol? implementation = methodSymbol.ContainingType.FindImplementationForInterfaceMember(interfaceMethod);
+                    IMethodSymbol? implementation = methodSymbol.ContainingType.FindImplementationForInterfaceMember(interfaceMethod) as IMethodSymbol;
                     if (implementation == null) continue;
                     
-                    if (implementation.Equals(methodSymbol, SymbolEqualityComparer.Default)) continue;
-                    if (!interfaceMethod.TryCreateMethodNode(semanticModel, out var interfaceMethodNode)) continue;
-
+                    if (!implementation.Equals(methodSymbol, SymbolEqualityComparer.Default)) continue;
+                    if (!interfaceMethod.TryCreateMethodNode(semanticModel, out MethodNode? interfaceMethodNode)) continue;
+                    if (interfaceMethodNode == null) continue;
+                    
                     methodNode = interfaceMethodNode!;
 
                     return true;
@@ -82,6 +83,20 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             }
 
             return false;
+        }
+        
+        public static ImmutableArray<ISymbol> InterfaceImplementations(this IMethodSymbol symbol)
+        {
+            if (symbol.Kind != SymbolKind.Method && symbol.Kind != SymbolKind.Property && symbol.Kind != SymbolKind.Event)
+                return ImmutableArray<ISymbol>.Empty;
+
+            var containingType = symbol.ContainingType;
+            var query = from iface in containingType.AllInterfaces
+                from interfaceMember in iface.GetMembers()
+                let impl = containingType.FindImplementationForInterfaceMember(interfaceMember)
+                where symbol.Equals(impl)
+                select interfaceMember;
+            return query.ToImmutableArray();
         }
 
         public static MethodNode CreateMethodNode(this IMethodSymbol symbol)
