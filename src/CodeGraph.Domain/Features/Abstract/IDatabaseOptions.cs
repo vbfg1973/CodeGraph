@@ -1,6 +1,6 @@
 using CommandLine;
 
-namespace CodeGraph.Domain.Features
+namespace CodeGraph.Domain.Features.Abstract
 {
     public interface IDatabaseOptions
     {
