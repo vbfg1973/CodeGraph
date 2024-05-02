@@ -1,4 +1,5 @@
-﻿using CodeGraph.Domain.Features.Solution;
+﻿using CodeGraph.Domain.Features.ImportSolution;
+using CodeGraph.Domain.Features.SequenceUml;
 using CommandLine;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -28,15 +29,24 @@ namespace CodeGraph
         {
             Parser.Default
                 .ParseArguments<
-                    ImportSolutionOptions
+                    ImportSolutionOptions,
+                    SequenceUmlOptions
                 >(args)
-                .WithParsed(options =>
+                .WithParsed<ImportSolutionOptions>(options =>
                 {
                     ImportSolutionVerb? verb = s_serviceProvider.GetService<ImportSolutionVerb>();
 
                     verb?.Run(options)
                         .Wait();
-                });
+                })
+                .WithParsed<SequenceUmlOptions>(options =>
+                {
+                    SequenceUmlVerb? verb = s_serviceProvider.GetService<SequenceUmlVerb>();
+
+                    verb?.Run(options)
+                        .Wait();
+                })
+                ;
         }
 
         private static void ConfigureServices()
@@ -49,6 +59,7 @@ namespace CodeGraph
             s_serviceCollection.AddLogging(configure => configure.AddSerilog());
 
             s_serviceCollection.AddTransient<ImportSolutionVerb>();
+            s_serviceCollection.AddTransient<SequenceUmlVerb>();
 
             s_serviceProvider = s_serviceCollection.BuildServiceProvider();
         }
