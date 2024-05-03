@@ -1,8 +1,10 @@
-﻿using System.Text.Json;
+﻿using System.Diagnostics;
+using System.Text.Json;
 using CodeGraph.Domain.Graph.Database;
 using CodeGraph.Domain.Graph.Database.Repositories;
 using CodeGraph.Domain.Graph.Database.Repositories.Base;
 using CodeGraph.Domain.Graph.QueryModels;
+using CodeGraph.Domain.Graph.QueryModels.Enums;
 using CommandLine;
 using Microsoft.Extensions.Logging;
 
@@ -29,10 +31,33 @@ namespace CodeGraph.Domain.Features.SequenceUml
 
             InterfaceRepository interfaceRepository = new(dataAccess, _loggerFactory);
 
-            List<InterfaceMethodImplementation> res = await interfaceRepository.Query();
+            var sw = new Stopwatch();
+            sw.Start();
+            List<InterfaceMethodImplementation> interfaceMethodImplementations = await interfaceRepository.InterfaceMethodImplementations();
+            List<MethodInvocation> methodInvocations = await interfaceRepository.MethodInvocations();
+            sw.Stop();
 
-            Console.WriteLine(JsonSerializer.Serialize(res, new JsonSerializerOptions { WriteIndented = true }));
-            Console.WriteLine(res.Count);
+            Console.WriteLine(interfaceMethodImplementations.Count);
+            Console.WriteLine(methodInvocations.Count);
+
+            var classMethodInvocations = methodInvocations
+                .Count(x => x.InvokedMethodParentType == ObjectType.Class);
+            
+            var interfaceMethodInvocations = methodInvocations
+                .Count(x => x.InvokedMethodParentType == ObjectType.Interface);
+            
+            Console.WriteLine($"Class Invocations: {classMethodInvocations}");
+            Console.WriteLine($"Interface Invocations: {interfaceMethodInvocations}");
+
+            foreach (var interfaceMethodInvocation in methodInvocations.Where(x =>
+                         x.InvokedMethodParentType == ObjectType.Interface))
+            {
+                var candidates = interfaceMethodImplementations.Where(x =>
+                    x.InterfaceName == interfaceMethodInvocation.InvokedMethodParent &&
+                    x.InterfaceMethodName == interfaceMethodInvocation.InvokedMethod).ToList();
+            }
+            
+            Console.WriteLine(sw.Elapsed);
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using CodeGraph.Domain.Graph.QueryModels.Enums;
 using Microsoft.Extensions.Logging;
 using Neo4j.Driver;
 
@@ -9,6 +11,12 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         private readonly string _database;
 
         private readonly ILogger<Neo4jDataAccess> _logger;
+
+        private readonly JsonSerializerOptions _options = new()
+        {
+            WriteIndented = true
+        };
+
         private readonly IAsyncSession _session;
 
         /// <summary>
@@ -18,7 +26,8 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         {
             _logger = loggerFactory.CreateLogger<Neo4jDataAccess>();
             _database = credentialsConfig.Database ?? "neo4j";
-            IDriver driver = GraphDatabase.Driver(credentialsConfig.Host, AuthTokens.Basic(credentialsConfig.UserName, credentialsConfig.Password));
+            IDriver driver = GraphDatabase.Driver(credentialsConfig.Host,
+                AuthTokens.Basic(credentialsConfig.UserName, credentialsConfig.Password));
 
             _session = driver.AsyncSession(o => o.WithDatabase(_database));
         }
@@ -115,13 +124,14 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
 
                 List<T>? result = await _session.ExecuteReadAsync(async tx =>
                 {
-                    List<T> data = new List<T>();
+                    List<T> data = new();
                     IResultCursor? res = await tx.RunAsync(query, parameters);
                     List<IRecord>? records = await res.ToListAsync();
-                    data = JsonSerializer.Deserialize<List<T>>(JsonSerializer.Serialize(records))!.ToList();
-                    
-                    
-                    // data = records.Select(x => (T)x.Values[returnObjectKey]).ToList();
+
+                    // Console.WriteLine(JsonSerializer.Serialize(records, _options));
+
+                    data = JsonSerializer.Deserialize<List<T>>(JsonSerializer.Serialize(records, _options))!.ToList();
+
                     return data;
                 });
 
