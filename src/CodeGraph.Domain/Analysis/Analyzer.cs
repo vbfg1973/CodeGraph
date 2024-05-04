@@ -50,6 +50,20 @@ namespace CodeGraph.Domain.Analysis
             {
                 await Console.Error.WriteLineAsync($"{kvp.Key}: {kvp.Value.Count}");
             }
+
+            var invokedNamespaces = _triples
+                .OfType<TripleInvocationOf>()
+                .Where(x => x.NodeB is MethodNode)
+                .Select(x => x.NodeB.FullName)
+                .Select(x => string.Join(".", x.Split('.').SkipLast(2)))
+                .GroupBy(x => x)
+                .Select(grouping => new {Namespace = grouping.Key, Count = grouping.Count()})
+                .OrderBy(x => x.Namespace)
+                .Select(x => $"ns: {x.Namespace} - {x.Count}");
+
+            await Console.Error.WriteLineAsync("Invoked namespaces:");
+            await Console.Error.WriteLineAsync("\t" + string.Join("\n\t", invokedNamespaces));
+            
             await Console.Error.WriteLineAsync();
         }
 

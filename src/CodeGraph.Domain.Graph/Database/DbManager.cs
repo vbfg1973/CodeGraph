@@ -7,7 +7,7 @@ namespace CodeGraph.Domain.Graph.Database
 {
     public static class DbManager
     {
-        private const int BatchSize = 250;
+        private const int BatchSize = 1000;
 
         public static async Task InsertData(IList<Triple> triples, CredentialsConfig credentials, bool isDelete)
         {
@@ -47,17 +47,18 @@ namespace CodeGraph.Domain.Graph.Database
                         {
                             await tx.RunAsync(triple.ToString());
                         }
-                        
+
                         count += BatchSize;
                     });
 
                     await Console.Error.WriteAsync(
-                        $"Inserted {count} triples - {sw.Elapsed} - {sw.ElapsedMilliseconds - last_ms}ms  \r");
+                        $"Inserted {count} triples - {sw.Elapsed} - {Math.Round((decimal) (sw.ElapsedMilliseconds - last_ms) / 1000, 2)} secs  \r");
                     last_ms = sw.ElapsedMilliseconds;
                 }
 
                 sw.Stop();
 
+                await Console.Error.WriteAsync(new string(' ', 80) + "\r"); // Clear line
                 await Console.Error.WriteLineAsync($"Inserted {triples.Count} triples complete - {sw.Elapsed}");
             }
             catch (Exception ex)
