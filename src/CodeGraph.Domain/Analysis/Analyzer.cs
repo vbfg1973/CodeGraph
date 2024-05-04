@@ -36,35 +36,9 @@ namespace CodeGraph.Domain.Analysis
             }
 
             await RelationshipStatistics();
-
+            await ReportNamespaces();
+            
             return _triples.Distinct().ToList();
-        }
-
-        private async Task RelationshipStatistics()
-        {
-            Dictionary<string, List<Triple>> dictionary =
-                _triples.GroupBy(x => x.Relationship.Type).ToDictionary(x => x.Key, x => x.ToList());
-
-            await Console.Error.WriteLineAsync();
-            foreach (KeyValuePair<string, List<Triple>> kvp in dictionary.OrderByDescending(x => x.Value.Count()))
-            {
-                await Console.Error.WriteLineAsync($"{kvp.Key}: {kvp.Value.Count}");
-            }
-
-            IEnumerable<string> invokedNamespaces = _triples
-                .OfType<TripleInvocationOf>()
-                .Where(x => x.NodeB is MethodNode)
-                .Select(x => x.NodeB.FullName)
-                .Select(x => string.Join(".", x.Split('.').SkipLast(2)))
-                .GroupBy(x => x)
-                .Select(grouping => new { Namespace = grouping.Key, Count = grouping.Count() })
-                .OrderBy(x => x.Namespace)
-                .Select(x => $"ns: {x.Namespace} - {x.Count}");
-
-            await Console.Error.WriteLineAsync("Invoked namespaces:");
-            await Console.Error.WriteLineAsync("\t" + string.Join("\n\t", invokedNamespaces));
-
-            await Console.Error.WriteLineAsync();
         }
 
         private async Task ProjectAnalysis(IProjectAnalyzer projectAnalyzer, AdhocWorkspace workspace,
@@ -113,6 +87,39 @@ namespace CodeGraph.Domain.Analysis
                 CSharpTypeDiscoveryWalker walker = new(fileNode!, walkerOptions);
                 _triples.AddRange(walker.Walk());
             }
+        }
+        
+        private async Task RelationshipStatistics()
+        {
+            Dictionary<string, List<Triple>> dictionary =
+                _triples.GroupBy(x => x.Relationship.Type).ToDictionary(x => x.Key, x => x.ToList());
+
+            await Console.Error.WriteLineAsync();
+            foreach (KeyValuePair<string, List<Triple>> kvp in dictionary.OrderByDescending(x => x.Value.Count()))
+            {
+                await Console.Error.WriteLineAsync($"{kvp.Key}: {kvp.Value.Count}");
+            }
+
+            await Console.Error.WriteLineAsync();
+        }
+
+        private async Task ReportNamespaces()
+        {
+            await Console.Error.WriteLineAsync();
+
+            IEnumerable<string> invokedNamespaces = _triples
+                .OfType<TripleInvocationOf>()
+                .Where(x => x.NodeB is MethodNode)
+                .Select(x => x.NodeB.FullName)
+                .Select(x => string.Join(".", x.Split('.').SkipLast(2)))
+                .GroupBy(x => x)
+                .Select(grouping => new { Namespace = grouping.Key, Count = grouping.Count() })
+                .OrderBy(x => x.Namespace)
+                .Select(x => $"ns: {x.Namespace} - {x.Count}");
+
+            await Console.Error.WriteLineAsync("Invoked namespaces:");
+            await Console.Error.WriteLineAsync("\t" + string.Join("\n\t", invokedNamespaces));
+            await Console.Error.WriteLineAsync();
         }
     }
 }
