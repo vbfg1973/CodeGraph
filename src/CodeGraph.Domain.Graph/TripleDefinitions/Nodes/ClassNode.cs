@@ -1,4 +1,6 @@
-﻿namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
+﻿using CodeGraph.Domain.Graph.TripleDefinitions.Nodes.Abstract;
+
+namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
 {
     public class ClassNode : TypeNode, IEquatable<ClassNode>
     {

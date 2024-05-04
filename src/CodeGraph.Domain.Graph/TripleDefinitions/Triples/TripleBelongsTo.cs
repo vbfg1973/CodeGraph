@@ -5,12 +5,12 @@ using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 
 namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
 {
-    public class TripleDeclaredAt : Triple
+    public class TripleBelongsTo : Triple
     {
-        public TripleDeclaredAt(
+        public TripleBelongsTo(
             TypeNode typeA,
-            FileNode fileB)
-            : base(typeA, fileB, new DeclaredAtRelationship())
+            ProjectNode projectB)
+            : base(typeA, projectB, new BelongsToRelationship())
         {
         }
     }

@@ -1,4 +1,5 @@
 ﻿using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes.Abstract;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis;

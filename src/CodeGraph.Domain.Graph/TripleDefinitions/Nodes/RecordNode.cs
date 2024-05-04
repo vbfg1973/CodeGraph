@@ -1,3 +1,5 @@
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes.Abstract;
+
 namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
 {
     public class RecordNode : TypeNode, IEquatable<RecordNode>

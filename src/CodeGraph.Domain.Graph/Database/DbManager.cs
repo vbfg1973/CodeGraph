@@ -33,7 +33,13 @@ namespace CodeGraph.Domain.Graph.Database
                 long last_ms = 0;
                 Stopwatch sw = new();
                 sw.Start();
-                foreach (var tripleBatch in triples.OrderBy(x => x.Relationship.Type).Batch(BatchSize).ToList())
+
+                var orderedTriples = triples
+                    .OrderBy(x => x.Relationship.Type)
+                    .ThenBy(x => x.NodeA.FullName)
+                    .ThenBy(x => x.NodeB.FullName);
+                
+                foreach (var tripleBatch in orderedTriples.Batch(BatchSize).ToList())
                 {
                     await session.ExecuteWriteAsync(async tx =>
                     {
