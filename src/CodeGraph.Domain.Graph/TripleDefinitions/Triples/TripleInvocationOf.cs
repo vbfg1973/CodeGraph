@@ -4,12 +4,12 @@ using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 
 namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
 {
-    public class TripleInvoke : Triple
+    public class TripleInvocationOf : Triple
     {
-        public TripleInvoke(
-            MethodNode methodA,
-            InvocationNode invocationB)
-            : base(methodA, invocationB, new InvokesRelationship())
+        public TripleInvocationOf(
+            InvocationNode invocationA,
+            MethodNode methodB)
+            : base(invocationA, methodB, new InvocationOfRelationship())
         {
         }
     }

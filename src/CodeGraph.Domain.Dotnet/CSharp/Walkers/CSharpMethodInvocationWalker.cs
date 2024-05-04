@@ -58,9 +58,21 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
             if (symbol is not IMethodSymbol invokedMethodSymbol) return;
 
+            
+
             if (invokedMethodSymbol.TryCreateMethodNode(_walkerOptions.DotnetOptions.SemanticModel,
                     out MethodNode? invokedMethod))
-                _triples.Add(new TripleInvoke(parentMethodNode, invokedMethod!));
+            {
+                int location = invocation.GetLocation().SourceSpan.Start;
+
+                string invocationNodeName = parentMethodNode.FullName + "_" + invokedMethod!.FullName;
+                InvocationNode invocationNode = new InvocationNode(invocationNodeName);
+                InvocationLocationNode invocationLocationNode = new InvocationLocationNode(location);
+                
+                _triples.Add(new TripleInvoke(parentMethodNode, invocationNode));
+                _triples.Add(new TripleInvokedAt(invocationNode, invocationLocationNode));
+                _triples.Add(new TripleInvocationOf(invocationNode, invokedMethod));
+            }
         }
     }
 }

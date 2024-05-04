@@ -35,7 +35,22 @@ namespace CodeGraph.Domain.Analysis
                 await ProjectAnalysis(projectAnalyzer, workspace, projects);
             }
 
-            return _triples;
+            await RelationshipStatistics();
+
+            return _triples.Distinct().ToList();
+        }
+
+        private async Task RelationshipStatistics()
+        {
+            Dictionary<string, List<Triple>> dictionary =
+                _triples.GroupBy(x => x.Relationship.Type).ToDictionary(x => x.Key, x => x.ToList());
+
+            await Console.Error.WriteLineAsync();
+            foreach (var kvp in dictionary.OrderByDescending(x => x.Value.Count()))
+            {
+                await Console.Error.WriteLineAsync($"{kvp.Key}: {kvp.Value.Count}");
+            }
+            await Console.Error.WriteLineAsync();
         }
 
         private async Task ProjectAnalysis(IProjectAnalyzer projectAnalyzer, AdhocWorkspace workspace,

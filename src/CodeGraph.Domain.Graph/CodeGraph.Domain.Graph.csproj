@@ -16,7 +16,9 @@
     </ItemGroup>
 
     <ItemGroup>
-        <Folder Include="TripleDefinitions\"/>
+      <Folder Include="TripleDefinitions\Invocation\Nodes\" />
+      <Folder Include="TripleDefinitions\Invocation\Relationships\" />
+      <Folder Include="TripleDefinitions\Relationships\Invocation\" />
     </ItemGroup>
 
 </Project>
