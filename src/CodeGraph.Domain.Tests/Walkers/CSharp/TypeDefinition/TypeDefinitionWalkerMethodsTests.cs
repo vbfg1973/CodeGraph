@@ -40,7 +40,8 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
         [Theory]
         [InlineData("ClassWithMethodArguments.csharp", "MethodWithTwoArguments", 2)]
         [InlineData("ClassWithMethodArguments.csharp", "MethodWithThreeArguments", 3)]
-        public async Task Given_Class_With_Methods_Correct_Number_Arguments(string fileName, string methodName, int expectedArgumentCount)
+        public async Task Given_Class_With_Methods_Correct_Number_Arguments(string fileName, string methodName,
+            int expectedArgumentCount)
         {
             // Arrange
             (WalkerOptions walkerOptions, FileNode fileNode) =

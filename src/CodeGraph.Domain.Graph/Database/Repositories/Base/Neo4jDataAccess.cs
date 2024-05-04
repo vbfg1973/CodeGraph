@@ -1,6 +1,4 @@
 ﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-using CodeGraph.Domain.Graph.QueryModels.Enums;
 using Microsoft.Extensions.Logging;
 using Neo4j.Driver;
 

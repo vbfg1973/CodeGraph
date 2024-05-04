@@ -29,7 +29,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.Global
         public async Task Given_CSharp_File_No_Triples_Have_Null_Nodes(string fullPath)
         {
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(fullPath, descendIntoSubWalkers: true);
+            (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(fullPath, true);
 
             // Act
             CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);

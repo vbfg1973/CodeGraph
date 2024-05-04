@@ -41,7 +41,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                                     labels(parentType)[0] AS InvokedMethodParentType,
                                     invokedMethod.name AS InvokedMethod
                            """;
-            
+
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
             return await _dataAccess.ExecuteReadDictionaryAsync<MethodInvocation>(query, "p", parameters);
         }

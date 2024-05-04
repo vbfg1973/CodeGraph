@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text.Json;
 using CodeGraph.Domain.Graph.Database;
 using CodeGraph.Domain.Graph.Database.Repositories;
 using CodeGraph.Domain.Graph.Database.Repositories.Base;
@@ -31,32 +30,33 @@ namespace CodeGraph.Domain.Features.SequenceUml
 
             InterfaceRepository interfaceRepository = new(dataAccess, _loggerFactory);
 
-            var sw = new Stopwatch();
+            Stopwatch sw = new Stopwatch();
             sw.Start();
-            List<InterfaceMethodImplementation> interfaceMethodImplementations = await interfaceRepository.InterfaceMethodImplementations();
+            List<InterfaceMethodImplementation> interfaceMethodImplementations =
+                await interfaceRepository.InterfaceMethodImplementations();
             List<MethodInvocation> methodInvocations = await interfaceRepository.MethodInvocations();
             sw.Stop();
 
             Console.WriteLine(interfaceMethodImplementations.Count);
             Console.WriteLine(methodInvocations.Count);
 
-            var classMethodInvocations = methodInvocations
+            int classMethodInvocations = methodInvocations
                 .Count(x => x.InvokedMethodParentType == ObjectType.Class);
-            
-            var interfaceMethodInvocations = methodInvocations
+
+            int interfaceMethodInvocations = methodInvocations
                 .Count(x => x.InvokedMethodParentType == ObjectType.Interface);
-            
+
             Console.WriteLine($"Class Invocations: {classMethodInvocations}");
             Console.WriteLine($"Interface Invocations: {interfaceMethodInvocations}");
 
-            foreach (var interfaceMethodInvocation in methodInvocations.Where(x =>
+            foreach (MethodInvocation interfaceMethodInvocation in methodInvocations.Where(x =>
                          x.InvokedMethodParentType == ObjectType.Interface))
             {
-                var candidates = interfaceMethodImplementations.Where(x =>
+                List<InterfaceMethodImplementation> candidates = interfaceMethodImplementations.Where(x =>
                     x.InterfaceName == interfaceMethodInvocation.InvokedMethodParent &&
                     x.InterfaceMethodName == interfaceMethodInvocation.InvokedMethod).ToList();
             }
-            
+
             Console.WriteLine(sw.Elapsed);
         }
     }
