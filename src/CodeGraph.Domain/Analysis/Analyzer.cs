@@ -46,24 +46,24 @@ namespace CodeGraph.Domain.Analysis
                 _triples.GroupBy(x => x.Relationship.Type).ToDictionary(x => x.Key, x => x.ToList());
 
             await Console.Error.WriteLineAsync();
-            foreach (var kvp in dictionary.OrderByDescending(x => x.Value.Count()))
+            foreach (KeyValuePair<string, List<Triple>> kvp in dictionary.OrderByDescending(x => x.Value.Count()))
             {
                 await Console.Error.WriteLineAsync($"{kvp.Key}: {kvp.Value.Count}");
             }
 
-            var invokedNamespaces = _triples
+            IEnumerable<string> invokedNamespaces = _triples
                 .OfType<TripleInvocationOf>()
                 .Where(x => x.NodeB is MethodNode)
                 .Select(x => x.NodeB.FullName)
                 .Select(x => string.Join(".", x.Split('.').SkipLast(2)))
                 .GroupBy(x => x)
-                .Select(grouping => new {Namespace = grouping.Key, Count = grouping.Count()})
+                .Select(grouping => new { Namespace = grouping.Key, Count = grouping.Count() })
                 .OrderBy(x => x.Namespace)
                 .Select(x => $"ns: {x.Namespace} - {x.Count}");
 
             await Console.Error.WriteLineAsync("Invoked namespaces:");
             await Console.Error.WriteLineAsync("\t" + string.Join("\n\t", invokedNamespaces));
-            
+
             await Console.Error.WriteLineAsync();
         }
 

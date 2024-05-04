@@ -34,12 +34,12 @@ namespace CodeGraph.Domain.Graph.Database
                 Stopwatch sw = new();
                 sw.Start();
 
-                var orderedTriples = triples
+                IOrderedEnumerable<Triple> orderedTriples = triples
                     .OrderBy(x => x.Relationship.Type)
                     .ThenBy(x => x.NodeA.FullName)
                     .ThenBy(x => x.NodeB.FullName);
-                
-                foreach (var tripleBatch in orderedTriples.Batch(BatchSize).ToList())
+
+                foreach (IEnumerable<Triple> tripleBatch in orderedTriples.Batch(BatchSize).ToList())
                 {
                     await session.ExecuteWriteAsync(async tx =>
                     {
@@ -52,7 +52,7 @@ namespace CodeGraph.Domain.Graph.Database
                     });
 
                     await Console.Error.WriteAsync(
-                        $"Inserted {count} triples - {sw.Elapsed} - {Math.Round((decimal) (sw.ElapsedMilliseconds - last_ms) / 1000, 2)} secs  \r");
+                        $"Inserted {count} triples - {sw.Elapsed} - {Math.Round((decimal)(sw.ElapsedMilliseconds - last_ms) / 1000, 2)} secs  \r");
                     last_ms = sw.ElapsedMilliseconds;
                 }
 

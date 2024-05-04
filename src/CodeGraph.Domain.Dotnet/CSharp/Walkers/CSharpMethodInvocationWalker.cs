@@ -61,7 +61,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
             if (!invokedMethodSymbol.TryCreateMethodNode(_walkerOptions.DotnetOptions.SemanticModel,
                     out MethodNode? invokedMethod)) return;
-            
+
             int location = invocation.GetLocation().SourceSpan.Start;
 
             string invocationNodeName = parentMethodNode.FullName + "_" + invokedMethod!.FullName;
@@ -69,14 +69,17 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             InvocationLocationNode invocationLocationNode = new(location);
 
             // Ignore dotnet's core methods
-            if (invokedMethod.FullName.StartsWith("System", StringComparison.InvariantCultureIgnoreCase) || 
+            if (invokedMethod.FullName.StartsWith("System", StringComparison.InvariantCultureIgnoreCase) ||
                 invokedMethod.FullName.StartsWith("Microsoft.Asp", StringComparison.InvariantCultureIgnoreCase) ||
-                invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Metadata", StringComparison.InvariantCultureIgnoreCase) ||
-                invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Migrations", StringComparison.InvariantCultureIgnoreCase) ||
-                invokedMethod.FullName.StartsWith("Microsoft.Extensions", StringComparison.InvariantCultureIgnoreCase) ||
+                invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Metadata",
+                    StringComparison.InvariantCultureIgnoreCase) ||
+                invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Migrations",
+                    StringComparison.InvariantCultureIgnoreCase) ||
+                invokedMethod.FullName.StartsWith("Microsoft.Extensions",
+                    StringComparison.InvariantCultureIgnoreCase) ||
                 invokedMethod.FullName.StartsWith("Moq", StringComparison.InvariantCultureIgnoreCase)
-                ) return;
-                
+               ) return;
+
             _triples.Add(new TripleInvoke(parentMethodNode, invocationNode));
             _triples.Add(new TripleInvokedAt(invocationNode, invocationLocationNode));
             _triples.Add(new TripleInvocationOf(invocationNode, invokedMethod));
