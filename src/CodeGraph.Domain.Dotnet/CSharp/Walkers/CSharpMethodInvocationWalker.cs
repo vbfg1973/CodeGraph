@@ -71,7 +71,8 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             // Ignore dotnet's core methods
             if (invokedMethod.FullName.StartsWith("System", StringComparison.InvariantCultureIgnoreCase) || 
                 invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Metadata", StringComparison.InvariantCultureIgnoreCase) ||
-                invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Migrations", StringComparison.InvariantCultureIgnoreCase)
+                invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Metadata", StringComparison.InvariantCultureIgnoreCase) ||
+                invokedMethod.FullName.StartsWith("Moq", StringComparison.InvariantCultureIgnoreCase)
                 ) return;
                 
             _triples.Add(new TripleInvoke(parentMethodNode, invocationNode));
