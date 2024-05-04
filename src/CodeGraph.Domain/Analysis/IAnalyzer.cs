@@ -1,4 +1,4 @@
-﻿using CodeGraph.Domain.Graph.Triples.Abstract;
+﻿using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 
 namespace CodeGraph.Domain.Analysis
 {

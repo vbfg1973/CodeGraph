@@ -1,8 +1,8 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.Extensions;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
@@ -58,9 +58,28 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
             if (symbol is not IMethodSymbol invokedMethodSymbol) return;
 
-            if (invokedMethodSymbol.TryCreateMethodNode(_walkerOptions.DotnetOptions.SemanticModel,
-                    out MethodNode? invokedMethod))
-                _triples.Add(new TripleInvoke(parentMethodNode, invokedMethod!));
+
+            if (!invokedMethodSymbol.TryCreateMethodNode(_walkerOptions.DotnetOptions.SemanticModel,
+                    out MethodNode? invokedMethod)) return;
+            
+            int location = invocation.GetLocation().SourceSpan.Start;
+
+            string invocationNodeName = parentMethodNode.FullName + "_" + invokedMethod!.FullName;
+            InvocationNode invocationNode = new(parentMethodNode, invokedMethod);
+            InvocationLocationNode invocationLocationNode = new(location);
+
+            // Ignore dotnet's core methods
+            if (invokedMethod.FullName.StartsWith("System", StringComparison.InvariantCultureIgnoreCase) || 
+                invokedMethod.FullName.StartsWith("Microsoft.Asp", StringComparison.InvariantCultureIgnoreCase) ||
+                invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Metadata", StringComparison.InvariantCultureIgnoreCase) ||
+                invokedMethod.FullName.StartsWith("Microsoft.EntityFrameworkCore.Migrations", StringComparison.InvariantCultureIgnoreCase) ||
+                invokedMethod.FullName.StartsWith("Microsoft.Extensions", StringComparison.InvariantCultureIgnoreCase) ||
+                invokedMethod.FullName.StartsWith("Moq", StringComparison.InvariantCultureIgnoreCase)
+                ) return;
+                
+            _triples.Add(new TripleInvoke(parentMethodNode, invocationNode));
+            _triples.Add(new TripleInvokedAt(invocationNode, invocationLocationNode));
+            _triples.Add(new TripleInvocationOf(invocationNode, invokedMethod));
         }
     }
 }

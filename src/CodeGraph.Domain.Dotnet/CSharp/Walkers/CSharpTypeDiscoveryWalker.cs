@@ -1,8 +1,9 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.Extensions;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
@@ -35,7 +36,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             GetTypeDeclarationTriples(node);
 
             SubWalkers(node);
-            
+
             base.VisitInterfaceDeclaration(node);
         }
 
@@ -59,8 +60,10 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
         {
             TypeNode typeNode = GetTypeNode(node);
 
-            _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
+            ProjectNode projectNode = new(walkerOptions.DotnetOptions.Project!.Name);
 
+            _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
+            _triples.Add(new TripleBelongsTo(typeNode, projectNode));
             _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
             _triples.AddRange(WordTriples(typeNode));
         }

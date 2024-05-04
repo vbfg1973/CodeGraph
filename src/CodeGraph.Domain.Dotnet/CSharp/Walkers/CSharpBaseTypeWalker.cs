@@ -2,10 +2,10 @@
 using CodeGraph.Domain.Common;
 using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.Extensions;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Nodes.Abstract;
-using CodeGraph.Domain.Graph.Triples;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 

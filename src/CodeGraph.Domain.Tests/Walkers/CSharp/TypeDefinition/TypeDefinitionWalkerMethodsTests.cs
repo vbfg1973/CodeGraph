@@ -1,7 +1,7 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
 using CodeGraph.Domain.Tests.TestHelpers;
 using FluentAssertions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -40,7 +40,8 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
         [Theory]
         [InlineData("ClassWithMethodArguments.csharp", "MethodWithTwoArguments", 2)]
         [InlineData("ClassWithMethodArguments.csharp", "MethodWithThreeArguments", 3)]
-        public async Task Given_Class_With_Methods_Correct_Number_Arguments(string fileName, string methodName, int expectedArgumentCount)
+        public async Task Given_Class_With_Methods_Correct_Number_Arguments(string fileName, string methodName,
+            int expectedArgumentCount)
         {
             // Arrange
             (WalkerOptions walkerOptions, FileNode fileNode) =

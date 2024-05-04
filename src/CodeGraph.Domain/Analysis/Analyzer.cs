@@ -4,9 +4,9 @@ using CodeGraph.Domain.Analysis.FileSystem;
 using CodeGraph.Domain.Dotnet;
 using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 
 namespace CodeGraph.Domain.Analysis
@@ -35,7 +35,36 @@ namespace CodeGraph.Domain.Analysis
                 await ProjectAnalysis(projectAnalyzer, workspace, projects);
             }
 
-            return _triples;
+            await RelationshipStatistics();
+
+            return _triples.Distinct().ToList();
+        }
+
+        private async Task RelationshipStatistics()
+        {
+            Dictionary<string, List<Triple>> dictionary =
+                _triples.GroupBy(x => x.Relationship.Type).ToDictionary(x => x.Key, x => x.ToList());
+
+            await Console.Error.WriteLineAsync();
+            foreach (var kvp in dictionary.OrderByDescending(x => x.Value.Count()))
+            {
+                await Console.Error.WriteLineAsync($"{kvp.Key}: {kvp.Value.Count}");
+            }
+
+            var invokedNamespaces = _triples
+                .OfType<TripleInvocationOf>()
+                .Where(x => x.NodeB is MethodNode)
+                .Select(x => x.NodeB.FullName)
+                .Select(x => string.Join(".", x.Split('.').SkipLast(2)))
+                .GroupBy(x => x)
+                .Select(grouping => new {Namespace = grouping.Key, Count = grouping.Count()})
+                .OrderBy(x => x.Namespace)
+                .Select(x => $"ns: {x.Namespace} - {x.Count}");
+
+            await Console.Error.WriteLineAsync("Invoked namespaces:");
+            await Console.Error.WriteLineAsync("\t" + string.Join("\n\t", invokedNamespaces));
+            
+            await Console.Error.WriteLineAsync();
         }
 
         private async Task ProjectAnalysis(IProjectAnalyzer projectAnalyzer, AdhocWorkspace workspace,
@@ -54,7 +83,8 @@ namespace CodeGraph.Domain.Analysis
             await CodeAnalysis(project, projectAnalyzer, analyzerResult);
         }
 
-        private async Task CodeAnalysis(Project project, IProjectAnalyzer projectAnalyzer, IAnalyzerResult analyzerResult)
+        private async Task CodeAnalysis(Project project, IProjectAnalyzer projectAnalyzer,
+            IAnalyzerResult analyzerResult)
         {
             await Console.Error.WriteLineAsync($"Code analysis: {project.Name}");
             Compilation? compilation = await project.GetCompilationAsync();
@@ -78,7 +108,7 @@ namespace CodeGraph.Domain.Analysis
                 _triples.AddRange(fileSystemTriples);
 
                 SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
-                
+
                 WalkerOptions walkerOptions = new(new DotnetOptions(syntaxTree, semanticModel, project), true);
                 CSharpTypeDiscoveryWalker walker = new(fileNode!, walkerOptions);
                 _triples.AddRange(walker.Walk());

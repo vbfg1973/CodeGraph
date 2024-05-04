@@ -5,15 +5,17 @@
         public CredentialsConfig(string credentials)
         {
             if (string.IsNullOrEmpty(credentials)) return;
-            string[] args = credentials.Split(":");
-            if (args.Length != 3) return;
-            Database = args[0];
-            User = args[1];
-            Password = args[2];
+            string[] args = credentials.Split(";");
+            if (args.Length != 4) return;
+            Host = args[0];
+            Database = args[1];
+            UserName = args[2];
+            Password = args[3];
         }
 
+        public string Host { get; }
         public string Database { get; }
-        public string User { get; }
+        public string UserName { get; }
         public string Password { get; }
     }
 }

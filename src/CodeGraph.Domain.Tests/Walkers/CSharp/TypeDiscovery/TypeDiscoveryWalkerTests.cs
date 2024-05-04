@@ -1,8 +1,7 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
 using CodeGraph.Domain.Tests.TestHelpers;
 using FluentAssertions;
 

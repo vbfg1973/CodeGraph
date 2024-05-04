@@ -1,7 +1,7 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
-using CodeGraph.Domain.Graph.Nodes;
-using CodeGraph.Domain.Graph.Triples.Abstract;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using CodeGraph.Domain.Tests.TestHelpers;
 using CodeGraph.Domain.Tests.Walkers.CSharp.Global.ClassData;
 using FluentAssertions;
@@ -29,7 +29,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.Global
         public async Task Given_CSharp_File_No_Triples_Have_Null_Nodes(string fullPath)
         {
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(fullPath, descendIntoSubWalkers: true);
+            (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(fullPath, true);
 
             // Act
             CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);

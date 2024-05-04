@@ -1,5 +1,5 @@
 ﻿using System.Collections.Immutable;
-using CodeGraph.Domain.Graph.Nodes;
+using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
 using Microsoft.CodeAnalysis;
 
 namespace CodeGraph.Domain.Dotnet.Extensions
@@ -59,23 +59,27 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             return true;
         }
 
-        public static bool TryGetInterfaceMethodFromImplementation(this IMethodSymbol methodSymbol, SemanticModel semanticModel, out MethodNode methodNode)
+        public static bool TryGetInterfaceMethodFromImplementation(this IMethodSymbol methodSymbol,
+            SemanticModel semanticModel, out MethodNode methodNode)
         {
             methodNode = null!;
-            
-            ImmutableArray<INamedTypeSymbol> interfaces = methodSymbol.ContainingType.AllInterfaces; 
-            
-            foreach(INamedTypeSymbol @interface in interfaces)
+
+            ImmutableArray<INamedTypeSymbol> interfaces = methodSymbol.ContainingType.AllInterfaces;
+
+            foreach (INamedTypeSymbol @interface in interfaces)
             {
                 foreach (IMethodSymbol interfaceMethod in @interface.GetMembers().OfType<IMethodSymbol>())
                 {
-                    IMethodSymbol? implementation = methodSymbol.ContainingType.FindImplementationForInterfaceMember(interfaceMethod) as IMethodSymbol;
+                    IMethodSymbol? implementation =
+                        methodSymbol.ContainingType.FindImplementationForInterfaceMember(interfaceMethod) as
+                            IMethodSymbol;
                     if (implementation == null) continue;
-                    
+
                     if (!implementation.Equals(methodSymbol, SymbolEqualityComparer.Default)) continue;
-                    if (!interfaceMethod.TryCreateMethodNode(semanticModel, out MethodNode? interfaceMethodNode)) continue;
+                    if (!interfaceMethod.TryCreateMethodNode(semanticModel, out MethodNode? interfaceMethodNode))
+                        continue;
                     if (interfaceMethodNode == null) continue;
-                    
+
                     methodNode = interfaceMethodNode!;
 
                     return true;
@@ -84,14 +88,15 @@ namespace CodeGraph.Domain.Dotnet.Extensions
 
             return false;
         }
-        
+
         public static ImmutableArray<ISymbol> InterfaceImplementations(this IMethodSymbol symbol)
         {
-            if (symbol.Kind != SymbolKind.Method && symbol.Kind != SymbolKind.Property && symbol.Kind != SymbolKind.Event)
+            if (symbol.Kind != SymbolKind.Method && symbol.Kind != SymbolKind.Property &&
+                symbol.Kind != SymbolKind.Event)
                 return ImmutableArray<ISymbol>.Empty;
 
-            var containingType = symbol.ContainingType;
-            var query = from iface in containingType.AllInterfaces
+            INamedTypeSymbol? containingType = symbol.ContainingType;
+            IEnumerable<ISymbol> query = from iface in containingType.AllInterfaces
                 from interfaceMember in iface.GetMembers()
                 let impl = containingType.FindImplementationForInterfaceMember(interfaceMember)
                 where symbol.Equals(impl)
