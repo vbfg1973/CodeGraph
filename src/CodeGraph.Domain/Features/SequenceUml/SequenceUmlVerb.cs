@@ -1,19 +1,18 @@
 ﻿using System.Diagnostics;
+using System.Text.Json;
 using CodeGraph.Domain.Graph.Database;
 using CodeGraph.Domain.Graph.Database.Repositories;
 using CodeGraph.Domain.Graph.Database.Repositories.Base;
 using CodeGraph.Domain.Graph.QueryModels;
 using CodeGraph.Domain.Graph.QueryModels.Enums;
-using CommandLine;
+using CodeGraph.Domain.Graph.QueryModels.Queries;
+using CodeGraph.Domain.Graph.QueryModels.Results;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using JsonSerializer = System.Text.Json.JsonSerializer;
 
 namespace CodeGraph.Domain.Features.SequenceUml
 {
-    [Verb("SequenceUml", HelpText = "Generate Sequence UML from nominated starting point")]
-    public class SequenceUmlOptions
-    {
-    }
-
     public class SequenceUmlVerb
     {
         private readonly ILoggerFactory _loggerFactory;
@@ -41,21 +40,31 @@ namespace CodeGraph.Domain.Features.SequenceUml
             Console.WriteLine(methodInvocations.Count);
 
             int classMethodInvocations = methodInvocations
-                .Count(x => x.InvokedMethodParentType == ObjectType.Class);
+                .Count(x => x.InvokedMethodOwnerType == ObjectType.Class);
 
             int interfaceMethodInvocations = methodInvocations
-                .Count(x => x.InvokedMethodParentType == ObjectType.Interface);
+                .Count(x => x.InvokedMethodOwnerType == ObjectType.Interface);
 
             Console.WriteLine($"Class Invocations: {classMethodInvocations}");
             Console.WriteLine($"Interface Invocations: {interfaceMethodInvocations}");
 
-            foreach (MethodInvocation interfaceMethodInvocation in methodInvocations.Where(x =>
-                         x.InvokedMethodParentType == ObjectType.Interface))
+            foreach (var methodInvocation in methodInvocations.Where(x => x.InvokedMethodOwnerType == ObjectType.Interface))
             {
-                List<InterfaceMethodImplementation> candidates = interfaceMethodImplementations.Where(x =>
-                    x.InterfaceName == interfaceMethodInvocation.InvokedMethodParent &&
-                    x.InterfaceMethodName == interfaceMethodInvocation.InvokedMethod).ToList();
+                var implementations = await interfaceRepository.InterfaceMethodImplementations(new InterfaceImplementationQuery()
+                    { InterfaceMethodPk = methodInvocation.InvokedMethodPk});
+
+                if (implementations.Count() == 1)
+                {
+                    InterfaceMethodImplementation i = implementations.First();
+                    Console.WriteLine($"Called: {string.Join(".", methodInvocation.InvokedMethodOwnerFullName, methodInvocation.InvokedMethodName)} - Actually called: {string.Join(".", i.ClassFullName, i.ClassMethodName)}");
+                }
+
+                else
+                {
+                    Console.WriteLine($"---------- More than one {implementations.Count()} implementation Called: {string.Join(".", methodInvocation.InvokedMethodOwnerFullName, methodInvocation.InvokedMethodName)} ----------");
+                }
             }
+            
 
             Console.WriteLine(sw.Elapsed);
         }
