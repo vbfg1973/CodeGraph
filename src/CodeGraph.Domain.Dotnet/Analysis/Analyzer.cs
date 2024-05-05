@@ -32,7 +32,7 @@ namespace CodeGraph.Domain.Dotnet.Analysis
 
         public async Task<IList<Triple>> Analyze()
         {
-            _logger.LogDebug("{Method}", nameof(Analyze));
+            _logger.LogTrace("{Method}", nameof(Analyze));
             
             IEnumerable<IProjectAnalyzer> projectAnalyzers = _analyzerManager.Projects.Values;
 
@@ -47,13 +47,13 @@ namespace CodeGraph.Domain.Dotnet.Analysis
             await RelationshipStatistics();
             await ReportNamespaces();
             
-            return _triples.Distinct().ToList();
+            return _triples;
         }
 
         private async Task ProjectAnalysis(IProjectAnalyzer projectAnalyzer, AdhocWorkspace workspace,
             List<(Project, IProjectAnalyzer, IAnalyzerResult)> projects)
         {
-            _logger.LogDebug("{Method} {ProjectName}", nameof(ProjectAnalysis), projectAnalyzer.ProjectInSolution.ProjectName);
+            _logger.LogTrace("{Method} {ProjectName}", nameof(ProjectAnalysis), projectAnalyzer.ProjectInSolution.ProjectName);
 
             Project? project = projectAnalyzer.AddToWorkspace(workspace);
             IAnalyzerResult? analyzerResult = projectAnalyzer.Build().First();
@@ -71,7 +71,7 @@ namespace CodeGraph.Domain.Dotnet.Analysis
         private async Task CodeAnalysis(Project project, IProjectAnalyzer projectAnalyzer,
             IAnalyzerResult analyzerResult)
         {
-            _logger.LogDebug("{Method} {ProjectName}", nameof(CodeAnalysis), project.Name);
+            _logger.LogTrace("{Method} {ProjectName}", nameof(CodeAnalysis), project.Name);
             
             await Console.Error.WriteLineAsync($"Code analysis: {project.Name}");
             Compilation? compilation = await project.GetCompilationAsync();
