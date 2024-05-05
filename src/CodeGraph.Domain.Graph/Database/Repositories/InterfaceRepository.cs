@@ -6,7 +6,14 @@ using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Graph.Database.Repositories
 {
-    public class InterfaceRepository
+    public interface IInterfaceRepository
+    {
+        Task<List<InterfaceMethodImplementationQueryResult>> InterfaceMethodImplementations(InterfaceImplementationQuery? interfaceImplementationQuery = null!);
+
+        Task<List<MethodInvocationQueryResult>> MethodInvocations(MethodInvocationQuery? methodInvocationQuery = null);
+    }
+
+    public class InterfaceRepository : IInterfaceRepository
     {
         private readonly INeo4jDataAccess _dataAccess;
         private readonly ILoggerFactory _loggerFactory;
@@ -17,7 +24,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
             _loggerFactory = loggerFactory;
         }
 
-        public async Task<List<InterfaceMethodImplementation>> InterfaceMethodImplementations(
+        public async Task<List<InterfaceMethodImplementationQueryResult>> InterfaceMethodImplementations(
             InterfaceImplementationQuery? interfaceImplementationQuery = null!)
         {
             string query = interfaceImplementationQuery == null
@@ -61,10 +68,10 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                    """;
 
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
-            return await _dataAccess.ExecuteReadDictionaryAsync<InterfaceMethodImplementation>(query, "p", parameters);
+            return await _dataAccess.ExecuteReadDictionaryAsync<InterfaceMethodImplementationQueryResult>(query, "p", parameters);
         }
 
-        public async Task<List<MethodInvocation>> MethodInvocations(MethodInvocationQuery? methodInvocationQuery = null)
+        public async Task<List<MethodInvocationQueryResult>> MethodInvocations(MethodInvocationQuery? methodInvocationQuery = null)
         {
             string query = methodInvocationQuery == null
                 ? """
@@ -119,7 +126,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                    """;
 
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
-            return await _dataAccess.ExecuteReadDictionaryAsync<MethodInvocation>(query, "p", parameters);
+            return await _dataAccess.ExecuteReadDictionaryAsync<MethodInvocationQueryResult>(query, "p", parameters);
         }
 
         private string FullName(string fullName)

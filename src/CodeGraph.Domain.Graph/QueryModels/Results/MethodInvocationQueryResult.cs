@@ -3,7 +3,7 @@ using CodeGraph.Domain.Graph.QueryModels.Enums;
 
 namespace CodeGraph.Domain.Graph.QueryModels.Results
 {
-    public class MethodInvocation
+    public class MethodInvocationQueryResult
     {
         public string ClassFullName { get; set; } = null!;
         public string ClassName { get; set; } = null!;

@@ -31,9 +31,9 @@ namespace CodeGraph.Domain.Features.SequenceUml
 
             Stopwatch sw = new Stopwatch();
             sw.Start();
-            List<InterfaceMethodImplementation> interfaceMethodImplementations =
+            List<InterfaceMethodImplementationQueryResult> interfaceMethodImplementations =
                 await interfaceRepository.InterfaceMethodImplementations();
-            List<MethodInvocation> methodInvocations = await interfaceRepository.MethodInvocations();
+            List<MethodInvocationQueryResult> methodInvocations = await interfaceRepository.MethodInvocations();
             sw.Stop();
 
             Console.WriteLine(interfaceMethodImplementations.Count);
@@ -55,7 +55,7 @@ namespace CodeGraph.Domain.Features.SequenceUml
 
                 if (implementations.Count() == 1)
                 {
-                    InterfaceMethodImplementation i = implementations.First();
+                    InterfaceMethodImplementationQueryResult i = implementations.First();
                     Console.WriteLine($"Called: {string.Join(".", methodInvocation.InvokedMethodOwnerFullName, methodInvocation.InvokedMethodName)} - Actually called: {string.Join(".", i.ClassFullName, i.ClassMethodName)}");
                 }
 

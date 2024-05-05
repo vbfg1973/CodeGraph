@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace CodeGraph.Domain.Tests.Walkers.CSharp.MethodInvocation
 {
-    public class MethodInvocationTests
+    public class MethodInvocationQueryResultTests
     {
         private readonly string[] _path =
         {

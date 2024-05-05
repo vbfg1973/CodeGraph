@@ -1,6 +1,6 @@
 ﻿namespace CodeGraph.Domain.Graph.QueryModels.Results
 {
-    public class InterfaceMethodImplementation
+    public class InterfaceMethodImplementationQueryResult
     {
         public string InterfaceFullName { get; set; } = null!;
         public string InterfaceName { get; set; } = null!;
