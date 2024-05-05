@@ -1,27 +1,56 @@
 ﻿using CodeGraph.Domain.Graph.Database.Repositories.Base;
-using CodeGraph.Domain.Graph.QueryModels;
 using CodeGraph.Domain.Graph.QueryModels.Queries;
 using CodeGraph.Domain.Graph.QueryModels.Results;
 using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Graph.Database.Repositories
+
 {
-    public interface IInterfaceRepository
-    {
-        Task<List<InterfaceMethodImplementationQueryResult>> InterfaceMethodImplementations(InterfaceImplementationQuery? interfaceImplementationQuery = null!);
-
-        Task<List<MethodInvocationQueryResult>> MethodInvocations(MethodInvocationQuery? methodInvocationQuery = null);
-    }
-
-    public class InterfaceRepository : IInterfaceRepository
+    public class MethodRepository : IMethodRepository
     {
         private readonly INeo4jDataAccess _dataAccess;
-        private readonly ILoggerFactory _loggerFactory;
+        private readonly ILogger<MethodRepository> _logger;
 
-        public InterfaceRepository(INeo4jDataAccess dataAccess, ILoggerFactory loggerFactory)
+        public MethodRepository(INeo4jDataAccess dataAccess, ILoggerFactory loggerFactory)
         {
             _dataAccess = dataAccess;
-            _loggerFactory = loggerFactory;
+            _logger = loggerFactory.CreateLogger<MethodRepository>();
+        }
+
+        public async Task<MethodQueryResult> LookupMethodByFullName(string fullName)
+        {
+            string query = $"""
+                            MATCH (t)-[:HAS]-(m:Method{FullName(fullName)})
+                             RETURN t.fullName AS MethodOwnerFullName,
+                                    t.name AS MethodOwnerName,
+                            		t.pk AS MethodOwnerPk,
+                            		labels(t)[1] AS MethodOwnerType,
+                            		
+                            		m.fullName AS MethodFullName,
+                            		m.name AS MethodName,
+                            		m.pk AS MethodPk
+                            """;
+            
+            IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
+            return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
+        }
+
+        public async Task<MethodQueryResult> LookupMethodByPk(string pk)
+        {
+            string query = $"""
+                            MATCH (t)-[:HAS]-(m:Method{Pk(pk)})
+                             RETURN t.fullName AS MethodOwnerFullName,
+                                    t.name AS MethodOwnerName,
+                            		t.pk AS MethodOwnerPk,
+                            		labels(t)[1] AS MethodOwnerType,
+                            		
+                            		m.fullName AS MethodFullName,
+                            		m.name AS MethodName,
+                            		m.pk AS MethodPk
+                            """;
+            
+            IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
+            return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
         }
 
         public async Task<List<InterfaceMethodImplementationQueryResult>> InterfaceMethodImplementations(
@@ -68,22 +97,24 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                    """;
 
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
-            return await _dataAccess.ExecuteReadDictionaryAsync<InterfaceMethodImplementationQueryResult>(query, "p", parameters);
+            return await _dataAccess.ExecuteReadDictionaryAsync<InterfaceMethodImplementationQueryResult>(query, "p",
+                parameters);
         }
 
-        public async Task<List<MethodInvocationQueryResult>> MethodInvocations(MethodInvocationQuery? methodInvocationQuery = null)
+        public async Task<List<MethodInvocationQueryResult>> MethodInvocations(
+            MethodInvocationQuery? methodInvocationQuery = null)
         {
             string query = methodInvocationQuery == null
                 ? """
                   MATCH (c)-[:HAS]-(cm:Method)-[:INVOKES]-(i:Invocation)-[:INVOKED_AT]-(at:InvocationLocation)
                   MATCH (i)-[:INVOCATION_OF]-(im)-[:HAS]-(pt)
-                  RETURN c.fullName AS ClassFullName,
-                         c.name AS ClassName,
-                         c.pk AS ClassPk,
+                  RETURN c.fullName AS CallingOwnerFullName,
+                         c.name AS CallingOwnerName,
+                         c.pk AS CallingOwnerPk,
                          
-                         cm.fullName AS ClassMethodFullName,
-                         cm.name AS ClassMethodName,
-                         cm.pk AS ClassMethodPk,
+                         cm.fullName AS CallingOwnerMethodFullName,
+                         cm.name AS CallingOwnerMethodName,
+                         cm.pk AS CallingOwnerMethodPk,
                          
                   	     pt.fullName AS InvokedMethodOwnerFullName,
                   	     pt.name AS InvokedMethodOwnerName,
@@ -100,15 +131,15 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                            at.fullName
                   """
                 : $"""
-                   MATCH (c{FullName(methodInvocationQuery.ClassFullName)})-[:HAS]-(cm:Method{FullName(methodInvocationQuery.MethodFullName)})-[:INVOKES]-(i:Invocation)-[:INVOKED_AT]-(at:InvocationLocation)
+                   MATCH (c)-[:HAS]-(cm:Method{Pk(methodInvocationQuery.MethodPk)})-[:INVOKES]-(i:Invocation)-[:INVOKED_AT]-(at:InvocationLocation)
                    MATCH (i)-[:INVOCATION_OF]-(im)-[:HAS]-(pt)
-                   RETURN c.fullName AS ClassFullName,
-                          c.name AS ClassName,
-                          c.pk AS ClassPk,
+                   RETURN c.fullName AS CallingOwnerFullName,
+                          c.name AS CallingOwnerName,
+                          c.pk AS CallingOwnerPk,
                           
-                          cm.fullName AS ClassMethodFullName,
-                          cm.name AS ClassMethodName,
-                          cm.pk AS ClassMethodPk,
+                          cm.fullName AS CallingOwnerMethodFullName,
+                          cm.name AS CallingOwnerMethodName,
+                          cm.pk AS CallingOwnerMethodPk,
                           
                    	      pt.fullName AS InvokedMethodOwnerFullName,
                    	      pt.name AS InvokedMethodOwnerName,
@@ -138,7 +169,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
         {
             return string.IsNullOrEmpty(name) ? string.Empty : $" {{name: \"{name}\"}}";
         }
-        
+
         private string Pk(string pk)
         {
             return string.IsNullOrEmpty(pk) ? string.Empty : $" {{pk: \"{pk}\"}}";

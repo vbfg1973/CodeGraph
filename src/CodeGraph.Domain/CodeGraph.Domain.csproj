@@ -17,6 +17,7 @@
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.9.2"/>
         <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.9.2"/>
         <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.MSBuild" Version="4.9.2"/>
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.1" />
         <PackageReference Include="Neo4j.Driver" Version="5.18.1"/>
     </ItemGroup>
 

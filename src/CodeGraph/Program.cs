@@ -1,5 +1,8 @@
-﻿using CodeGraph.Domain.Features.ImportSolution;
+﻿using CodeGraph.Domain;
+using CodeGraph.Domain.Features.ImportSolution;
 using CodeGraph.Domain.Features.SequenceUml;
+using CodeGraph.Domain.Graph;
+using CodeGraph.Domain.Graph.Database;
 using CommandLine;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,12 +23,20 @@ namespace CodeGraph
                 .ReadFrom
                 .Configuration(s_configuration)
                 .CreateLogger();
+
+            AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+            {
+                Log.Logger.Error(e.ExceptionObject as Exception, "UnhandledException");
+            };
+
             ConfigureServices();
 
-            ParseCommandLine(args);
+            ParseArgumentsIntoCommandLineVerbs(args);
+
+            Log.CloseAndFlush();
         }
 
-        private static void ParseCommandLine(string[] args)
+        private static void ParseArgumentsIntoCommandLineVerbs(string[] args)
         {
             Parser.Default
                 .ParseArguments<
@@ -58,8 +69,14 @@ namespace CodeGraph
 
             s_serviceCollection.AddLogging(configure => configure.AddSerilog());
 
-            s_serviceCollection.AddTransient<ImportSolutionVerb>();
-            s_serviceCollection.AddTransient<SequenceUmlVerb>();
+            CredentialsConfig credentialsConfig = new("neo4j://localhost:7687;neo4j;neo4j;AdminPassword");
+
+            s_serviceCollection.AddSingleton(credentialsConfig);
+
+            s_serviceCollection.AddDatabase();
+
+            s_serviceCollection.AddDomainServices();
+            s_serviceCollection.AddFeatureCommandLineVerbs();
 
             s_serviceProvider = s_serviceCollection.BuildServiceProvider();
         }

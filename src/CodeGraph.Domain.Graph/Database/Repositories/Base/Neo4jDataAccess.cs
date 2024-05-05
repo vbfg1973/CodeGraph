@@ -53,16 +53,17 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         /// </summary>
         public async Task<T> ExecuteReadScalarAsync<T>(string query, IDictionary<string, object>? parameters = null)
         {
+            _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
+            
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();
 
                 T result = await _session.ExecuteReadAsync(async tx =>
                 {
-                    T scalar = default;
                     IResultCursor? res = await tx.RunAsync(query, parameters);
-                    scalar = (await res.SingleAsync())[0].As<T>();
-                    return scalar;
+                    IRecord? record = await res.SingleAsync();
+                    return JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(record, _options))!;
                 });
 
                 return result;
@@ -80,16 +81,17 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         public async Task<T> ExecuteWriteTransactionAsync<T>(string query,
             IDictionary<string, object>? parameters = null)
         {
+            _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
+            
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();
 
                 T result = await _session.ExecuteWriteAsync(async tx =>
                 {
-                    T scalar = default;
                     IResultCursor? res = await tx.RunAsync(query, parameters);
-                    scalar = (await res.SingleAsync())[0].As<T>();
-                    return scalar;
+                    IRecord? record = await res.SingleAsync();
+                    return JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(record, _options))!;
                 });
 
                 return result;
@@ -116,6 +118,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         private async Task<List<T>> ExecuteReadTransactionAsync<T>(string query, string returnObjectKey,
             IDictionary<string, object>? parameters)
         {
+            _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();

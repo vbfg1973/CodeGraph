@@ -14,7 +14,7 @@
         public string ClassName { get; set; } = null!;
         public string ClassPk { get; set; } = null!;
         
-        public string ClassMethodFukkName { get; set; } = null!;
+        public string ClassMethodFullName { get; set; } = null!;
         public string ClassMethodName { get; set; } = null!;
         public string ClassMethodPk { get; set; } = null!;
     }

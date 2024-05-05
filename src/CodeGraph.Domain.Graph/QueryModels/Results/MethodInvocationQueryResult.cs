@@ -5,13 +5,13 @@ namespace CodeGraph.Domain.Graph.QueryModels.Results
 {
     public class MethodInvocationQueryResult
     {
-        public string ClassFullName { get; set; } = null!;
-        public string ClassName { get; set; } = null!;
-        public string ClassPk { get; set; } = null!;
+        public string CallingOwnerFullName { get; set; } = null!;
+        public string CallingOwnerName { get; set; } = null!;
+        public string CallingOwnerPk { get; set; } = null!;
         
-        public string ClassMethodFullName { get; set; } = null!;
-        public string ClassMethodName { get; set; } = null!;
-        public string ClassMethodPk { get; set; } = null!;
+        public string CallingOwnerMethodFullName { get; set; } = null!;
+        public string CallingOwnerMethodName { get; set; } = null!;
+        public string CallingOwnerMethodPk { get; set; } = null!;
 
         public string InvokedMethodOwnerFullName { get; set; } = null!;
         public string InvokedMethodOwnerName { get; set; } = null!;
