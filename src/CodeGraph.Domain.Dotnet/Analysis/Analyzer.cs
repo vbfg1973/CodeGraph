@@ -1,30 +1,39 @@
 ﻿using Buildalyzer;
 using Buildalyzer.Workspaces;
-using CodeGraph.Domain.Analysis.FileSystem;
-using CodeGraph.Domain.Dotnet;
 using CodeGraph.Domain.Dotnet.Abstract;
+using CodeGraph.Domain.Dotnet.Analysis.FileSystem;
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
 using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 
-namespace CodeGraph.Domain.Analysis
+namespace CodeGraph.Domain.Dotnet.Analysis
 {
     public class Analyzer : IAnalyzer
     {
         private readonly AnalysisConfig _analysisConfig;
+        private readonly ILoggerFactory _loggerFactory;
         private readonly AnalyzerManager _analyzerManager;
+        private readonly ILogger<Analyzer> _logger;
+        
         private readonly List<Triple> _triples = new();
 
-        public Analyzer(AnalysisConfig analysisConfig)
+        public Analyzer(AnalysisConfig analysisConfig, ILoggerFactory loggerFactory)
         {
+            _logger = loggerFactory.CreateLogger<Analyzer>();
+            
             _analysisConfig = analysisConfig;
+            _loggerFactory = loggerFactory;
+            
             _analyzerManager = new AnalyzerManager(_analysisConfig.Solution);
         }
 
         public async Task<IList<Triple>> Analyze()
         {
+            _logger.LogDebug("{Method}", nameof(Analyze));
+            
             IEnumerable<IProjectAnalyzer> projectAnalyzers = _analyzerManager.Projects.Values;
 
             AdhocWorkspace workspace = new();
@@ -44,6 +53,8 @@ namespace CodeGraph.Domain.Analysis
         private async Task ProjectAnalysis(IProjectAnalyzer projectAnalyzer, AdhocWorkspace workspace,
             List<(Project, IProjectAnalyzer, IAnalyzerResult)> projects)
         {
+            _logger.LogDebug("{Method} {ProjectName}", nameof(ProjectAnalysis), projectAnalyzer.ProjectInSolution.ProjectName);
+
             Project? project = projectAnalyzer.AddToWorkspace(workspace);
             IAnalyzerResult? analyzerResult = projectAnalyzer.Build().First();
             projects.Add((project, projectAnalyzer, analyzerResult));
@@ -60,6 +71,8 @@ namespace CodeGraph.Domain.Analysis
         private async Task CodeAnalysis(Project project, IProjectAnalyzer projectAnalyzer,
             IAnalyzerResult analyzerResult)
         {
+            _logger.LogDebug("{Method} {ProjectName}", nameof(CodeAnalysis), project.Name);
+            
             await Console.Error.WriteLineAsync($"Code analysis: {project.Name}");
             Compilation? compilation = await project.GetCompilationAsync();
 
@@ -84,7 +97,7 @@ namespace CodeGraph.Domain.Analysis
                 SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
 
                 WalkerOptions walkerOptions = new(new DotnetOptions(syntaxTree, semanticModel, project), true);
-                CSharpTypeDiscoveryWalker walker = new(fileNode!, walkerOptions);
+                CSharpTypeDiscoveryWalker walker = new(fileNode!, walkerOptions, _loggerFactory);
                 _triples.AddRange(walker.Walk());
             }
         }

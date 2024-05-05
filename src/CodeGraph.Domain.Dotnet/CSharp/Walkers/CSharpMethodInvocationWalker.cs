@@ -5,15 +5,20 @@ using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 {
-    public class CSharpMethodInvocationWalker(TypeDeclarationSyntax declarationSyntax, WalkerOptions walkerOptions)
+    public class CSharpMethodInvocationWalker(TypeDeclarationSyntax declarationSyntax, WalkerOptions walkerOptions, ILoggerFactory loggerFactory)
         : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
         private readonly TypeDeclarationSyntax _declarationSyntax = declarationSyntax;
+        private readonly ILoggerFactory _loggerFactory = loggerFactory;
 
         private readonly List<Triple> _triples = new();
+
+        private readonly ILogger<CSharpMethodInvocationWalker> _logger =
+            loggerFactory.CreateLogger<CSharpMethodInvocationWalker>();
 
         public IEnumerable<Triple> Walk()
         {
@@ -22,13 +27,15 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             return _triples;
         }
 
-        public override void VisitMethodDeclaration(MethodDeclarationSyntax node)
+        public override void VisitMethodDeclaration(MethodDeclarationSyntax syntax)
         {
-            MethodNode methodNode = GetMethodNode(node);
+            _logger.LogDebug("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitMethodDeclaration), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
 
-            foreach (ExpressionSyntax syntax in node.DescendantNodes().OfType<ExpressionSyntax>())
+            MethodNode methodNode = GetMethodNode(syntax);
+
+            foreach (ExpressionSyntax expressionSyntax in syntax.DescendantNodes().OfType<ExpressionSyntax>())
             {
-                switch (syntax)
+                switch (expressionSyntax)
                 {
                     case ObjectCreationExpressionSyntax creation:
                         ClassNode classNode = GetTypeNodeFromInstantiation(creation);
@@ -40,16 +47,20 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
                 }
             }
 
-            base.VisitMethodDeclaration(node);
+            base.VisitMethodDeclaration(syntax);
         }
 
         private ClassNode GetTypeNodeFromInstantiation(ObjectCreationExpressionSyntax creationExpressionSyntax)
         {
+            _logger.LogDebug("{Method} {SyntaxType} {FilePath}", nameof(GetTypeNodeFromInstantiation), nameof(ObjectCreationExpressionSyntax), creationExpressionSyntax.SyntaxTree.FilePath);
+
             return _walkerOptions.DotnetOptions.SemanticModel.GetTypeInfo(creationExpressionSyntax).CreateClassNode();
         }
 
         private void AddInvokedMethodTriple(InvocationExpressionSyntax invocation, MethodNode parentMethodNode)
         {
+            _logger.LogDebug("{Method} {SyntaxType} {FilePath}", nameof(AddInvokedMethodTriple), nameof(InvocationExpressionSyntax), invocation.SyntaxTree.FilePath);
+            
             ISymbol? symbol = _walkerOptions
                 .DotnetOptions
                 .SemanticModel
