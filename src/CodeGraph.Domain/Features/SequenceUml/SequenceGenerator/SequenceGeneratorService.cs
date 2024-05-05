@@ -35,18 +35,7 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
                 await _methodRepository.MethodInvocations(new MethodInvocationQuery
                     { MethodPk = methodQueryResult.MethodPk });
 
-            foreach (MethodInvocationQueryResult invocation in invocations)
-            {
-                if (invocation.InvokedMethodOwnerType != ObjectType.Interface)
-                    methodInvocationHierarchy.MethodInvocations.Add(await FindSequenceFromMethod(invocation));
-
-                else
-                {
-                    MethodQueryResult methodFromInterfaceImplementation = await GetMethodFromInterfaceImplementation(invocation);
-                
-                    methodInvocationHierarchy.MethodInvocations.Add(await FindSequenceFromMethod(methodFromInterfaceImplementation));
-                }
-            }
+            await ProcessInvocations(invocations, methodInvocationHierarchy);
 
             return methodInvocationHierarchy;
         }
@@ -61,8 +50,18 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
             List<MethodInvocationQueryResult> invocations = await _methodRepository.MethodInvocations(
                 new MethodInvocationQuery { MethodPk = methodInvocationQueryResult.InvokedMethodPk });
 
+            await ProcessInvocations(invocations, methodInvocationHierarchy);
+
+            return methodInvocationHierarchy;
+        }
+
+        private async Task ProcessInvocations(List<MethodInvocationQueryResult> invocations, MethodInvocationHierarchy methodInvocationHierarchy)
+        {
             foreach (MethodInvocationQueryResult invocation in invocations)
             {
+                if (invocation.InvokedMethodPk == methodInvocationHierarchy.MethodPk)
+                    continue;
+                
                 if (invocation.InvokedMethodOwnerType != ObjectType.Interface)
                     methodInvocationHierarchy.MethodInvocations.Add(await FindSequenceFromMethod(invocation));
 
@@ -73,8 +72,6 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
                     methodInvocationHierarchy.MethodInvocations.Add(await FindSequenceFromMethod(methodFromInterfaceImplementation));
                 }
             }
-
-            return methodInvocationHierarchy;
         }
 
         private async Task<MethodQueryResult> GetMethodFromInterfaceImplementation(
