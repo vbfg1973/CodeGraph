@@ -1,6 +1,6 @@
 using CodeGraph.Domain.Graph.QueryModels.Results;
 
-namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
+namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models
 {
     public class MethodInvocationHierarchy
     {
