@@ -8,7 +8,7 @@ namespace CodeGraph.Domain.Graph.QueryModels.Results
         public string CallingOwnerFullName { get; set; } = null!;
         public string CallingOwnerName { get; set; } = null!;
         public string CallingOwnerPk { get; set; } = null!;
-        
+
         public string CallingOwnerMethodFullName { get; set; } = null!;
         public string CallingOwnerMethodName { get; set; } = null!;
         public string CallingOwnerMethodPk { get; set; } = null!;
@@ -16,7 +16,7 @@ namespace CodeGraph.Domain.Graph.QueryModels.Results
         public string InvokedMethodOwnerFullName { get; set; } = null!;
         public string InvokedMethodOwnerName { get; set; } = null!;
         public string InvokedMethodOwnerPk { get; set; } = null!;
-        
+
         public string InvokedMethodFullName { get; set; } = null!;
         public string InvokedMethodName { get; set; } = null!;
         public string InvokedMethodPk { get; set; } = null!;

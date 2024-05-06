@@ -23,7 +23,7 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
             MethodFullName = methodQueryResult.MethodFullName;
             MethodPk = methodQueryResult.MethodPk;
         }
-        
+
         public MethodInvocationHierarchy(MethodInvocationQueryResult methodQueryResult)
         {
             ParentTypeFullname = methodQueryResult.InvokedMethodOwnerFullName;
@@ -31,7 +31,7 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
             MethodFullName = methodQueryResult.InvokedMethodFullName;
             MethodPk = methodQueryResult.InvokedMethodPk;
         }
-        
+
         public string ParentTypeFullname { get; }
         public string ParentTypePk { get; }
         public string MethodFullName { get; }

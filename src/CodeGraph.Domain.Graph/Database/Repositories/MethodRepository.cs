@@ -30,7 +30,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                             		m.name AS MethodName,
                             		m.pk AS MethodPk
                             """;
-            
+
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
             return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
         }
@@ -48,7 +48,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                             		m.name AS MethodName,
                             		m.pk AS MethodPk
                             """;
-            
+
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
             return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
         }

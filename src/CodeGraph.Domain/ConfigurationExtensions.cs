@@ -9,7 +9,6 @@ namespace CodeGraph.Domain
     {
         public static IServiceCollection AddFeatureCommandLineVerbs(this IServiceCollection serviceCollection)
         {
-            
             serviceCollection.AddTransient<ImportSolutionVerb>();
             serviceCollection.AddTransient<SequenceUmlVerb>();
 

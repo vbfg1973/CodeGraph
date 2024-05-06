@@ -9,12 +9,18 @@ using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 {
-    public class CSharpTypeDiscoveryWalker(FileNode fileNode, ProjectNode projectNode, WalkerOptions walkerOptions, ILoggerFactory loggerFactory)
+    public class CSharpTypeDiscoveryWalker(
+        FileNode fileNode,
+        ProjectNode projectNode,
+        WalkerOptions walkerOptions,
+        ILoggerFactory loggerFactory)
         : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
         private readonly ProjectNode _projectNode = projectNode;
         private readonly List<Triple> _triples = new();
-        private ILogger<CSharpTypeDiscoveryWalker> _logger = loggerFactory.CreateLogger<CSharpTypeDiscoveryWalker>();
+
+        private readonly ILogger<CSharpTypeDiscoveryWalker> _logger =
+            loggerFactory.CreateLogger<CSharpTypeDiscoveryWalker>();
 
         public IEnumerable<Triple> Walk()
         {
@@ -27,8 +33,9 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public override void VisitClassDeclaration(ClassDeclarationSyntax node)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitClassDeclaration), nameof(ClassDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
-            
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitClassDeclaration),
+                nameof(ClassDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
+
             GetTypeDeclarationTriples(node);
 
             SubWalkers(node);
@@ -39,8 +46,9 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public override void VisitInterfaceDeclaration(InterfaceDeclarationSyntax node)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitInterfaceDeclaration), nameof(InterfaceDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
-            
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitInterfaceDeclaration),
+                nameof(InterfaceDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
+
             GetTypeDeclarationTriples(node);
 
             SubWalkers(node);
@@ -50,8 +58,9 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public override void VisitRecordDeclaration(RecordDeclarationSyntax node)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitRecordDeclaration), nameof(RecordDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
-            
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitRecordDeclaration),
+                nameof(RecordDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
+
             GetTypeDeclarationTriples(node);
 
             SubWalkers(node);
@@ -68,7 +77,8 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         private void GetTypeDeclarationTriples(TypeDeclarationSyntax node)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(GetTypeDeclarationTriples), nameof(TypeDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(GetTypeDeclarationTriples),
+                nameof(TypeDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
 
             TypeNode typeNode = GetTypeNode(node);
 
@@ -80,8 +90,9 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         private void SubWalkers(TypeDeclarationSyntax node)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(SubWalkers), nameof(TypeDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
-            
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(SubWalkers),
+                nameof(TypeDeclarationSyntax), node.Identifier.ToString(), node.SyntaxTree.FilePath);
+
             if (!_walkerOptions.DescendIntoSubWalkers) return;
 
             CSharpTypeDefinitionWalker typeDefinitionWalker = new(node, _walkerOptions, loggerFactory);

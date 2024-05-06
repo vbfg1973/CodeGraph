@@ -12,12 +12,17 @@ using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
 
 namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 {
-    public class CSharpTypeDefinitionWalker(TypeDeclarationSyntax typeDeclarationSyntax, WalkerOptions walkerOptions, ILoggerFactory loggerFactory)
+    public class CSharpTypeDefinitionWalker(
+        TypeDeclarationSyntax typeDeclarationSyntax,
+        WalkerOptions walkerOptions,
+        ILoggerFactory loggerFactory)
         : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
-        private ILogger<CSharpTypeDefinitionWalker> _logger = loggerFactory.CreateLogger<CSharpTypeDefinitionWalker>();
         private readonly ILoggerFactory _loggerFactory = loggerFactory;
         private readonly List<Triple> _triples = new();
+
+        private readonly ILogger<CSharpTypeDefinitionWalker> _logger =
+            loggerFactory.CreateLogger<CSharpTypeDefinitionWalker>();
 
         public IEnumerable<Triple> Walk()
         {
@@ -29,8 +34,9 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public override void VisitMethodDeclaration(MethodDeclarationSyntax syntax)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitMethodDeclaration), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
-            
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitMethodDeclaration),
+                nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
+
             GetHasTriple(syntax);
             GetImplementationOfTriples(syntax);
 
@@ -39,8 +45,9 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public override void VisitPropertyDeclaration(PropertyDeclarationSyntax syntax)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitPropertyDeclaration), nameof(PropertyDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
-            
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitPropertyDeclaration),
+                nameof(PropertyDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
+
             GetHasTriple(syntax);
 
             base.VisitPropertyDeclaration(syntax);
@@ -48,26 +55,34 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         private void GetHasTriple(MethodDeclarationSyntax syntax)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(GetHasTriple), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
-            
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(GetHasTriple),
+                nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
+
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             MethodNode methodNode = GetMethodNode(syntax);
-            
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath} {MethodNodeFullName} {MethodNodeReturnType}", nameof(GetHasTriple), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath, methodNode.FullName, methodNode.ReturnType);
-            
+
+            _logger.LogTrace(
+                "{Method} {SyntaxType} {NameFromSyntax} {FilePath} {MethodNodeFullName} {MethodNodeReturnType}",
+                nameof(GetHasTriple), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(),
+                syntax.SyntaxTree.FilePath, methodNode.FullName, methodNode.ReturnType);
+
             _triples.Add(new TripleHas(typeNode, methodNode));
             _triples.AddRange(WordTriples(methodNode));
         }
 
         private void GetHasTriple(PropertyDeclarationSyntax syntax)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(GetHasTriple), nameof(PropertyDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(GetHasTriple),
+                nameof(PropertyDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
 
             TypeNode typeNode = GetTypeNode(typeDeclarationSyntax);
             IPropertySymbol propertySymbol =
                 CSharpExtensions.GetDeclaredSymbol(_walkerOptions.DotnetOptions.SemanticModel, syntax)!;
             PropertyNode propertyNode = propertySymbol.CreatePropertyNode();
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath} {PropertyNodeFullName} {PropertyNodeReturnType}", nameof(GetHasTriple), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath, propertyNode.FullName, propertyNode.ReturnType);
+            _logger.LogTrace(
+                "{Method} {SyntaxType} {NameFromSyntax} {FilePath} {PropertyNodeFullName} {PropertyNodeReturnType}",
+                nameof(GetHasTriple), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(),
+                syntax.SyntaxTree.FilePath, propertyNode.FullName, propertyNode.ReturnType);
 
             _triples.Add(new TripleHas(typeNode, propertyNode));
             _triples.AddRange(WordTriples(propertyNode));
@@ -75,7 +90,8 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         private void GetImplementationOfTriples(MethodDeclarationSyntax syntax)
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(GetImplementationOfTriples), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
+            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(GetImplementationOfTriples),
+                nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
 
             MethodNode methodNode = GetMethodNode(syntax);
             IMethodSymbol methodSymbol =
@@ -83,8 +99,11 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
             if (!methodSymbol.TryGetInterfaceMethodFromImplementation(_walkerOptions.DotnetOptions.SemanticModel,
                     out MethodNode interfaceMethodNode)) return;
-            
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath} {MethodNodeFullName} {MethodNodeReturnType}", nameof(GetHasTriple), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath, interfaceMethodNode.FullName, interfaceMethodNode.ReturnType);
+
+            _logger.LogTrace(
+                "{Method} {SyntaxType} {NameFromSyntax} {FilePath} {MethodNodeFullName} {MethodNodeReturnType}",
+                nameof(GetHasTriple), nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(),
+                syntax.SyntaxTree.FilePath, interfaceMethodNode.FullName, interfaceMethodNode.ReturnType);
             _triples.Add(new TripleImplementationOf(methodNode, interfaceMethodNode));
         }
     }

@@ -11,7 +11,7 @@ namespace CodeGraph.Domain.Features.SequenceUml
         public async Task Run(SequenceUmlOptions options)
         {
             logger.LogInformation("{Method}", nameof(Run));
-            
+
             Stopwatch sw = new();
             sw.Start();
 
@@ -19,7 +19,7 @@ namespace CodeGraph.Domain.Features.SequenceUml
                 await sequenceGeneratorService.FindSequenceFromStartingMethod(options.StartingMethodFullName);
 
             Console.WriteLine(JsonSerializer.Serialize(methodInvocationHierarchy,
-                options: new JsonSerializerOptions { WriteIndented = true }));
+                new JsonSerializerOptions { WriteIndented = true }));
 
             sw.Stop();
             Console.WriteLine(sw.Elapsed);

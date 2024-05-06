@@ -70,7 +70,7 @@
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
         <None Update="CodeToTest\CSharp\InterfaceImplementation\GenericReturnTypeSeparateNamespaces.cs">
-          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

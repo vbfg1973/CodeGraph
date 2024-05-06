@@ -34,7 +34,8 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.Global
             (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(fullPath, true);
 
             // Act
-            CSharpTypeDiscoveryWalker walker = new(fileNode, new ProjectNode("FakeProject"), walkerOptions, A.Fake<ILoggerFactory>());
+            CSharpTypeDiscoveryWalker walker = new(fileNode, new ProjectNode("FakeProject"), walkerOptions,
+                A.Fake<ILoggerFactory>());
             List<Triple> results = walker.Walk().ToList();
 
             // Assert

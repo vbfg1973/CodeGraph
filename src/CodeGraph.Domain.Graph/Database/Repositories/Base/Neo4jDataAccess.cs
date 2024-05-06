@@ -54,7 +54,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         public async Task<T> ExecuteReadScalarAsync<T>(string query, IDictionary<string, object>? parameters = null)
         {
             _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
-            
+
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();
@@ -82,7 +82,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
             IDictionary<string, object>? parameters = null)
         {
             _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
-            
+
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();

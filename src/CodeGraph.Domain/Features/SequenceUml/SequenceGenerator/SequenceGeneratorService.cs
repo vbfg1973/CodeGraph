@@ -28,7 +28,8 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
 
         private async Task<MethodInvocationHierarchy> FindSequenceFromMethod(MethodQueryResult methodQueryResult)
         {
-            _logger.LogTrace("{Method} {MethodFullName} {Argument}", nameof(FindSequenceFromMethod), methodQueryResult.MethodFullName, nameof(MethodQueryResult));
+            _logger.LogTrace("{Method} {MethodFullName} {Argument}", nameof(FindSequenceFromMethod),
+                methodQueryResult.MethodFullName, nameof(MethodQueryResult));
             MethodInvocationHierarchy methodInvocationHierarchy = new(methodQueryResult);
 
             List<MethodInvocationQueryResult> invocations =
@@ -43,7 +44,8 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
         private async Task<MethodInvocationHierarchy> FindSequenceFromMethod(
             MethodInvocationQueryResult methodInvocationQueryResult)
         {
-            _logger.LogTrace("{Method} {MethodFullName} {Argument}", nameof(FindSequenceFromMethod), methodInvocationQueryResult.InvokedMethodFullName, nameof(MethodInvocationQueryResult));
+            _logger.LogTrace("{Method} {MethodFullName} {Argument}", nameof(FindSequenceFromMethod),
+                methodInvocationQueryResult.InvokedMethodFullName, nameof(MethodInvocationQueryResult));
 
             MethodInvocationHierarchy methodInvocationHierarchy = new(methodInvocationQueryResult);
 
@@ -55,21 +57,26 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
             return methodInvocationHierarchy;
         }
 
-        private async Task ProcessInvocations(List<MethodInvocationQueryResult> invocations, MethodInvocationHierarchy methodInvocationHierarchy)
+        private async Task ProcessInvocations(List<MethodInvocationQueryResult> invocations,
+            MethodInvocationHierarchy methodInvocationHierarchy)
         {
             foreach (MethodInvocationQueryResult invocation in invocations)
             {
                 if (invocation.InvokedMethodPk == methodInvocationHierarchy.MethodPk)
                     continue;
-                
+
                 if (invocation.InvokedMethodOwnerType != ObjectType.Interface)
+                {
                     methodInvocationHierarchy.MethodInvocations.Add(await FindSequenceFromMethod(invocation));
+                }
 
                 else
                 {
-                    MethodQueryResult methodFromInterfaceImplementation = await GetMethodFromInterfaceImplementation(invocation);
-                
-                    methodInvocationHierarchy.MethodInvocations.Add(await FindSequenceFromMethod(methodFromInterfaceImplementation));
+                    MethodQueryResult methodFromInterfaceImplementation =
+                        await GetMethodFromInterfaceImplementation(invocation);
+
+                    methodInvocationHierarchy.MethodInvocations.Add(
+                        await FindSequenceFromMethod(methodFromInterfaceImplementation));
                 }
             }
         }
@@ -77,7 +84,8 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
         private async Task<MethodQueryResult> GetMethodFromInterfaceImplementation(
             MethodInvocationQueryResult invocation)
         {
-            _logger.LogTrace("{Method} {MethodFullName} {Argument}", nameof(GetMethodFromInterfaceImplementation), invocation.InvokedMethodFullName, nameof(MethodInvocationQuery));
+            _logger.LogTrace("{Method} {MethodFullName} {Argument}", nameof(GetMethodFromInterfaceImplementation),
+                invocation.InvokedMethodFullName, nameof(MethodInvocationQuery));
 
             List<InterfaceMethodImplementationQueryResult> implementations = await _methodRepository
                 .InterfaceMethodImplementations(new InterfaceImplementationQuery
@@ -88,8 +96,9 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator
                     $"Interface method {invocation.InvokedMethodFullName} has more that one implemetation");
 
             InterfaceMethodImplementationQueryResult impl = implementations.First();
-            _logger.LogTrace("Looked for {InvokedMethodFullName} and found {ClassMethodFullName}", invocation.InvokedMethodFullName, impl.ClassMethodFullName);
-            
+            _logger.LogTrace("Looked for {InvokedMethodFullName} and found {ClassMethodFullName}",
+                invocation.InvokedMethodFullName, impl.ClassMethodFullName);
+
             MethodQueryResult methodQueryResult =
                 await _methodRepository.LookupMethodByPk(impl.ClassMethodPk);
             return methodQueryResult;

@@ -8,10 +8,10 @@ namespace CodeGraph.Domain.Graph.QueryModels.Results
         public string MethodOwnerFullName { get; set; } = null!;
         public string MethodOwnerName { get; set; } = null!;
         public string MethodOwnerPk { get; set; } = null!;
-        
+
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ObjectType MethodOwnerType { get; set; }
-        
+
         public string MethodFullName { get; set; } = null!;
         public string MethodName { get; set; } = null!;
         public string MethodPk { get; set; } = null!;

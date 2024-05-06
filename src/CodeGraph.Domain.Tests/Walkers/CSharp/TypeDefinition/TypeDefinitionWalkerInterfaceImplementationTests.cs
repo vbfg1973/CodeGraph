@@ -35,16 +35,14 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
                 A.Fake<ILoggerFactory>());
             discoveredTriples.AddRange(walker.Walk());
 
-            List<TripleHas> interfaceMethods = discoveredTriples.OfType<TripleHas>().Where(x => x.NodeA is InterfaceNode).ToList();
+            List<TripleHas> interfaceMethods =
+                discoveredTriples.OfType<TripleHas>().Where(x => x.NodeA is InterfaceNode).ToList();
             List<TripleImplementationOf> implementations = discoveredTriples.OfType<TripleImplementationOf>().ToList();
             List<TripleInvocationOf> invocations = discoveredTriples.OfType<TripleInvocationOf>().ToList();
-            
+
             interfaceMethods.Count().Should().Be(implementations.Count);
 
-            if (invocations.Any())
-            {
-                interfaceMethods.Count().Should().Be(invocations.Count);
-            }
+            if (invocations.Any()) interfaceMethods.Count().Should().Be(invocations.Count);
 
             HashSet<string> interfaceMethodPks = interfaceMethods.Select(x => x.NodeB.Pk).ToHashSet();
             HashSet<string> implementationPks = implementations.Select(x => x.NodeB.Pk).ToHashSet();
