@@ -1,0 +1,37 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp.InterfaceImplementation
+{
+    
+    public class ProcessResult
+    {
+        public ProcessResult(bool success, string message = null)
+        {
+            Success = success;
+            Message = message;
+        }
+
+        public bool Success { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ProcessResult<T> : ProcessResult
+    {
+        public T Item { get; set; }
+        public ProcessResult(bool success, T item = default, string message = null) : base(success, message)
+        {
+            Item = item;
+        }
+    }
+
+    public interface IGenericReturnType
+    {
+        Task<ProcessResult<T>> Process<T>();
+    }
+
+    public class GenericReturnType : IGenericReturnType
+    {
+        public Task<ProcessResult<T>> Process<T>()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

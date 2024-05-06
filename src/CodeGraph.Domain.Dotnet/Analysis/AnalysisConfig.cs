@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Dotnet
+﻿namespace CodeGraph.Domain.Dotnet.Analysis
 {
     public class AnalysisConfig
     {

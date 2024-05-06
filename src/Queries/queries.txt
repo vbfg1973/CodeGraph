@@ -1,24 +1,46 @@
 -- Find methods that implement an interface method where the interface was defined within the codebase 
-MATCH (c)-[:HAS]-(classMethod:Method)-[:IMPLEMENTS]-(interfaceMethod:Method)-[:HAS]-(i:Interface)
-  RETURN i.fullName AS InterfaceFullName, 
-         i.name AS InterfaceName,
-         interfaceMethod.name AS InterfaceMethodName ,
-         c.fullName AS ClassFullName, 
-         c.name AS ClassName, 
-         classMethod.name AS ClassMethodName
-  ORDER BY InterfaceFullName, InterfaceMethodName
+                  MATCH (c)-[:HAS]-(classMethod:Method)-[:IMPLEMENTS]->(interfaceMethod:Method)<-[:HAS]-(i:Interface)
+                    RETURN i.fullName AS InterfaceFullName,
+                           i.name AS InterfaceName,
+                           i.pk AS InterfacePk,
+                           
+                           interfaceMethod.fullName AS InterfaceMethodFullName,
+                           interfaceMethod.name AS InterfaceMethodName,
+                           interfaceMethod.pk AS InterfaceMethodPk,
+                           
+                           c.fullName AS ClassFullName,
+                           c.name AS ClassName,
+                           c.pk AS ClassPk,
+                           
+                           classMethod.fullName AS ClassMethodFullName,
+                           classMethod.name AS ClassMethodName,
+                           classMethod.pk AS ClassMethodPk
+                    ORDER BY InterfaceFullName, InterfaceMethodName
   
--- Find invocations of methods that are defined within the codebase
-MATCH (c)-[:HAS]-(classMethod:Method)-[:INVOKES]-(invokedMethod:Method)-[:HAS]-(methodOwner) 
-  RETURN c.name AS ClassName, 
-         classMethod.name AS ClassMethod, 
-         methodOwner.name AS InvokedMethodOwnerName, 
-         labels(methodOwner)[0] AS InvokedMethodOwnerType, 
-         invokedMethod.name AS InvokedMethodName
-  ORDER BY ClassName, 
-           ClassMethod, 
-           InvokedMethodOwnerName, 
-           InvokedMethodName
+-- Find invocations of methods that are defined within the codebase, ordered by invocation order
+                  MATCH (c)-[:HAS]-(cm:Method)-[:INVOKES]-(i:Invocation)-[:INVOKED_AT]-(at:InvocationLocation)
+                  MATCH (i)-[:INVOCATION_OF]-(im)-[:HAS]-(pt)
+                  RETURN c.fullName AS ClassFullName,
+                         c.name AS ClassName,
+                         c.pk AS ClassPk,
+                         
+                         cm.fullName AS ClassMethodFullName,
+                         cm.name AS ClassMethodName,
+                         cm.pk AS ClassMethodPk,
+                         
+                  	     pt.fullName AS InvokedMethodOwnerFullName,
+                  	     pt.name AS InvokedMethodOwnerName,
+                  	     pt.pk AS InvokedMethodOwnerPk,
+                  	     
+                         im.fullName AS InvokedMethodFullName,
+                         im.name AS InvokedMethodName,
+                         im.pk AS InvokedMethodPk,
+                         
+                  	     labels(pt)[1] AS InvokedMethodOwnerType,
+                  	     
+                  	     at.fullName AS Location
+                  ORDER BY cm.fullName,
+                           at.fullName
   
 -- Find invocation chains from a nominated method to the surface
    ...

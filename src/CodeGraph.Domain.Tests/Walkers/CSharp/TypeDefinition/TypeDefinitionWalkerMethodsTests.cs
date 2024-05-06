@@ -3,8 +3,10 @@ using CodeGraph.Domain.Dotnet.CSharp.Walkers;
 using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
 using CodeGraph.Domain.Tests.TestHelpers;
+using FakeItEasy;
 using FluentAssertions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
 {
@@ -32,7 +34,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
                 .OfType<TypeDeclarationSyntax>()
                 .First();
 
-            CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions);
+            CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions, A.Fake<ILoggerFactory>());
             List<TripleHas> results = walker.Walk().OfType<TripleHas>().Where(x => x.NodeB is MethodNode).ToList();
             results.Count().Should().Be(expectedMethodCount);
         }
@@ -54,7 +56,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
                 .OfType<TypeDeclarationSyntax>()
                 .First();
 
-            CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions);
+            CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions, A.Fake<ILoggerFactory>());
             List<MethodNode> results = walker.Walk()
                 .OfType<TripleHas>()
                 .Where(x => x.NodeB is MethodNode)
@@ -83,7 +85,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDefinition
                 .OfType<TypeDeclarationSyntax>()
                 .First();
 
-            CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions);
+            CSharpTypeDefinitionWalker walker = new(declaration, walkerOptions, A.Fake<ILoggerFactory>());
             List<MethodNode> MethodNodes = walker.Walk()
                 .OfType<TripleHas>()
                 // ReSharper disable once ConditionIsAlwaysTrueOrFalseAccordingToNullableAPIContract

@@ -1,0 +1,66 @@
+﻿using StudentDesktop.Common.Models;
+using StudentDesktop.Services.Avatars.Implementation;
+
+namespace StudentDesktop.Common.Models
+{
+    public class ProcessResult
+    {
+        public ProcessResult(bool success, string message = null)
+        {
+            Success = success;
+            Message = message;
+        }
+
+        public bool Success { get; set; }
+        public string Message { get; set; }
+    }
+
+    public class ProcessResult<T> : ProcessResult
+    {
+        public ProcessResult(bool success, T item = default, string message = null) : base(success, message)
+        {
+            Item = item;
+        }
+
+        public T Item { get; set; }
+    }
+}
+
+namespace StudentDesktop.Services.Avatars.Implementation
+{
+    public class StudentAvatar
+    {
+        public Dictionary<string, dynamic> Avatar { get; set; }
+    }
+
+    public interface IGenericReturnType
+    {
+        Task<ProcessResult<StudentAvatar>> Process();
+    }
+
+    public class GenericReturnType : IGenericReturnType
+    {
+        public Task<ProcessResult<StudentAvatar>> Process()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}
+
+namespace InvocationNamespace
+{
+    public class Invoke
+    {
+        private readonly IGenericReturnType _genericReturnType;
+
+        public Invoke(IGenericReturnType genericReturnType)
+        {
+            _genericReturnType = genericReturnType;
+        }
+
+        public async Task Run()
+        {
+            await _genericReturnType.Process();
+        } 
+    }
+}

@@ -4,7 +4,9 @@ using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using CodeGraph.Domain.Tests.TestHelpers;
 using CodeGraph.Domain.Tests.Walkers.CSharp.Global.ClassData;
+using FakeItEasy;
 using FluentAssertions;
+using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Tests.Walkers.CSharp.Global
 {
@@ -32,7 +34,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.Global
             (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(fullPath, true);
 
             // Act
-            CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions);
+            CSharpTypeDiscoveryWalker walker = new(fileNode, new ProjectNode("FakeProject"), walkerOptions, A.Fake<ILoggerFactory>());
             List<Triple> results = walker.Walk().ToList();
 
             // Assert
