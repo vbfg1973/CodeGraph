@@ -13,6 +13,10 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
             SetPrimaryKey();
         }
 
+        public MethodNode() : base(string.Empty, string.Empty, new[] { "" })
+        {
+        }
+
         public override string Label { get; } = "Method";
 
         public string Arguments { get; }

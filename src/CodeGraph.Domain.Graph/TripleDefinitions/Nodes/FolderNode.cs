@@ -9,6 +9,10 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
         {
         }
 
+        public FolderNode() : base(string.Empty, string.Empty)
+        {
+        }
+
         public override string Label { get; } = "Folder";
 
         public bool Equals(FolderNode? other)

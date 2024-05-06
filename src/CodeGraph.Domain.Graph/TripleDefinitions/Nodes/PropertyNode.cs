@@ -10,6 +10,10 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
             ReturnType = returnType;
         }
 
+        public PropertyNode() : base(string.Empty, string.Empty, new[] { "" })
+        {
+        }
+
         public string ReturnType { get; }
 
         public override string Label { get; } = "Property";

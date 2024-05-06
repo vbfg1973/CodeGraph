@@ -12,6 +12,10 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
             ReturnType = methodNode.ReturnType;
         }
 
+        public InvocationNode() : base(string.Empty, string.Empty)
+        {
+        }
+
         public string Arguments { get; }
 
         public string ReturnType { get; }

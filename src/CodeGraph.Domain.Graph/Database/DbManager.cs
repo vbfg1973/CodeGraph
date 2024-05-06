@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using CodeGraph.Domain.Common;
+using CodeGraph.Domain.Graph.TripleDefinitions;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Neo4j.Driver;
 
@@ -27,12 +28,30 @@ namespace CodeGraph.Domain.Graph.Database
                         $"Deleting graph data of \"{credentials.Database}\" database complete.");
                 }
 
+                Stopwatch sw = new();
+                sw.Start();
+                
+                foreach (string label in NodeUtilities.NodeLabels())
+                {
+                    await session.ExecuteWriteAsync(async tx =>
+                    {
+                        string dropIndexQuery = $"DROP INDEX {label.ToLower()}_pk  IF EXISTS";
+                        await Console.Error.WriteLineAsync(dropIndexQuery);
+                        await tx.RunAsync(dropIndexQuery);
+                    });
+
+                    await session.ExecuteWriteAsync(async tx =>
+                    {
+                        string createIndexQuery = $"CREATE INDEX {label.ToLower()}_pk  FOR (n:{label}) ON (n.pk)";
+                        await Console.Error.WriteLineAsync(createIndexQuery);
+                        await tx.RunAsync(createIndexQuery);
+                    });
+                }
+                
                 await Console.Error.WriteLineAsync($"Inserting {triples.Count} triples...");
 
                 int count = 0;
                 long last_ms = 0;
-                Stopwatch sw = new();
-                sw.Start();
 
                 IOrderedEnumerable<Triple> orderedTriples = triples
                     .OrderBy(x => x.Relationship.Type)

@@ -1,6 +1,5 @@
 version: '3'
 services:
-
   neo4j:
     image: neo4j:latest
     container_name: codegraph_neo4j
@@ -8,8 +7,15 @@ services:
     ports:
       - 7474:7474
       - 7687:7687
+    volumes:
+      - type: volume
+        source: codegraph-volume-data
+        target: /data
     environment:
       NEO4J_AUTH: neo4j/AdminPassword
       NEO4J_dbms_memory_pagecache_size: 2G
       NEO4J_dbms.memory.heap.initial_size: 2G
       NEO4J_dbms_memory_heap_max__size: 4G
+      
+volumes:
+  codegraph-volume-data:

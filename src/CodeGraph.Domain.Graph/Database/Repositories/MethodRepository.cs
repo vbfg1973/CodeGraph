@@ -24,7 +24,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                              RETURN t.fullName AS MethodOwnerFullName,
                                     t.name AS MethodOwnerName,
                             		t.pk AS MethodOwnerPk,
-                            		labels(t)[1] AS MethodOwnerType,
+                            		labels(t)[0] AS MethodOwnerType,
                             		
                             		m.fullName AS MethodFullName,
                             		m.name AS MethodName,
@@ -42,7 +42,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                              RETURN t.fullName AS MethodOwnerFullName,
                                     t.name AS MethodOwnerName,
                             		t.pk AS MethodOwnerPk,
-                            		labels(t)[1] AS MethodOwnerType,
+                            		labels(t)[0] AS MethodOwnerType,
                             		
                             		m.fullName AS MethodFullName,
                             		m.name AS MethodName,
@@ -124,7 +124,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                          im.name AS InvokedMethodName,
                          im.pk AS InvokedMethodPk,
                          
-                  	     labels(pt)[1] AS InvokedMethodOwnerType,
+                  	     labels(pt)[0] AS InvokedMethodOwnerType,
                   	     
                   	     at.fullName AS Location
                   ORDER BY cm.fullName,
@@ -149,7 +149,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                           im.name AS InvokedMethodName,
                           im.pk AS InvokedMethodPk,
                           
-                   	     labels(pt)[1] AS InvokedMethodOwnerType,
+                   	     labels(pt)[0] AS InvokedMethodOwnerType,
                    	     
                    	     at.fullName AS Location
                    ORDER BY cm.fullName,

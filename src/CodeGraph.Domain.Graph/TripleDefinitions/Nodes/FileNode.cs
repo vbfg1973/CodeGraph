@@ -9,6 +9,10 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
         {
         }
 
+        public FileNode() : base(string.Empty, string.Empty)
+        {
+        }
+
         public override string Label { get; } = "File";
 
         public bool Equals(FileNode? other)
