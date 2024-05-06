@@ -2,6 +2,7 @@
 using CodeGraph.Domain.Dotnet.CSharp.Walkers;
 using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
+using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using CodeGraph.Domain.Tests.TestHelpers;
 using FakeItEasy;
 using FluentAssertions;
@@ -36,8 +37,9 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.MethodInvocation
                 .First();
 
             CSharpMethodInvocationWalker walker = new(declaration, walkerOptions, A.Fake<ILoggerFactory>());
-            List<TripleInvoke> results =
-                walker.Walk().OfType<TripleInvoke>().Where(x => x.NodeB is MethodNode).ToList();
+
+            List<Triple> triples = walker.Walk().ToList();
+            List<TripleInvoke> results = triples.OfType<TripleInvoke>().ToList();
             results.Count().Should().Be(expectedInvocationCount);
         }
 
@@ -58,7 +60,8 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.MethodInvocation
                 .First();
 
             CSharpMethodInvocationWalker walker = new(declaration, walkerOptions, A.Fake<ILoggerFactory>());
-            List<TripleConstruct> results = walker.Walk().OfType<TripleConstruct>().ToList();
+            List<Triple> triples = walker.Walk().ToList();
+            List<TripleConstruct> results = triples.OfType<TripleConstruct>().ToList();
             results.Count().Should().Be(expectedObjectConstructions);
         }
     }
