@@ -69,6 +69,9 @@
         <None Update="CodeToTest\CSharp\TypeDefinition\ClassWithInterfaceDefinedMethods.csharp">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
+        <None Update="CodeToTest\CSharp\InterfaceImplementation\GenericReturnTypeSeparateNamespaces.cs">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
     </ItemGroup>
 
 </Project>

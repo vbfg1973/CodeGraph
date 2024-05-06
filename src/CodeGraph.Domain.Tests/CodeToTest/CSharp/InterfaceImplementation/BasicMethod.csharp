@@ -1,0 +1,15 @@
+﻿namespace CodeGraph.Domain.Tests.CodeToTest.CSharp.InterfaceImplementation
+{
+    public interface IBasicMethod
+    {
+        Task Process();
+    }
+
+    public class BasicMethod : IBasicMethod
+    {
+        public async Task Process()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

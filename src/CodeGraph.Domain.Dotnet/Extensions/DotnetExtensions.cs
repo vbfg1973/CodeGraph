@@ -114,7 +114,7 @@ namespace CodeGraph.Domain.Dotnet.Extensions
                 .Select(x => (name: x.Name, type: x.Type.ToString()))
                 .ToArray();
 
-            string returnType = symbol.ReturnType.ToString() ?? "Unknown";
+            INamedTypeSymbol? returnTypeNamedTypeSymbol = symbol.ReturnType as INamedTypeSymbol;
 
             string symbolName = symbol.Name;
             string[] modifiers = symbol.MapModifiers();
@@ -122,7 +122,7 @@ namespace CodeGraph.Domain.Dotnet.Extensions
             return new MethodNode(fullName,
                 symbolName,
                 args,
-                returnType,
+                returnTypeNamedTypeSymbol?.ToDisplayString() ?? "Unknown",
                 modifiers);
         }
 

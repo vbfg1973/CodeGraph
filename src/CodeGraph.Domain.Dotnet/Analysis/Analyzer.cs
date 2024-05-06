@@ -97,7 +97,7 @@ namespace CodeGraph.Domain.Dotnet.Analysis
                 SemanticModel semanticModel = compilation.GetSemanticModel(syntaxTree);
 
                 WalkerOptions walkerOptions = new(new DotnetOptions(syntaxTree, semanticModel, project), true);
-                CSharpTypeDiscoveryWalker walker = new(fileNode!, walkerOptions, _loggerFactory);
+                CSharpTypeDiscoveryWalker walker = new(fileNode!, new ProjectNode(project.Name), walkerOptions, _loggerFactory);
                 _triples.AddRange(walker.Walk());
             }
         }

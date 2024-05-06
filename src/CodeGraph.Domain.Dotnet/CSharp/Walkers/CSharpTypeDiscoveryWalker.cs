@@ -9,9 +9,10 @@ using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 {
-    public class CSharpTypeDiscoveryWalker(FileNode fileNode, WalkerOptions walkerOptions, ILoggerFactory loggerFactory)
+    public class CSharpTypeDiscoveryWalker(FileNode fileNode, ProjectNode projectNode, WalkerOptions walkerOptions, ILoggerFactory loggerFactory)
         : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
+        private readonly ProjectNode _projectNode = projectNode;
         private readonly List<Triple> _triples = new();
         private ILogger<CSharpTypeDiscoveryWalker> _logger = loggerFactory.CreateLogger<CSharpTypeDiscoveryWalker>();
 
@@ -71,10 +72,8 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
             TypeNode typeNode = GetTypeNode(node);
 
-            ProjectNode projectNode = new(walkerOptions.DotnetOptions.Project!.Name);
-
             _triples.Add(new TripleDeclaredAt(typeNode, fileNode));
-            _triples.Add(new TripleBelongsTo(typeNode, projectNode));
+            _triples.Add(new TripleBelongsTo(typeNode, _projectNode));
             _triples.AddRange(node.GetInherits(typeNode, walkerOptions.DotnetOptions.SemanticModel));
             _triples.AddRange(WordTriples(typeNode));
         }

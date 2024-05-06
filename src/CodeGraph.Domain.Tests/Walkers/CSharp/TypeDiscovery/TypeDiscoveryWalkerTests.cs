@@ -32,7 +32,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDiscovery
                 await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
 
             // Act
-            CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions, A.Fake<ILoggerFactory>());
+            CSharpTypeDiscoveryWalker walker = new(fileNode, new ProjectNode("FakeProject"), walkerOptions, A.Fake<ILoggerFactory>());
             List<TripleDeclaredAt> results = walker.Walk().OfType<TripleDeclaredAt>().ToList();
 
             // Assert
@@ -54,7 +54,7 @@ namespace CodeGraph.Domain.Tests.Walkers.CSharp.TypeDiscovery
                 await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
 
             // Act
-            CSharpTypeDiscoveryWalker walker = new(fileNode, walkerOptions, A.Fake<ILoggerFactory>());
+            CSharpTypeDiscoveryWalker walker = new(fileNode, new ProjectNode("FakeProject"), walkerOptions, A.Fake<ILoggerFactory>());
             List<TripleOfType> results = walker.Walk().OfType<TripleOfType>().ToList();
 
             // Assert
