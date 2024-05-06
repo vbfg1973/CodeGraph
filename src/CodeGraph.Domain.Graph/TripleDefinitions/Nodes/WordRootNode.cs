@@ -8,6 +8,10 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
         {
         }
 
+        public WordRootNode() : base(string.Empty, string.Empty)
+        {
+        }
+
         public override string Label => "WordRoot";
 
         public bool Equals(WordRootNode? other)

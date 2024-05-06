@@ -1,0 +1,14 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp.TypeDefinition
+{
+    public class ClassWithCustomMethodReturnType
+    {
+        public CustomType CustomTypeWithNoArguments()
+        {
+            throw new NotImplementedException();
+        }
+    }
+    
+    public class CustomType 
+    {
+    }
+}

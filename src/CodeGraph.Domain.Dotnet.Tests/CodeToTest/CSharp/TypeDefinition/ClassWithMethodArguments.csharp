@@ -1,0 +1,15 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp.TypeDefinition
+{
+    public class ClassWithMethodArguments
+    {
+        public void MethodWithTwoArguments(string firstArgument, string secondArgument)
+        {
+            Console.WriteLine($"{firstArgument} - {secondArgument}");
+        }
+                
+        public void MethodWithThreeArguments(string firstArgument, string secondArgument, string thirdArgument)
+        {
+            Console.WriteLine($"{firstArgument} - {secondArgument} - {thirdArgument");
+        }
+    }
+}

@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph", "CodeGraph\Code
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain", "CodeGraph.Domain\CodeGraph.Domain.csproj", "{CFFE2396-27E4-4B6D-9D87-40CAD37E3B9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Tests", "CodeGraph.Domain.Tests\CodeGraph.Domain.Tests.csproj", "{FF530E09-5626-472D-80A4-AF9D747E6E79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Dotnet.Tests", "CodeGraph.Domain.Dotnet.Tests\CodeGraph.Domain.Dotnet.Tests.csproj", "{FF530E09-5626-472D-80A4-AF9D747E6E79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Graph", "CodeGraph.Domain.Graph\CodeGraph.Domain.Graph.csproj", "{C8843018-9842-472C-AF9D-926ADA370328}"
 EndProject
@@ -16,6 +16,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Common", "CodeGraph.Domain.Common\CodeGraph.Domain.Common.csproj", "{F1B1C2A2-AAD4-4FDF-8EB0-1A4AE5BA8D35}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Api", "CodeGraph.Api\CodeGraph.Api.csproj", "{7849FB93-E981-4034-9EEB-B47DAF53B931}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Tests", "CodeGraph.Domain.Tests\CodeGraph.Domain.Tests.csproj", "{D5E659F5-A177-4E9E-B063-A7534E599487}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{46D2856A-10B3-4A9F-9E18-FE9A8ADEF913}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,5 +58,13 @@ Global
 		{7849FB93-E981-4034-9EEB-B47DAF53B931}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7849FB93-E981-4034-9EEB-B47DAF53B931}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7849FB93-E981-4034-9EEB-B47DAF53B931}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5E659F5-A177-4E9E-B063-A7534E599487}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5E659F5-A177-4E9E-B063-A7534E599487}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5E659F5-A177-4E9E-B063-A7534E599487}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5E659F5-A177-4E9E-B063-A7534E599487}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{FF530E09-5626-472D-80A4-AF9D747E6E79} = {46D2856A-10B3-4A9F-9E18-FE9A8ADEF913}
+		{D5E659F5-A177-4E9E-B063-A7534E599487} = {46D2856A-10B3-4A9F-9E18-FE9A8ADEF913}
 	EndGlobalSection
 EndGlobal

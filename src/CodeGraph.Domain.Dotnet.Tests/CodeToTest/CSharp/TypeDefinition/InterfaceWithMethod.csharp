@@ -1,0 +1,7 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp.TypeDefinition
+{
+    public interface IInterfaceWithMethod
+    {
+        Task<string> StringAsync();
+    }
+}

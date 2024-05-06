@@ -1,6 +1,10 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator;
+using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models;
+using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services;
+using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Abstract;
+using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Strategies;
 using Microsoft.Extensions.Logging;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
@@ -18,9 +22,15 @@ namespace CodeGraph.Domain.Features.SequenceUml
             MethodInvocationHierarchy methodInvocationHierarchy =
                 await sequenceGeneratorService.FindSequenceFromStartingMethod(options.StartingMethodFullName);
 
-            Console.WriteLine(JsonSerializer.Serialize(methodInvocationHierarchy,
-                new JsonSerializerOptions { WriteIndented = true }));
+            // Console.WriteLine(JsonSerializer.Serialize(methodInvocationHierarchy,
+            //     new JsonSerializerOptions { WriteIndented = true }));
 
+            ISequenceUmlGenerator plant = new PlantUmlSequenceUmlGenerator();
+
+            string umlDescription = await plant.GenerateUmlDescription(methodInvocationHierarchy);
+
+            Console.WriteLine(umlDescription);
+            
             sw.Stop();
             Console.WriteLine(sw.Elapsed);
         }
