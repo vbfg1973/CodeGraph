@@ -1,0 +1,10 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp
+{
+    public abstract class BaseClass
+    {
+    }
+
+    public class ClassWithInterface : BaseClass
+    {
+    }
+}

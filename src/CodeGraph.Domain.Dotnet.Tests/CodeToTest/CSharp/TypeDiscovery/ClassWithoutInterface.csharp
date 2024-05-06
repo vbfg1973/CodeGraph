@@ -1,0 +1,7 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp
+{
+    public class ClassWithoutInterface
+    {
+        public void Method();
+    }
+}

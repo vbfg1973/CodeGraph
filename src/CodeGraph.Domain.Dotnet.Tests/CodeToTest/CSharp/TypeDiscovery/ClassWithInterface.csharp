@@ -1,0 +1,12 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp
+{
+    public interface IIClassWithInterface
+    {
+        
+    }
+    
+    public class ClassWithInterface : IIClassWithInterface
+    {
+        
+    }
+}

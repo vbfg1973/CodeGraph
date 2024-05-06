@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph", "CodeGraph\Code
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain", "CodeGraph.Domain\CodeGraph.Domain.csproj", "{CFFE2396-27E4-4B6D-9D87-40CAD37E3B9B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Tests", "CodeGraph.Domain.Tests\CodeGraph.Domain.Tests.csproj", "{FF530E09-5626-472D-80A4-AF9D747E6E79}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Dotnet.Tests", "CodeGraph.Domain.Dotnet.Tests\CodeGraph.Domain.Dotnet.Tests.csproj", "{FF530E09-5626-472D-80A4-AF9D747E6E79}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Graph", "CodeGraph.Domain.Graph\CodeGraph.Domain.Graph.csproj", "{C8843018-9842-472C-AF9D-926ADA370328}"
 EndProject

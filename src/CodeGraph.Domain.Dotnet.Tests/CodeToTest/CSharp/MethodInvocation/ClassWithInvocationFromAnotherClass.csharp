@@ -1,0 +1,29 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp.MethodInvocation
+{
+    public class ClassWithInvocationFromAnotherClass
+    {
+        public void Method()
+        {
+            var otherClass = new OtherClass();
+            
+            otherClass.Method();
+        }
+    }
+    
+    public class OtherClass 
+    {
+        public void Method()
+        {
+            var thirdClass = new ThirdClass();
+            
+            thirdClass.Method();
+        }
+    }
+    
+    public class ThirdClass 
+    {
+        public void Method()
+        {
+        }
+    }
+}

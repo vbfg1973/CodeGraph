@@ -1,0 +1,10 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp.TypeDefinition
+{
+    public class ClassWithCustomMethod
+    {
+        public string BuiltinMethodTypeWithNoArguments()
+        {
+            throw new NotImplementedException();
+        }
+    }
+}

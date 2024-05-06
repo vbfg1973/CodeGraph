@@ -1,0 +1,15 @@
+﻿namespace CodeGraph.Domain.Dotnet.Tests.CodeToTest.CSharp.MethodInvocation
+{
+    public class ClassWithSelfInvocation
+    {
+        public static void Method()
+        {
+            PrivateMethod("Arg");
+        }
+
+        private static void PrivateMethod(string arg)
+        {
+            
+        }
+    }
+}
