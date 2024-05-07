@@ -46,7 +46,8 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                             		
                             		m.fullName AS MethodFullName,
                             		m.name AS MethodName,
-                            		m.pk AS MethodPk
+                            		m.pk AS MethodPk,
+                            		m.returnType AS MethodReturnType
                             """;
 
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
@@ -73,7 +74,8 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                            
                            classMethod.fullName AS ClassMethodFullName,
                            classMethod.name AS ClassMethodName,
-                           classMethod.pk AS ClassMethodPk
+                           classMethod.pk AS ClassMethodPk,
+                           classMethod.returnType AS ClassMethodReturnType
                     ORDER BY InterfaceFullName, InterfaceMethodName
                   """
                 : $"""
@@ -92,7 +94,8 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                           
                           classMethod.fullName AS ClassMethodFullName,
                           classMethod.name AS ClassMethodName,
-                          classMethod.pk AS ClassMethodPk
+                          classMethod.pk AS ClassMethodPk,
+                          classMethod.returnType AS ClassMethodReturnType
                      ORDER BY InterfaceFullName, InterfaceMethodName
                    """;
 
@@ -123,6 +126,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                          im.fullName AS InvokedMethodFullName,
                          im.name AS InvokedMethodName,
                          im.pk AS InvokedMethodPk,
+                         im.returnType AS InvokedMethodReturnType,
                          
                   	     labels(pt)[0] AS InvokedMethodOwnerType,
                   	     
@@ -148,6 +152,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                           im.fullName AS InvokedMethodFullName,
                           im.name AS InvokedMethodName,
                           im.pk AS InvokedMethodPk,
+                          im.returnType AS InvokedMethodReturnType,
                           
                    	     labels(pt)[0] AS InvokedMethodOwnerType,
                    	     
