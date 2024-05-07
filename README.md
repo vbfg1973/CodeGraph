@@ -18,6 +18,7 @@ It is very much a work in progress.
 ## Completed 
 * The [data model](src/docs/data_model.md) exists and is well tested. 
 * Fully importing a wholly CSharp solution
+* Generating sequence diagrams from method invocations
 
 ## To Do
 * Support for multiple solutions
