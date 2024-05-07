@@ -84,7 +84,7 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Strat
             
             if (!parent.ParentTypeFullname.Equals(called.ParentTypeFullname))
             {
-                sb.AppendLine($"{GetName(called.ParentTypeFullname)} --> {GetName(parent.ParentTypeFullname)}");
+                sb.AppendLine($"{GetName(called.ParentTypeFullname)} --> {GetName(parent.ParentTypeFullname)} : {called.MethodReturnType}");
             }
             return sb.ToString();
         }

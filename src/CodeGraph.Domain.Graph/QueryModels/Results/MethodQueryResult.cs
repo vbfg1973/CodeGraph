@@ -15,5 +15,6 @@ namespace CodeGraph.Domain.Graph.QueryModels.Results
         public string MethodFullName { get; set; } = null!;
         public string MethodName { get; set; } = null!;
         public string MethodPk { get; set; } = null!;
+        public string MethodReturnType { get; set; } = null!;
     }
 }

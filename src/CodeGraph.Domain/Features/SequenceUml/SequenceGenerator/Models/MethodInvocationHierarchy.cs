@@ -4,24 +4,13 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models
 {
     public class MethodInvocationHierarchy
     {
-        public MethodInvocationHierarchy(
-            string parentTypeFullname,
-            string parentTypePk,
-            string methodFullName,
-            string methodPk)
-        {
-            ParentTypeFullname = parentTypeFullname;
-            ParentTypePk = parentTypePk;
-            MethodFullName = methodFullName;
-            MethodPk = methodPk;
-        }
-
         public MethodInvocationHierarchy(MethodQueryResult methodQueryResult)
         {
             ParentTypeFullname = methodQueryResult.MethodOwnerFullName;
             ParentTypePk = methodQueryResult.MethodOwnerPk;
             MethodFullName = methodQueryResult.MethodFullName;
             MethodPk = methodQueryResult.MethodPk;
+            MethodReturnType = methodQueryResult.MethodReturnType;
         }
 
         public MethodInvocationHierarchy(MethodInvocationQueryResult methodQueryResult)
@@ -30,12 +19,14 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models
             ParentTypePk = methodQueryResult.InvokedMethodOwnerPk;
             MethodFullName = methodQueryResult.InvokedMethodFullName;
             MethodPk = methodQueryResult.InvokedMethodPk;
+            MethodReturnType = methodQueryResult.InvokedMethodReturnType;
         }
 
         public string ParentTypeFullname { get; }
         public string ParentTypePk { get; }
         public string MethodFullName { get; }
         public string MethodPk { get; }
+        public string MethodReturnType { get; }
 
         public List<MethodInvocationHierarchy> MethodInvocations { get; } = new();
     }

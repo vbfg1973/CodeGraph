@@ -17,5 +17,6 @@
         public string ClassMethodFullName { get; set; } = null!;
         public string ClassMethodName { get; set; } = null!;
         public string ClassMethodPk { get; set; } = null!;
+        public string ClassMethodReturnType { get; set; } = null!;
     }
 }

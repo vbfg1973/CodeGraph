@@ -20,6 +20,7 @@ namespace CodeGraph.Domain.Graph.QueryModels.Results
         public string InvokedMethodFullName { get; set; } = null!;
         public string InvokedMethodName { get; set; } = null!;
         public string InvokedMethodPk { get; set; } = null!;
+        public string InvokedMethodReturnType { get; set; } = null!;
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ObjectType InvokedMethodOwnerType { get; set; }
