@@ -26,6 +26,7 @@ All relationships are expressed in neo4j style syntax. Images to follow.
 * (Folder)-[:INCLUDED_IN]->(Folder)
 * (File)-[:INCLUDED_IN]->(Folder)
 
+---
 
 * (Class)-[:DECLARED_AT]->(File)
 * (Interface)-[:DECLARED_AT]->(File)
@@ -36,6 +37,7 @@ All relationships are expressed in neo4j style syntax. Images to follow.
 * (Project)-[:DEPENDS_ON]->(Project)
 * (Project)-[:DEPENDS_ON]->(Package)
 
+---
 
 * (Class)-[:BELONGS_TO]->(Project)
 * (Interface)-[:BELONGS_TO]->(Project)
@@ -47,19 +49,22 @@ All relationships are expressed in neo4j style syntax. Images to follow.
 * (Interface)-[:HAS]->(Method)
 * (Record)-[:HAS]->(Method)
 
+---
 
 * (Class)-[:HAS]->(Property)
 * (Interface)-[:HAS]->(Property)
 * (Record)-[:HAS]->(Property)
 
+---
 
-* (Class)-[:IMPLEMENTS]->(Method)
+* (Class)-[:IMPLEMENTS]->(Interface)
 
 ### Dotnet Code Flow
 
 * (Method)-[:CONSTRUCTS]->(Class)
 * (Method)-[:CONSTRUCTS]->(Record)
 
+---
 
 * (Method)-[:INVOKES]->(Invocation)
 * (Invocation)-[:INVOKED_AT]->(InvocationLocation)
@@ -73,5 +78,6 @@ All relationships are expressed in neo4j style syntax. Images to follow.
 * (Method)-[:HAS_WORD_IN_NAME]->(Word)
 * (Property)-[:HAS_WORD_IN_NAME]->(Word)
 
+---
 
 * (Word)-[:WORD_DERIVES_FROM]->(WordRoot)
