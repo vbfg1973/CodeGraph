@@ -21,6 +21,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGraph.Domain.Tests", "C
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{46D2856A-10B3-4A9F-9E18-FE9A8ADEF913}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentation", "{2F27BF54-6D59-4997-A114-A2CF2F433153}"
+	ProjectSection(SolutionItems) = preProject
+		..\README.md = ..\README.md
+		docs\data_model.md = docs\data_model.md
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
