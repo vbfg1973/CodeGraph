@@ -9,7 +9,7 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
     /// <summary>
     ///     CSharp Cognitive Complexity Analysis
     /// </summary>
-    public class CSharpCognitiveComplexityWalker : CSharpSyntaxWalker, IDotnetComplexityAnalyzer
+    public class CSharpCognitiveComplexityWalker : CSharpBaseTypeWalker, IDotnetComplexityAnalyzer
     {
         private readonly MethodDeclarationSyntax _methodDeclarationSyntax;
         private MethodDeclarationSyntax? _currentMethod;
@@ -17,7 +17,7 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
         private int _nesting;
 
 
-        public CSharpCognitiveComplexityWalker(MethodDeclarationSyntax methodDeclarationSyntax)
+        public CSharpCognitiveComplexityWalker(MethodDeclarationSyntax methodDeclarationSyntax, WalkerOptions walkerOptions) : base(walkerOptions)
         {
             _nesting = 0;
             _methodDeclarationSyntax = methodDeclarationSyntax;

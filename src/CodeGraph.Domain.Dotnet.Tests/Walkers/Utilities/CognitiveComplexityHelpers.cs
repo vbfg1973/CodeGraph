@@ -40,15 +40,15 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.Utilities
                 .First(method => method.SubOrFunctionStatement.Identifier.ToString() == methodName);
         }
 
-        public static IComplexityAnalyzer GetMethodAnalyzer(Language language, SyntaxNode syntaxNode)
-        {
-            return language switch
-            {
-                Language.CSharp => new CSharpCognitiveComplexityWalker((MethodDeclarationSyntax)syntaxNode),
-                Language.VisualBasic => new VisualBasicCognitiveComplexityAnalyzer((MethodBlockSyntax)syntaxNode),
-                _ => throw new ArgumentOutOfRangeException(nameof(language), language, null)
-            };
-        }
+        // public static IComplexityAnalyzer GetMethodAnalyzer(Language language, SyntaxNode syntaxNode)
+        // {
+        //     return language switch
+        //     {
+        //         Language.CSharp => new CSharpCognitiveComplexityWalker((MethodDeclarationSyntax)syntaxNode),
+        //         Language.VisualBasic => new VisualBasicCognitiveComplexityAnalyzer((MethodBlockSyntax)syntaxNode),
+        //         _ => throw new ArgumentOutOfRangeException(nameof(language), language, null)
+        //     };
+        // }
 
         public static string FileNameFromClass(string className)
         {

@@ -9,15 +9,15 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleHas(
             TypeNode typeA,
-            MethodNode methodB)
-            : base(typeA, methodB, new HasRelationship())
+            MethodNode methodNodeB)
+            : base(typeA, methodNodeB, new HasRelationship())
         {
         }
 
         public TripleHas(
             TypeNode typeA,
-            PropertyNode methodB)
-            : base(typeA, methodB, new HasRelationship())
+            PropertyNode methodNodeB)
+            : base(typeA, methodNodeB, new HasRelationship())
         {
         }
     }

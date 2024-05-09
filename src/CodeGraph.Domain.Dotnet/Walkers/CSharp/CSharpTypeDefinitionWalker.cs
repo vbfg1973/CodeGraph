@@ -9,7 +9,6 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
 
-
 namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 {
     public class CSharpTypeDefinitionWalker(
@@ -18,11 +17,11 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
         ILoggerFactory loggerFactory)
         : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
-        private readonly ILoggerFactory _loggerFactory = loggerFactory;
-        private readonly List<Triple> _triples = new();
-
         private readonly ILogger<CSharpTypeDefinitionWalker> _logger =
             loggerFactory.CreateLogger<CSharpTypeDefinitionWalker>();
+
+        private readonly ILoggerFactory _loggerFactory = loggerFactory;
+        private readonly List<Triple> _triples = new();
 
         public IEnumerable<Triple> Walk()
         {
@@ -39,6 +38,7 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 
             GetHasTriple(syntax);
             GetImplementationOfTriples(syntax);
+            GetComplexity(syntax);
 
             base.VisitMethodDeclaration(syntax);
         }
@@ -51,6 +51,16 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
             GetHasTriple(syntax);
 
             base.VisitPropertyDeclaration(syntax);
+        }
+
+        private void GetComplexity(MethodDeclarationSyntax syntax)
+        {
+            CSharpCognitiveComplexityWalker walker = new(syntax, _walkerOptions);
+
+            MethodNode methodNode = GetMethodNode(syntax);
+            CognitiveComplexityNode cognitiveComplexityNode = new(walker.ComplexityScore);
+
+            _triples.Add(new TripleHasComplexity(methodNode, cognitiveComplexityNode));
         }
 
         private void GetHasTriple(MethodDeclarationSyntax syntax)

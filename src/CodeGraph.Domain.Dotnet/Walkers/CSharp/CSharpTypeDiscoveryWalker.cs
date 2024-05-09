@@ -24,7 +24,7 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 
         public IEnumerable<Triple> Walk()
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(Walk));
+            _logger.LogTrace("{Method}", nameof(Walk));
 
             base.Visit(walkerOptions.DotnetOptions.SyntaxTree.GetRoot());
 

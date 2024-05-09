@@ -8,8 +8,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleImplementationOf(
             MethodNode methodA,
-            MethodNode methodB)
-            : base(methodA, methodB, new ImplementsRelationship())
+            MethodNode methodNodeB)
+            : base(methodA, methodNodeB, new ImplementsRelationship())
         {
         }
     }

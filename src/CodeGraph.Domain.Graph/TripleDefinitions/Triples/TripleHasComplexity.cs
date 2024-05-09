@@ -4,12 +4,12 @@ using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 
 namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
 {
-    public class TripleDependsOnProject : Triple
+    public class TripleHasComplexity : Triple
     {
-        public TripleDependsOnProject(
-            ProjectNode projectA,
-            ProjectNode projectNodeB)
-            : base(projectA, projectNodeB, new DependsOnRelationship())
+        public TripleHasComplexity(
+            MethodNode methodA,
+            CognitiveComplexityNode cognitiveComplexityNodeB)
+            : base(methodA, cognitiveComplexityNodeB, new HasComplexityRelationship())
         {
         }
     }

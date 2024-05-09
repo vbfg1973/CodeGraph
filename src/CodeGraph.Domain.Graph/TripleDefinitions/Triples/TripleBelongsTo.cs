@@ -9,8 +9,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleBelongsTo(
             TypeNode typeA,
-            ProjectNode projectB)
-            : base(typeA, projectB, new BelongsToRelationship())
+            ProjectNode projectNodeB)
+            : base(typeA, projectNodeB, new BelongsToRelationship())
         {
         }
     }

@@ -123,7 +123,7 @@ namespace CodeGraph.Domain.Dotnet.Analysis
             await Console.Error.WriteLineAsync();
 
             IEnumerable<string> invokedNamespaces = _triples
-                .OfType<TripleInvocationOf>()
+                .OfType<TripleHasComplexity>()
                 .Where(x => x.NodeB is MethodNode)
                 .Select(x => x.NodeB.FullName)
                 .Select(x => string.Join(".", x.Split('.').SkipLast(2)))

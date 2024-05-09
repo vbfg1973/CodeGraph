@@ -9,22 +9,22 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleOfType(
             ClassNode classA,
-            TypeNode typeB)
-            : base(classA, typeB, new OfTypeRelationship())
+            TypeNode typeNodeB)
+            : base(classA, typeNodeB, new OfTypeRelationship())
         {
         }
 
         public TripleOfType(
             RecordNode recordA,
-            TypeNode typeB)
-            : base(recordA, typeB, new OfTypeRelationship())
+            TypeNode typeNodeB)
+            : base(recordA, typeNodeB, new OfTypeRelationship())
         {
         }
 
         public TripleOfType(
             InterfaceNode interfaceA,
-            InterfaceNode interfaceB)
-            : base(interfaceA, interfaceB, new OfTypeRelationship())
+            InterfaceNode interfaceNodeB)
+            : base(interfaceA, interfaceNodeB, new OfTypeRelationship())
         {
         }
     }

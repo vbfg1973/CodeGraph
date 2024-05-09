@@ -14,8 +14,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
 
         public TripleConstruct(
             MethodNode methodA,
-            ClassNode classB)
-            : base(methodA, classB, new ConstructRelationship())
+            ClassNode classNodeB)
+            : base(methodA, classNodeB, new ConstructRelationship())
         {
         }
     }
