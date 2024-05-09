@@ -1,0 +1,99 @@
+Imports System
+
+Namespace CodeAnalysis.Domain.Analyzers.Tests.TestClasses
+    Public Class VisualBasicIfElseClass
+        Public Shared Sub BasicMethod()
+            Console.WriteLine("This method does nothing")
+        End Sub
+
+        Public Sub Method_IfStatement()
+            Dim rand = New Random(100)
+            If 0 > rand.[Next]() Then Console.WriteLine("Do nothing")
+        End Sub
+
+        Public Sub Method_IfElseStatement()
+            Dim rand = New Random(100)
+
+            If 0 > rand.[Next]() Then
+                Console.WriteLine("Do nothing")
+            Else
+                Console.WriteLine("Do this instead")
+            End If
+        End Sub
+
+        Public Sub Method_IfElseIfStatement()
+            Dim rand = New Random(100)
+
+            If 0 > rand.[Next]() Then
+                Console.WriteLine("Do nothing")
+            ElseIf 2 > rand.[Next]() Then
+                Console.WriteLine("Do nothing here too")
+            Else
+                Console.WriteLine("Do this instead")
+            End If
+        End Sub
+
+        Public Sub Method_NestedIfElseStatement()
+            Dim rand = New Random(100)
+
+            If 10 > rand.[Next]() Then
+
+                If 10 > rand.[Next]() Then
+                    Console.WriteLine("Do nothing")
+                Else
+                    Console.WriteLine("Do this instead")
+                End If
+            Else
+                Console.WriteLine("Do this instead")
+            End If
+        End Sub
+
+        Public Sub Method_DoublyNestedIfElseStatement()
+            Dim rand = New Random(100)
+
+            If 10 > rand.[Next]() Then
+
+                If 10 > rand.[Next]() Then
+                    Console.WriteLine("Do nothing")
+                Else
+                    Console.WriteLine("Do this instead")
+                End If
+            Else
+
+                If 0 > rand.[Next]() Then
+                    Console.WriteLine("Do nothing")
+                Else
+                    Console.WriteLine("Do this instead")
+                End If
+            End If
+        End Sub
+
+        Public Sub Method_DeeplyNestedIfElseStatement()
+            Dim rand = New Random(100)
+
+            If 10 > rand.[Next]() Then
+
+                If 10 > rand.[Next]() Then
+
+                    If 10 > rand.[Next]() Then
+                        Console.WriteLine("Do nothing")
+                    Else
+                        Console.WriteLine("Do this instead")
+                    End If
+                Else
+
+                    If 0 > rand.[Next]() Then
+                        Console.WriteLine("Do nothing")
+                    Else
+                        Console.WriteLine("Do this instead")
+                    End If
+                End If
+            End If
+        End Sub
+
+        Public Sub Method_CoalescedIfElse()
+            Dim rand = New Random(100)
+            Console.WriteLine(If(0 > rand.[Next](), "Do nothing", "Do this instead"))
+        End Sub
+    End Class
+End Namespace

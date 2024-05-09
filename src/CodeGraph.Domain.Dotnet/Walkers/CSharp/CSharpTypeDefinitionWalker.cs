@@ -10,7 +10,7 @@ using Microsoft.Extensions.Logging;
 using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
 
 
-namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
+namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 {
     public class CSharpTypeDefinitionWalker(
         TypeDeclarationSyntax typeDeclarationSyntax,

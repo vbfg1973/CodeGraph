@@ -1,0 +1,52 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class SwitchClass
+        Public Sub SingleSwitch()
+            Dim i = Random.[Shared].[Next](1, 3)
+
+            Select Case i
+                Case 1
+                Case 2
+                Case 3
+                Case Else
+            End Select
+        End Sub
+
+        Public Sub DoubleSwitch()
+            Dim i = Random.[Shared].[Next](1, 3)
+
+            Select Case i
+                Case 1
+                    Dim j = Random.[Shared].[Next](1, 3)
+
+                    Select Case j
+                        Case 1
+                        Case 2
+                        Case 3
+                        Case Else
+                    End Select
+
+                Case 2
+                    Dim k = Random.[Shared].[Next](1, 3)
+
+                    Select Case k
+                        Case 1
+                        Case 2
+                        Case 3
+                        Case Else
+                    End Select
+
+                Case 3
+                    Dim l = Random.[Shared].[Next](1, 3)
+
+                    Select Case l
+                        Case 1
+                        Case 2
+                        Case 3
+                        Case Else
+                    End Select
+
+                Case Else
+            End Select
+        End Sub
+    End Class
+End Namespace

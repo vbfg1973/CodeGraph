@@ -1,0 +1,75 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class WhileClass
+    {
+        public void SingleWhileLoop()
+        {
+            while (true)
+            {
+                Console.WriteLine("Print some lines");
+            }
+        }
+
+        public void DoubleWhileLoop()
+        {
+            while (true)
+            {
+                while (true)
+                {
+                    Console.WriteLine("Print some lines");
+                }
+            }
+        }
+        
+        public void TripleWhileLoop()
+        {
+            while (true)
+            {
+                while (true)
+                {
+                    while (true)
+                    {
+                        Console.WriteLine("Print some lines");
+                    }
+                }
+            }
+        }
+        
+        public void QuadrupleWhileLoop()
+        {
+            while (true)
+            {
+                while (true)
+                {
+                    while (true)
+                    {
+                        while (true)
+                        {
+                            Console.WriteLine("Print some lines");
+                        }
+                    }
+                }
+            }
+        }
+        
+        public void QuintupleWhileLoop()
+        {
+            while (true)
+            {
+                while (true)
+                {
+                    while (true)
+                    {
+                        while (true)
+                        {
+                            while (true)
+                            {
+                                Console.WriteLine("Print some lines");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

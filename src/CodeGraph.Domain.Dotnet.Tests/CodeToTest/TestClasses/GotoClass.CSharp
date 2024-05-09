@@ -1,0 +1,13 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class GotoClass
+    {
+        public void GotoMethod()
+        {
+            goto GotoTarget;
+
+            GotoTarget:
+            Console.WriteLine("Print a line");
+        }
+    }
+}

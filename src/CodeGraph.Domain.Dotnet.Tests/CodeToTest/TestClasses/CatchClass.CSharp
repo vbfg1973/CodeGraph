@@ -1,0 +1,51 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class CatchClass
+    {
+        public void SingleCatch()
+        {
+            try
+            {
+                Console.WriteLine("Print a line");
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("Do something when caught");
+            }
+        }
+
+        public void DoubleCatch()
+        {
+            try
+            {
+                Console.WriteLine("Print a line");
+            }
+            catch (NotImplementedException e)
+            {
+                Console.WriteLine("Do something when caught");
+            }
+            
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine("Do something when caught");
+            }
+        }
+        
+        public void CatchWithFinally()
+        {
+            try
+            {
+                Console.WriteLine("Print a line");
+            }
+            catch (NotImplementedException e)
+            {
+                Console.WriteLine("Do something when caught");
+            }
+            
+            finally
+            {
+                Console.WriteLine("Do something when caught");
+            }
+        }
+    }
+}

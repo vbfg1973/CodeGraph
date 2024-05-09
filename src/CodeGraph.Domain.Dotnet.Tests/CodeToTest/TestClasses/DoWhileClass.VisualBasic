@@ -1,0 +1,53 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class DoWhileLoopClass
+        Public Sub SingleDoWhileLoop()
+            Do
+                Console.WriteLine("Print a line")
+            Loop While Random.[Shared].[Next](1, 10) <= 5
+        End Sub
+
+        Public Sub DoubleDoWhileLoop()
+            Do
+                Do
+                    Console.WriteLine("Print a line")
+                Loop While Random.[Shared].[Next](1, 10) <= 5
+            Loop While Random.[Shared].[Next](1, 10) <= 5
+        End Sub
+
+        Public Sub TripleDoWhileLoop()
+            Do
+                Do
+                    Do
+                        Console.WriteLine("Print a line")
+                    Loop While Random.[Shared].[Next](1, 10) <= 5
+                Loop While Random.[Shared].[Next](1, 10) <= 5
+            Loop While Random.[Shared].[Next](1, 10) <= 5
+        End Sub
+
+        Public Sub QuadrupleDoWhileLoop()
+            Do
+                Do
+                    Do
+                        Do
+                            Console.WriteLine("Print a line")
+                        Loop While Random.[Shared].[Next](1, 10) <= 5
+                    Loop While Random.[Shared].[Next](1, 10) <= 5
+                Loop While Random.[Shared].[Next](1, 10) <= 5
+            Loop While Random.[Shared].[Next](1, 10) <= 5
+        End Sub
+
+        Public Sub QuintupleDoWhileLoop()
+            Do
+                Do
+                    Do
+                        Do
+                            Do
+                                Console.WriteLine("Print a line")
+                            Loop While Random.[Shared].[Next](1, 10) <= 5
+                        Loop While Random.[Shared].[Next](1, 10) <= 5
+                    Loop While Random.[Shared].[Next](1, 10) <= 5
+                Loop While Random.[Shared].[Next](1, 10) <= 5
+            Loop While Random.[Shared].[Next](1, 10) <= 5
+        End Sub
+    End Class
+End Namespace

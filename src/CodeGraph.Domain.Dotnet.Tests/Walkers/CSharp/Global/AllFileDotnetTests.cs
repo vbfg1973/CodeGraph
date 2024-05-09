@@ -1,7 +1,7 @@
 ﻿using CodeGraph.Domain.Dotnet.Abstract;
-using CodeGraph.Domain.Dotnet.CSharp.Walkers;
 using CodeGraph.Domain.Dotnet.Tests.TestHelpers;
 using CodeGraph.Domain.Dotnet.Tests.Walkers.CSharp.Global.ClassData;
+using CodeGraph.Domain.Dotnet.Walkers.CSharp;
 using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using FakeItEasy;

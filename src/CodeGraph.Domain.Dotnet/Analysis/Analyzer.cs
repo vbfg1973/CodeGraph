@@ -2,7 +2,7 @@
 using Buildalyzer.Workspaces;
 using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.Analysis.FileSystem;
-using CodeGraph.Domain.Dotnet.CSharp.Walkers;
+using CodeGraph.Domain.Dotnet.Walkers.CSharp;
 using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;

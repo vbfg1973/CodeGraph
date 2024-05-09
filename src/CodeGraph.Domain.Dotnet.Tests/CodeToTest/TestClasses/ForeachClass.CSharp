@@ -1,0 +1,74 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class ForeachClass
+    {
+        public void SingleForeachLoop()
+        {
+            foreach (var i in Enumerable.Range(0, 100))
+            {
+                Console.WriteLine("Print a line");
+            }
+        }
+        public void DoubleForeachLoop()
+        {
+            foreach (var i in Enumerable.Range(0, 100))
+            {
+                foreach (var j in Enumerable.Range(0, 100))
+                {
+                    Console.WriteLine("Print a line");
+                }
+            }
+        }
+        
+        public void TripleForeachLoop()
+        {
+            foreach (var i in Enumerable.Range(0, 100))
+            {
+                foreach (var j in Enumerable.Range(0, 100))
+                {
+                    foreach (var k in Enumerable.Range(0, 100))
+                    {
+                        Console.WriteLine("Print a line");
+                    }
+                }
+            }
+        }
+        
+        public void QuadrupleForeachLoop()
+        {
+            foreach (var i in Enumerable.Range(0, 100))
+            {
+                foreach (var j in Enumerable.Range(0, 100))
+                {
+                    foreach (var k in Enumerable.Range(0, 100))
+                    {
+                        foreach (var l in Enumerable.Range(0, 100))
+                        {
+                            Console.WriteLine("Print a line");
+                        }
+                    }
+                }
+            }
+        }
+        
+        public void QuintupleForeachLoop()
+        {
+            foreach (var i in Enumerable.Range(0, 100))
+            {
+                foreach (var j in Enumerable.Range(0, 100))
+                {
+                    foreach (var k in Enumerable.Range(0, 100))
+                    {
+                        foreach (var l in Enumerable.Range(0, 100))
+                        {
+                            foreach (var m in Enumerable.Range(0, 100))
+                            {
+                                Console.WriteLine("Print a line");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

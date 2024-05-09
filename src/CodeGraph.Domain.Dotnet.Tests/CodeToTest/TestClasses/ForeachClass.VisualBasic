@@ -1,0 +1,53 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class ForeachClass
+        Public Sub SingleForeachLoop()
+            For Each i In Enumerable.Range(0, 100)
+                Console.WriteLine("Print a line")
+            Next
+        End Sub
+
+        Public Sub DoubleForeachLoop()
+            For Each i In Enumerable.Range(0, 100)
+                For Each j In Enumerable.Range(0, 100)
+                    Console.WriteLine("Print a line")
+                Next
+            Next
+        End Sub
+
+        Public Sub TripleForeachLoop()
+            For Each i In Enumerable.Range(0, 100)
+                For Each j In Enumerable.Range(0, 100)
+                    For Each k In Enumerable.Range(0, 100)
+                        Console.WriteLine("Print a line")
+                    Next
+                Next
+            Next
+        End Sub
+
+        Public Sub QuadrupleForeachLoop()
+            For Each i In Enumerable.Range(0, 100)
+                For Each j In Enumerable.Range(0, 100)
+                    For Each k In Enumerable.Range(0, 100)
+                        For Each l In Enumerable.Range(0, 100)
+                            Console.WriteLine("Print a line")
+                        Next
+                    Next
+                Next
+            Next
+        End Sub
+
+        Public Sub QuintupleForeachLoop()
+            For Each i In Enumerable.Range(0, 100)
+                For Each j In Enumerable.Range(0, 100)
+                    For Each k In Enumerable.Range(0, 100)
+                        For Each l In Enumerable.Range(0, 100)
+                            For Each m In Enumerable.Range(0, 100)
+                                Console.WriteLine("Print a line")
+                            Next
+                        Next
+                    Next
+                Next
+            Next
+        End Sub
+    End Class
+End Namespace

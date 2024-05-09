@@ -7,7 +7,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 
-namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
+namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 {
     public class CSharpMethodInvocationWalker(
         TypeDeclarationSyntax declarationSyntax,

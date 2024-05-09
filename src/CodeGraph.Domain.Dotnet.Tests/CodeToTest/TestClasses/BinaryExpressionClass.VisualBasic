@@ -1,0 +1,15 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class BinaryExpressionClass
+        Public Function SimpleBinaryExpression() As Boolean
+            Return True AndAlso True
+        End Function
+
+        Public Function NestedBinaryExpression() As Boolean
+            Return True AndAlso (True AndAlso True)
+        End Function
+
+        Public Function DoublyNestedBinaryExpression() As Boolean
+            Return True AndAlso (True AndAlso (False OrElse True))
+        End Function
+    End Class
+End Namespace

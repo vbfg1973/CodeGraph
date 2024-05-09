@@ -1,0 +1,15 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class MethodClass
+        Public Sub SimpleMethod()
+            Console.WriteLine("Print a line")
+        End Sub
+
+        Public Sub MethodWithInvocation()
+            SimpleMethod()
+        End Sub
+
+        Public Sub MethodWithRecursiveInvocation()
+            MethodWithRecursiveInvocation()
+        End Sub
+    End Class
+End Namespace

@@ -1,0 +1,75 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class CSharpForClass
+    {
+        public void SingleForLoop()
+        {
+            for (var i = 0; i < int.MaxValue; i++)
+            {
+                Console.WriteLine("Print bazillions of lines");
+            }
+        }
+        
+        public void DoubleForLoop()
+        {
+            for (var i = 0; i < int.MaxValue; i++)
+            {
+                for (var j = 0; j < int.MaxValue; j++)
+                {
+                    Console.WriteLine("Print bazillions and bazillions of lines");
+                }
+            }
+        }
+        
+        public void TripleForLoop()
+        {
+            for (var i = 0; i < int.MaxValue; i++)
+            {
+                for (var j = 0; j < int.MaxValue; j++)
+                {
+                    for (var k = 0; k < int.MaxValue; k++)
+                    {
+                        Console.WriteLine("Print bazillions and bazillions of lines");
+                    }
+                }
+            }
+        }
+        
+        public void QuadrupleForLoop()
+        {
+            for (var i = 0; i < int.MaxValue; i++)
+            {
+                for (var j = 0; j < int.MaxValue; j++)
+                {
+                    for (var k = 0; k < int.MaxValue; k++)
+                    {
+                        for (var l = 0; l < int.MaxValue; l++)
+                        {
+                            Console.WriteLine("Print bazillions and bazillions of lines");
+                        }
+                    }
+                }
+            }
+        }
+        
+        public void QuintupleForLoop()
+        {
+            for (var i = 0; i < int.MaxValue; i++)
+            {
+                for (var j = 0; j < int.MaxValue; j++)
+                {
+                    for (var k = 0; k < int.MaxValue; k++)
+                    {
+                        for (var l = 0; l < int.MaxValue; l++)
+                        {
+                            for (var m = 0; m < int.MaxValue; m++)
+                            {
+                                Console.WriteLine("Print bazillions and bazillions of lines");
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
