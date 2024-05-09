@@ -1,0 +1,18 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class SimpleLambdaClass
+        Public Sub SimpleLambda()
+            Dim func = Function(ByVal num As Integer) num * 5
+            Dim result = func(5)
+        End Sub
+
+        Public Sub ParenthesizedLambda()
+            Dim resultingSum = Function(ByVal num As Integer)
+                                   Dim x = Random.[Shared].[Next](1, 10)
+
+                                   If x > num Then
+                                       Return
+                                   End If
+                               End Function
+        End Sub
+    End Class
+End Namespace

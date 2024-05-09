@@ -1,0 +1,20 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class BinaryExpressionClass
+    {
+        public bool SimpleBinaryExpression()
+        {
+            return true && true;
+        }
+        
+        public bool NestedBinaryExpression()
+        {
+            return true && (true && true);
+        }
+        
+        public bool DoublyNestedBinaryExpression()
+        {
+            return true && (true && (false || true));
+        }
+    }
+}

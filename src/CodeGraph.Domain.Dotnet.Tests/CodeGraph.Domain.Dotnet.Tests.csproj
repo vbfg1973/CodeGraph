@@ -30,46 +30,13 @@
         <None Update="CodeToTest\**\*.csharp">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="CodeToTest\CSharp\MethodsAndProperties\ClassWithProperties.csharp">
+        <None Update="CodeToTest\**\*.CSharp">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="CodeToTest\CSharp\MethodsAndProperties\ClassWithCustomPropertyTypes.csharp">
+        <None Update="CodeToTest\**\*.VisualBasic">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
-        <None Update="CodeToTest\CSharp\TypeDefinitions\ClassWithAbstractBaseClass.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\TypeDefinitions\ClassWithInterface.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\TypeDefinitions\ClassWithInterfaceDefinedMethods.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\TypeDefinitions\ClassWithoutInterface.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\TypeDefinitions\HasGenericCustomInterface.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\TypeDefinitions\HasGenericInBuiltInterface.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\TypeDefinitions\InterfaceDerivingFromInterface.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\TypeDefinitions\RecordDefinition.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\MethodInvocation\ClassWithMultipleSelfInvocation.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\MethodInvocation\ClassWithInvocationFromAnotherClass.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\TypeDefinition\ClassWithInterfaceDefinedMethods.csharp">
-            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-        </None>
-        <None Update="CodeToTest\CSharp\InterfaceImplementation\GenericReturnTypeSeparateNamespaces.cs">
+        <None Update="CodeToTest\**\*.visualbasic">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>

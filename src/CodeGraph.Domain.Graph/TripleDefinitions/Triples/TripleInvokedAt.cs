@@ -8,8 +8,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleInvokedAt(
             InvocationNode invocationA,
-            InvocationLocationNode invocationLocationB)
-            : base(invocationA, invocationLocationB, new InvokedAtRelationship())
+            InvocationLocationNode invocationLocationNodeB)
+            : base(invocationA, invocationLocationNodeB, new InvokedAtRelationship())
         {
         }
     }

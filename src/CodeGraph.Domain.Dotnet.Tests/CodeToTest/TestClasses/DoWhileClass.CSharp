@@ -1,0 +1,75 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class DoWhileLoopClass
+    {
+        public void SingleDoWhileLoop()
+        {
+            do
+            {
+                Console.WriteLine("Print a line");
+            } while (Random.Shared.Next(1, 10) <= 5);
+        }
+
+        public void DoubleDoWhileLoop()
+        {
+            do
+            {
+                do
+                {
+                    Console.WriteLine("Print a line");
+                } while (Random.Shared.Next(1, 10) <= 5);
+            } while (Random.Shared.Next(1, 10) <= 5);
+        }
+
+        public void TripleDoWhileLoop()
+        {
+            do
+            {
+                do
+                {
+                    do
+                    {
+                        Console.WriteLine("Print a line");
+                    } while (Random.Shared.Next(1, 10) <= 5);
+                } while (Random.Shared.Next(1, 10) <= 5);
+            } while (Random.Shared.Next(1, 10) <= 5);
+        }
+
+        public void QuadrupleDoWhileLoop()
+        {
+            do
+            {
+                do
+                {
+                    do
+                    {
+                        do
+                        {
+                            Console.WriteLine("Print a line");
+                        } while (Random.Shared.Next(1, 10) <= 5);
+                    } while (Random.Shared.Next(1, 10) <= 5);
+                } while (Random.Shared.Next(1, 10) <= 5);
+            } while (Random.Shared.Next(1, 10) <= 5);
+        }
+
+        public void QuintupleDoWhileLoop()
+        {
+            do
+            {
+                do
+                {
+                    do
+                    {
+                        do
+                        {
+                            do
+                            {
+                                Console.WriteLine("Print a line");
+                            } while (Random.Shared.Next(1, 10) <= 5);
+                        } while (Random.Shared.Next(1, 10) <= 5);
+                    } while (Random.Shared.Next(1, 10) <= 5);
+                } while (Random.Shared.Next(1, 10) <= 5);
+            } while (Random.Shared.Next(1, 10) <= 5);
+        }
+    }
+}

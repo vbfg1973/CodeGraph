@@ -8,8 +8,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleInvocationOf(
             InvocationNode invocationA,
-            MethodNode methodB)
-            : base(invocationA, methodB, new InvocationOfRelationship())
+            MethodNode methodNodeB)
+            : base(invocationA, methodNodeB, new InvocationOfRelationship())
         {
         }
     }

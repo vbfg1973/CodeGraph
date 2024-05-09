@@ -1,0 +1,53 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class WhileClass
+        Public Sub SingleWhileLoop()
+            While True
+                Console.WriteLine("Print some lines")
+            End While
+        End Sub
+
+        Public Sub DoubleWhileLoop()
+            While True
+                While True
+                    Console.WriteLine("Print some lines")
+                End While
+            End While
+        End Sub
+
+        Public Sub TripleWhileLoop()
+            While True
+                While True
+                    While True
+                        Console.WriteLine("Print some lines")
+                    End While
+                End While
+            End While
+        End Sub
+
+        Public Sub QuadrupleWhileLoop()
+            While True
+                While True
+                    While True
+                        While True
+                            Console.WriteLine("Print some lines")
+                        End While
+                    End While
+                End While
+            End While
+        End Sub
+
+        Public Sub QuintupleWhileLoop()
+            While True
+                While True
+                    While True
+                        While True
+                            While True
+                                Console.WriteLine("Print some lines")
+                            End While
+                        End While
+                    End While
+                End While
+            End While
+        End Sub
+    End Class
+End Namespace

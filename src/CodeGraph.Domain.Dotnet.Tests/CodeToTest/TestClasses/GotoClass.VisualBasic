@@ -1,0 +1,10 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class GotoClass
+        Public Sub GotoMethod()
+            GoTo GotoTarget
+
+            GotoTarget:
+                Console.WriteLine("Print a line")
+        End Sub
+    End Class
+End Namespace

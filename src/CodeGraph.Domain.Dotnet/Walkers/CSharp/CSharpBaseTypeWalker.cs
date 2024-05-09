@@ -9,7 +9,7 @@ using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
+namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 {
     public abstract class CSharpBaseTypeWalker(WalkerOptions walkerOptions) : CSharpSyntaxWalker
     {

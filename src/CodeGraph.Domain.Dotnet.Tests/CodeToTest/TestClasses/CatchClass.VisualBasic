@@ -1,0 +1,31 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class CatchClass
+        Public Sub SingleCatch()
+            Try
+                Console.WriteLine("Print a line")
+            Catch e As Exception
+                Console.WriteLine("Do something when caught")
+            End Try
+        End Sub
+
+        Public Sub DoubleCatch()
+            Try
+                Console.WriteLine("Print a line")
+            Catch e As NotImplementedException
+                Console.WriteLine("Do something when caught")
+            Catch e As ArgumentNullException
+                Console.WriteLine("Do something when caught")
+            End Try
+        End Sub
+
+        Public Sub CatchWithFinally()
+            Try
+                Console.WriteLine("Print a line")
+            Catch e As NotImplementedException
+                Console.WriteLine("Do something when caught")
+            Finally
+                Console.WriteLine("Do something when caught")
+            End Try
+        End Sub
+    End Class
+End Namespace

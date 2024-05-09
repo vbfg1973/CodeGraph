@@ -9,8 +9,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 using CSharpExtensions = Microsoft.CodeAnalysis.CSharp.CSharpExtensions;
 
-
-namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
+namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 {
     public class CSharpTypeDefinitionWalker(
         TypeDeclarationSyntax typeDeclarationSyntax,
@@ -18,11 +17,11 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
         ILoggerFactory loggerFactory)
         : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
-        private readonly ILoggerFactory _loggerFactory = loggerFactory;
-        private readonly List<Triple> _triples = new();
-
         private readonly ILogger<CSharpTypeDefinitionWalker> _logger =
             loggerFactory.CreateLogger<CSharpTypeDefinitionWalker>();
+
+        private readonly ILoggerFactory _loggerFactory = loggerFactory;
+        private readonly List<Triple> _triples = new();
 
         public IEnumerable<Triple> Walk()
         {
@@ -37,6 +36,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitMethodDeclaration),
                 nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
 
+            GetComplexity(syntax);
             GetHasTriple(syntax);
             GetImplementationOfTriples(syntax);
 
@@ -51,6 +51,16 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
             GetHasTriple(syntax);
 
             base.VisitPropertyDeclaration(syntax);
+        }
+
+        private void GetComplexity(MethodDeclarationSyntax syntax)
+        {
+            CSharpCognitiveComplexityWalker walker = new(syntax, _walkerOptions);
+
+            MethodNode methodNode = GetMethodNode(syntax);
+            CognitiveComplexityNode cognitiveComplexityNode = new(walker.ComplexityScore);
+
+            _triples.Add(new TripleHasComplexity(methodNode, cognitiveComplexityNode));
         }
 
         private void GetHasTriple(MethodDeclarationSyntax syntax)

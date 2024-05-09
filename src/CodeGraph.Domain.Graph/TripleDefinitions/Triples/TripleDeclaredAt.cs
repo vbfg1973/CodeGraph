@@ -9,8 +9,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleDeclaredAt(
             TypeNode typeA,
-            FileNode fileB)
-            : base(typeA, fileB, new DeclaredAtRelationship())
+            FileNode fileNodeB)
+            : base(typeA, fileNodeB, new DeclaredAtRelationship())
         {
         }
     }

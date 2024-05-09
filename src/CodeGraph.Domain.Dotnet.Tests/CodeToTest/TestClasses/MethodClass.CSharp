@@ -1,0 +1,20 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class MethodClass
+    {
+        public void SimpleMethod()
+        {
+            Console.WriteLine("Print a line");
+        }
+        
+        public void MethodWithInvocation()
+        {
+            SimpleMethod();
+        }
+        
+        public void MethodWithRecursiveInvocation()
+        {
+            MethodWithRecursiveInvocation();
+        }
+    }
+}

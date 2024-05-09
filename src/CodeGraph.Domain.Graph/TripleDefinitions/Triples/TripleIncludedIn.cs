@@ -8,22 +8,22 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleIncludedIn(
             ProjectNode contentA,
-            FolderNode contentB)
-            : base(contentA, contentB, new IncludedInRelationship())
+            FolderNode contentNodeB)
+            : base(contentA, contentNodeB, new IncludedInRelationship())
         {
         }
 
         public TripleIncludedIn(
             FolderNode contentA,
-            FolderNode contentB)
-            : base(contentA, contentB, new IncludedInRelationship())
+            FolderNode contentNodeB)
+            : base(contentA, contentNodeB, new IncludedInRelationship())
         {
         }
 
         public TripleIncludedIn(
             FileNode contentA,
-            FolderNode contentB)
-            : base(contentA, contentB, new IncludedInRelationship())
+            FolderNode contentNodeB)
+            : base(contentA, contentNodeB, new IncludedInRelationship())
         {
         }
     }

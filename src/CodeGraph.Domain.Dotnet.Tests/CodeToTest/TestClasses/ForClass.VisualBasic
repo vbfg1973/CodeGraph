@@ -1,0 +1,63 @@
+Namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+    Public Class CSharpForClass
+        Public Sub SingleForLoop()
+            For i = 0 To Integer.MaxValue - 1
+                Console.WriteLine("Print bazillions of lines")
+            Next
+        End Sub
+
+        Public Sub DoubleForLoop()
+            For i = 0 To Integer.MaxValue - 1
+
+                For j = 0 To Integer.MaxValue - 1
+                    Console.WriteLine("Print bazillions and bazillions of lines")
+                Next
+            Next
+        End Sub
+
+        Public Sub TripleForLoop()
+            For i = 0 To Integer.MaxValue - 1
+
+                For j = 0 To Integer.MaxValue - 1
+
+                    For k = 0 To Integer.MaxValue - 1
+                        Console.WriteLine("Print bazillions and bazillions of lines")
+                    Next
+                Next
+            Next
+        End Sub
+
+        Public Sub QuadrupleForLoop()
+            For i = 0 To Integer.MaxValue - 1
+
+                For j = 0 To Integer.MaxValue - 1
+
+                    For k = 0 To Integer.MaxValue - 1
+
+                        For l = 0 To Integer.MaxValue - 1
+                            Console.WriteLine("Print bazillions and bazillions of lines")
+                        Next
+                    Next
+                Next
+            Next
+        End Sub
+
+        Public Sub QuintupleForLoop()
+            For i = 0 To Integer.MaxValue - 1
+
+                For j = 0 To Integer.MaxValue - 1
+
+                    For k = 0 To Integer.MaxValue - 1
+
+                        For l = 0 To Integer.MaxValue - 1
+
+                            For m = 0 To Integer.MaxValue - 1
+                                Console.WriteLine("Print bazillions and bazillions of lines")
+                            Next
+                        Next
+                    Next
+                Next
+            Next
+        End Sub
+    End Class
+End Namespace

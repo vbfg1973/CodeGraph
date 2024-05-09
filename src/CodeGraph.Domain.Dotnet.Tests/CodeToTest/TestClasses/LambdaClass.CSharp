@@ -1,0 +1,24 @@
+﻿namespace CodeAnalysis.Domain.Analyzers.Complexity.Tests.TestClasses
+{
+    public class SimpleLambdaClass
+    {
+        public void SimpleLambda()
+        {
+            var func = (int num) => num * 5;
+            var result = func(5);
+        }
+
+        public void ParenthesizedLambda()
+        {
+            var resultingSum = (int num) =>
+            {
+                var x = Random.Shared.Next(1, 10);
+
+                if (x > num)
+                {
+                    return;
+                }
+            };
+        }
+    }
+}

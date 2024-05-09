@@ -8,8 +8,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Triples
     {
         public TripleDependsOnProject(
             ProjectNode projectA,
-            ProjectNode projectB)
-            : base(projectA, projectB, new DependsOnRelationship())
+            ProjectNode projectNodeB)
+            : base(projectA, projectNodeB, new DependsOnRelationship())
         {
         }
     }

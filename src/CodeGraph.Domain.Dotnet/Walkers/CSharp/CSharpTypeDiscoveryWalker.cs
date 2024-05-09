@@ -7,7 +7,7 @@ using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.Logging;
 
-namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
+namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 {
     public class CSharpTypeDiscoveryWalker(
         FileNode fileNode,
@@ -24,7 +24,7 @@ namespace CodeGraph.Domain.Dotnet.CSharp.Walkers
 
         public IEnumerable<Triple> Walk()
         {
-            _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(Walk));
+            _logger.LogTrace("{Method}", nameof(Walk));
 
             base.Visit(walkerOptions.DotnetOptions.SyntaxTree.GetRoot());
 
