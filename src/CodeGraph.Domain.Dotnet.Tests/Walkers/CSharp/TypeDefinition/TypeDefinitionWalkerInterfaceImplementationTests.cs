@@ -38,7 +38,7 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.CSharp.TypeDefinition
             List<TripleHas> interfaceMethods =
                 discoveredTriples.OfType<TripleHas>().Where(x => x.NodeA is InterfaceNode).ToList();
             List<TripleImplementationOf> implementations = discoveredTriples.OfType<TripleImplementationOf>().ToList();
-            List<TripleHasComplexity> invocations = discoveredTriples.OfType<TripleHasComplexity>().ToList();
+            List<TripleInvocationOf> invocations = discoveredTriples.OfType<TripleInvocationOf>().ToList();
 
             interfaceMethods.Count().Should().Be(implementations.Count);
 

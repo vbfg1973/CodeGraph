@@ -36,9 +36,9 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
             _logger.LogTrace("{Method} {SyntaxType} {NameFromSyntax} {FilePath}", nameof(VisitMethodDeclaration),
                 nameof(MethodDeclarationSyntax), syntax.Identifier.ToString(), syntax.SyntaxTree.FilePath);
 
+            GetComplexity(syntax);
             GetHasTriple(syntax);
             GetImplementationOfTriples(syntax);
-            GetComplexity(syntax);
 
             base.VisitMethodDeclaration(syntax);
         }
