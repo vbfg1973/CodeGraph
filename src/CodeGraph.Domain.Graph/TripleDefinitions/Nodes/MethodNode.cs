@@ -33,7 +33,7 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
 
         public override string Set(string node)
         {
-            return $"{base.Set(node)}, {node}.returnType = \"{ReturnType}\"";
+            return $"{base.Set(node)}, {node}.arguments = \"{Arguments}\", {node}.returnType = \"{ReturnType}\"";
         }
 
         protected sealed override void SetPrimaryKey()

@@ -25,6 +25,6 @@ namespace CodeGraph.Domain.Graph.QueryModels.Results
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public ObjectType InvokedMethodOwnerType { get; set; }
 
-        public string Location { get; set; } = null!;
+        public int Location { get; set; }
     }
 }

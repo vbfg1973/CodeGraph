@@ -109,8 +109,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
         {
             string query = methodInvocationQuery == null
                 ? """
-                  MATCH (c)-[:HAS]-(cm:Method)-[:INVOKES]-(i:Invocation)-[:INVOKED_AT]-(at:InvocationLocation)
-                  MATCH (i)-[:INVOCATION_OF]-(im)-[:HAS]-(pt)
+                  MATCH (c)-[:HAS]-(cm:Method)-[:INVOKES]-(i:Invocation)-[:INVOCATION_OF]-(im)-[:HAS]-(pt)
                   RETURN c.fullName AS CallingOwnerFullName,
                          c.name AS CallingOwnerName,
                          c.pk AS CallingOwnerPk,
@@ -130,7 +129,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                          
                   	     labels(pt)[0] AS InvokedMethodOwnerType,
                   	     
-                  	     at.fullName AS Location
+                  	     i.location AS Location
                   ORDER BY cm.fullName,
                            at.fullName
                   """
@@ -145,9 +144,9 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                           cm.name AS CallingOwnerMethodName,
                           cm.pk AS CallingOwnerMethodPk,
                           
-                   	      pt.fullName AS InvokedMethodOwnerFullName,
-                   	      pt.name AS InvokedMethodOwnerName,
-                   	      pt.pk AS InvokedMethodOwnerPk,
+                   	     pt.fullName AS InvokedMethodOwnerFullName,
+                   	     pt.name AS InvokedMethodOwnerName,
+                   	     pt.pk AS InvokedMethodOwnerPk,
                    	     
                           im.fullName AS InvokedMethodFullName,
                           im.name AS InvokedMethodName,
@@ -156,7 +155,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                           
                    	     labels(pt)[0] AS InvokedMethodOwnerType,
                    	     
-                   	     at.fullName AS Location
+                   	     i.location AS Location
                    ORDER BY cm.fullName,
                             at.fullName
                    """;
