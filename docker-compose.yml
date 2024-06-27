@@ -16,6 +16,16 @@ services:
       NEO4J_dbms_memory_pagecache_size: 2G
       NEO4J_dbms.memory.heap.initial_size: 2G
       NEO4J_dbms_memory_heap_max__size: 4G
-      
+  ui:
+    image: codegraph/ui
+    build:
+      context: src/CodeGraph.Ui
+      dockerfile: Dockerfile
+    environment:
+      - ASPNETCORE_URLS=http://*:5005
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "8080:80"
+
 volumes:
   codegraph-volume-data:
