@@ -24,7 +24,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         {
             _logger = loggerFactory.CreateLogger<Neo4jDataAccess>();
             _database = credentialsConfig.Database ?? "neo4j";
-            IDriver driver = GraphDatabase.Driver(credentialsConfig.Host,
+            IDriver driver = GraphDatabase.Driver($"neo4j://{credentialsConfig.Host}:{credentialsConfig.Port}",
                 AuthTokens.Basic(credentialsConfig.UserName, credentialsConfig.Password));
 
             _session = driver.AsyncSession(o => o.WithDatabase(_database));
@@ -55,11 +55,12 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         {
             _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
 
+            T result = default(T);
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();
 
-                T result = await _session.ExecuteReadAsync(async tx =>
+                result = await _session.ExecuteReadAsync(async tx =>
                 {
                     IResultCursor? res = await tx.RunAsync(query, parameters);
                     IRecord? record = await res.SingleAsync();
@@ -71,11 +72,21 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
 
                 return result;
             }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message.Contains("The result set is empty"))
+                {
+                    result = default(T);
+                }
+            }
+
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was a problem while executing database query");
-                throw;
+                throw;                
             }
+
+            return result;
         }
 
         /// <summary>
@@ -86,11 +97,12 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         {
             _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
 
+            T? result = default(T);
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();
 
-                T result = await _session.ExecuteWriteAsync(async tx =>
+                result = await _session.ExecuteWriteAsync(async tx =>
                 {
                     IResultCursor? res = await tx.RunAsync(query, parameters);
                     IRecord? record = await res.SingleAsync();
@@ -102,11 +114,21 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
 
                 return result;
             }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message.Contains("The result set is empty"))
+                {
+                    result = default(T);
+                }
+            }
+
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was a problem while executing database query");
-                throw;
+                throw;                
             }
+
+            return result;
         }
 
         /// <summary>
@@ -125,11 +147,13 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
             IDictionary<string, object>? parameters)
         {
             _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
+
+            List<T>? result = Enumerable.Empty<T>().ToList();
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();
 
-                List<T>? result = await _session.ExecuteReadAsync(async tx =>
+                 result = await _session.ExecuteReadAsync(async tx =>
                 {
                     List<T> data = new();
                     IResultCursor? res = await tx.RunAsync(query, parameters);
@@ -142,14 +166,22 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
 
                     return data;
                 });
-
-                return result;
             }
+            catch (InvalidOperationException ex)
+            {
+                if (ex.Message.Contains("The result set is empty"))
+                {
+                    result = Enumerable.Empty<T>().ToList();
+                }
+            }
+
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was a problem while executing database query");
-                throw;
+                throw;                
             }
+
+            return result;
         }
     }
 }

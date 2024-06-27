@@ -5,8 +5,8 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
 {
     public interface IMethodRepository
     {
-        Task<MethodQueryResult> LookupMethodByFullName(string fullName);
-        Task<MethodQueryResult> LookupMethodByPk(string pk);
+        Task<MethodQueryResult?> LookupMethodByFullName(string fullName);
+        Task<MethodQueryResult?> LookupMethodByPk(string pk);
 
         Task<List<InterfaceMethodImplementationQueryResult>> InterfaceMethodImplementations(
             InterfaceImplementationQuery? interfaceImplementationQuery = null!);
