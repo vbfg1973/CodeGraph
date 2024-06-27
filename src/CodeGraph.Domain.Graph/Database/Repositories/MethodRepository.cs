@@ -17,7 +17,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
             _logger = loggerFactory.CreateLogger<MethodRepository>();
         }
 
-        public async Task<MethodQueryResult> LookupMethodByFullName(string fullName)
+        public async Task<MethodQueryResult?> LookupMethodByFullName(string fullName)
         {
             string query = $"""
                             MATCH (t)-[:HAS]-(m:Method{FullName(fullName)})
@@ -38,7 +38,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
             return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
         }
 
-        public async Task<MethodQueryResult> LookupMethodByPk(string pk)
+        public async Task<MethodQueryResult?> LookupMethodByPk(string pk)
         {
             string query = $"""
                             MATCH (t)-[:HAS]-(m:Method{Pk(pk)})
