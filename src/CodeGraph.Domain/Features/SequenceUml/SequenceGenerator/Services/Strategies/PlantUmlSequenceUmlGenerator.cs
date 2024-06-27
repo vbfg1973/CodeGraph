@@ -75,17 +75,17 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Strat
         {
             StringBuilder sb = new();
 
-            sb.AppendLine($"{GetName(parent.ParentTypeFullname)} -> {GetName(called.ParentTypeFullname)} : {GetName(called.MethodFullName)}");
+            sb.AppendLine(
+                $"{GetName(parent.ParentTypeFullname)} -> {GetName(called.ParentTypeFullname)} : {GetName(called.MethodFullName)}");
 
-            foreach (var invocationHierarchy in called.MethodInvocations)
+            foreach (MethodInvocationHierarchy invocationHierarchy in called.MethodInvocations)
             {
                 sb.Append(GetCalls(called, invocationHierarchy));
             }
-            
+
             if (!parent.ParentTypeFullname.Equals(called.ParentTypeFullname))
-            {
-                sb.AppendLine($"{GetName(called.ParentTypeFullname)} --> {GetName(parent.ParentTypeFullname)} : {called.MethodReturnType}");
-            }
+                sb.AppendLine(
+                    $"{GetName(called.ParentTypeFullname)} --> {GetName(parent.ParentTypeFullname)} : {called.MethodReturnType}");
             return sb.ToString();
         }
 

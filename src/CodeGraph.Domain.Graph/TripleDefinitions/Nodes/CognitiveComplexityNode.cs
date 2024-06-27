@@ -4,7 +4,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
 {
     public class CognitiveComplexityNode : Node
     {
-        public CognitiveComplexityNode(int complexityScore) : base(complexityScore.ToString("D10"), complexityScore.ToString("D10"))
+        public CognitiveComplexityNode(int complexityScore) : base(complexityScore.ToString("D10"),
+            complexityScore.ToString("D10"))
         {
             ComplexityScore = complexityScore;
         }

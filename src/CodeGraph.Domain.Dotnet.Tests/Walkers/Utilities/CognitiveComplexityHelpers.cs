@@ -1,7 +1,4 @@
-﻿using CodeGraph.Domain.Dotnet.Abstract;
-using CodeGraph.Domain.Dotnet.Extensions;
-using CodeGraph.Domain.Dotnet.Walkers.CSharp;
-using CodeGraph.Domain.Dotnet.Walkers.VisualBasic;
+﻿using CodeGraph.Domain.Dotnet.Extensions;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -14,7 +11,7 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.Utilities
     {
         public static SyntaxNode ParseSyntaxTreeRoot(string path, Language language)
         {
-            var text = File.ReadAllText(path);
+            string text = File.ReadAllText(path);
 
             return language switch
             {

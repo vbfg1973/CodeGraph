@@ -94,8 +94,7 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
             int location = invocation.GetLocation().SourceSpan.Start;
 
             string invocationNodeName = parentMethodNode.FullName + "_" + invokedMethod!.FullName;
-            InvocationNode invocationNode = new(parentMethodNode, invokedMethod);
-            InvocationLocationNode invocationLocationNode = new(location);
+            InvocationNode invocationNode = new(parentMethodNode, invokedMethod, location);
 
             // Ignore dotnet's core methods
             if (invokedMethod.FullName.StartsWith("System", StringComparison.InvariantCultureIgnoreCase) ||
@@ -114,7 +113,6 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
                 parentMethodNode.FullName, invokedMethod.FullName, "Adding triples");
 
             _triples.Add(new TripleInvoke(parentMethodNode, invocationNode));
-            _triples.Add(new TripleInvokedAt(invocationNode, invocationLocationNode));
             _triples.Add(new TripleInvocationOf(invocationNode, invokedMethod));
         }
     }

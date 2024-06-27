@@ -6,7 +6,7 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.CognitiveComplexity.ClassData
     public class DoWhileLoopVisualBasic : IEnumerable<object[]>
     {
         private const string FileName = "DoWhileClass.VisualBasic";
-        private const Language Language = CodeGraph.Domain.Dotnet.Extensions.Language.VisualBasic;
+        private const Language Language = Extensions.Language.VisualBasic;
 
         public IEnumerator<object[]> GetEnumerator()
         {

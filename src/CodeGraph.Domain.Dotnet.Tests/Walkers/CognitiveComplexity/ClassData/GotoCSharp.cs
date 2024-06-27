@@ -6,7 +6,7 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.CognitiveComplexity.ClassData
     public class GotoCSharp : IEnumerable<object[]>
     {
         private const string FileName = "GotoClass.CSharp";
-        private const Language Language = CodeGraph.Domain.Dotnet.Extensions.Language.CSharp;
+        private const Language Language = Extensions.Language.CSharp;
 
         public IEnumerator<object[]> GetEnumerator()
         {

@@ -150,15 +150,15 @@ namespace CodeGraph.Domain.Dotnet.Walkers.VisualBasic
 
         public override void VisitBinaryExpression(BinaryExpressionSyntax node)
         {
-            var nodeKind = node.Kind();
+            SyntaxKind nodeKind = node.Kind();
 
             if (!ToIgnore.Contains(node) && nodeKind is SyntaxKind.AndExpression or SyntaxKind.AndAlsoExpression
                     or SyntaxKind.OrExpression or SyntaxKind.OrElseExpression)
             {
-                var left = node.Left.RemoveParentheses();
+                SyntaxNode left = node.Left.RemoveParentheses();
                 if (!left.IsKind(nodeKind)) IncreaseComplexity(node.OperatorToken);
 
-                var right = node.Right.RemoveParentheses();
+                SyntaxNode right = node.Right.RemoveParentheses();
                 if (right.IsKind(nodeKind)) ToIgnore.Add(right);
             }
 
