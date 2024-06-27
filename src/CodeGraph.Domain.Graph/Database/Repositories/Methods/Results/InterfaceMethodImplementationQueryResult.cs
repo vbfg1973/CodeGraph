@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Graph.QueryModels.Results
+﻿namespace CodeGraph.Domain.Graph.Database.Repositories.Methods.Results
 {
     public class InterfaceMethodImplementationQueryResult
     {

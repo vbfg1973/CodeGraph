@@ -1,6 +1,6 @@
 ﻿using CodeGraph.Domain.Graph.Database.Repositories;
-using CodeGraph.Domain.Graph.Database.Repositories.MethodRepositories;
-using CodeGraph.Domain.Graph.QueryModels.Results;
+using CodeGraph.Domain.Graph.Database.Repositories.Methods;
+using CodeGraph.Domain.Graph.Database.Repositories.Methods.Results;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CodeGraph.Api.Controllers.Methods

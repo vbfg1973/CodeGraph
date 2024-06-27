@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using CodeGraph.Domain.Graph.QueryModels.Enums;
 
-namespace CodeGraph.Domain.Graph.QueryModels.Results
+namespace CodeGraph.Domain.Graph.Database.Repositories.Methods.Results
 {
     public class MethodQueryResult
     {
