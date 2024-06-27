@@ -24,7 +24,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         {
             _logger = loggerFactory.CreateLogger<Neo4jDataAccess>();
             _database = credentialsConfig.Database ?? "neo4j";
-            IDriver driver = GraphDatabase.Driver(credentialsConfig.Host,
+            IDriver driver = GraphDatabase.Driver($"neo4j://{credentialsConfig.Host}:{credentialsConfig.Port}",
                 AuthTokens.Basic(credentialsConfig.UserName, credentialsConfig.Password));
 
             _session = driver.AsyncSession(o => o.WithDatabase(_database));

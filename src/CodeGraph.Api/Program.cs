@@ -1,15 +1,16 @@
+using System.Text.Json;
 using CodeGraph.Api.Config;
 using CodeGraph.Domain;
 using CodeGraph.Domain.Graph;
-using CodeGraph.Domain.Graph.Database;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
-builder.ConfigureApp();
+AppSettings appSettings = builder.ConfigureApp();
 builder.ConfigureLogging();
 
 Log.Information("Environment: {Environment}", EnvironmentUtility.GetEnvironmentName());
+Log.Debug("{Configuration}", builder.Configuration.GetDebugView());
 
 // Add services to the container.
 
@@ -18,8 +19,9 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-CredentialsConfig credentialsConfig = new($"neo4j://localhost:7687;neo4j;neo4j;AdminPassword");
-builder.Services.AddSingleton(credentialsConfig);
+Log.Debug("{AppSettings}", JsonSerializer.Serialize(appSettings));
+
+builder.Services.AddSingleton(appSettings.Database);
 builder.Services.AddDatabase();
 builder.Services.AddDomainServices();
 
