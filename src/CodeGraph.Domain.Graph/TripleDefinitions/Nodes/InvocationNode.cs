@@ -29,7 +29,7 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions.Nodes
         {
             return $"{base.Set(node)}, {node}.location = \"{Location}\"";
         }
-        
+
         protected sealed override void SetPrimaryKey()
         {
             Pk = $"{FullName}{Arguments}{ReturnType}{Location}".GetHashCode().ToString();

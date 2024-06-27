@@ -17,7 +17,8 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
         private int _nesting;
 
 
-        public CSharpCognitiveComplexityWalker(MethodDeclarationSyntax methodDeclarationSyntax, WalkerOptions walkerOptions) : base(walkerOptions)
+        public CSharpCognitiveComplexityWalker(MethodDeclarationSyntax methodDeclarationSyntax,
+            WalkerOptions walkerOptions) : base(walkerOptions)
         {
             _nesting = 0;
             _methodDeclarationSyntax = methodDeclarationSyntax;
@@ -196,14 +197,14 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
 
         public override void VisitBinaryExpression(BinaryExpressionSyntax node)
         {
-            var nodeKind = node.Kind();
+            SyntaxKind nodeKind = node.Kind();
             if (nodeKind is SyntaxKind.LogicalAndExpression or SyntaxKind.LogicalOrExpression &&
                 !ToIgnore.Contains(node))
             {
-                var left = node.Left.RemoveParentheses();
+                SyntaxNode left = node.Left.RemoveParentheses();
                 if (!left.IsKind(nodeKind)) IncreaseComplexity(node.OperatorToken);
 
-                var right = node.Right.RemoveParentheses();
+                SyntaxNode right = node.Right.RemoveParentheses();
                 if (right.IsKind(nodeKind)) ToIgnore.Add(right);
             }
 

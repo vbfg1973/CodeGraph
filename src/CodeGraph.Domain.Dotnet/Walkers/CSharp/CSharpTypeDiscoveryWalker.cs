@@ -16,11 +16,11 @@ namespace CodeGraph.Domain.Dotnet.Walkers.CSharp
         ILoggerFactory loggerFactory)
         : CSharpBaseTypeWalker(walkerOptions), ICodeWalker
     {
-        private readonly ProjectNode _projectNode = projectNode;
-        private readonly List<Triple> _triples = new();
-
         private readonly ILogger<CSharpTypeDiscoveryWalker> _logger =
             loggerFactory.CreateLogger<CSharpTypeDiscoveryWalker>();
+
+        private readonly ProjectNode _projectNode = projectNode;
+        private readonly List<Triple> _triples = new();
 
         public IEnumerable<Triple> Walk()
         {

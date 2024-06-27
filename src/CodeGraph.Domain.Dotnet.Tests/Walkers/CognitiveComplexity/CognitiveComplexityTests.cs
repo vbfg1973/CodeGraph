@@ -15,8 +15,8 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.CognitiveComplexity
 {
     public class CognitiveComplexityTests
     {
-        private string[] _path = new[] { "CodeToTest", "TestClasses"};
-        
+        private readonly string[] _path = { "CodeToTest", "TestClasses" };
+
         [Theory]
         [ClassData(typeof(CatchClauseCSharp))]
         [ClassData(typeof(CatchClauseVisualBasic))]
@@ -43,18 +43,19 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.CognitiveComplexity
         public async Task GivenClassMethodHasCorrectCognitiveComplexity(string fileName, string methodName,
             int expectedComplexityScore, Language language)
         {
-            var treeRoot = CognitiveComplexityHelpers.ParseSyntaxTreeRoot(
+            SyntaxNode treeRoot = CognitiveComplexityHelpers.ParseSyntaxTreeRoot(
                 Path.Combine(Path.Combine(_path), string.Join(".", fileName)),
                 language);
 
-            var complexityScore = await GetComplexityScore(treeRoot, methodName, fileName, language);
+            int complexityScore = await GetComplexityScore(treeRoot, methodName, fileName, language);
 
             complexityScore
                 .Should()
                 .Be(expectedComplexityScore);
         }
 
-        private async Task<int> GetComplexityScore(SyntaxNode syntaxNode, string methodName, string fileName, Language language)
+        private async Task<int> GetComplexityScore(SyntaxNode syntaxNode, string methodName, string fileName,
+            Language language)
         {
             return language switch
             {
@@ -66,30 +67,34 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.CognitiveComplexity
 
         private async Task<int> GetCSharpComplexityScore(SyntaxNode syntaxNode, string methodName, string fileName)
         {
-            var methodDeclarationSyntax = syntaxNode
+            MethodDeclarationSyntax methodDeclarationSyntax = syntaxNode
                 .DescendantNodes()
                 .OfType<MethodDeclarationSyntax>()
                 .First(x => x.Identifier.ToString() == methodName);
 
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
-            
-            var analyzer = new CSharpCognitiveComplexityWalker(methodDeclarationSyntax, walkerOptions);
+            (WalkerOptions walkerOptions, FileNode fileNode) =
+                await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
+
+            CSharpCognitiveComplexityWalker analyzer =
+                new CSharpCognitiveComplexityWalker(methodDeclarationSyntax, walkerOptions);
 
             return analyzer.ComplexityScore;
         }
 
         private async Task<int> GetVisualBasicComplexityScore(SyntaxNode syntaxNode, string methodName, string fileName)
         {
-            var methodDeclarationSyntax = syntaxNode
+            MethodBlockSyntax methodDeclarationSyntax = syntaxNode
                 .DescendantNodes()
                 .OfType<MethodBlockSyntax>()
                 .First(x => x.SubOrFunctionStatement.Identifier.ToString() == methodName);
 
             // Arrange
-            (WalkerOptions walkerOptions, FileNode fileNode) = await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
-            
-            var analyzer = new VisualBasicCognitiveComplexityAnalyzer(methodDeclarationSyntax);
+            (WalkerOptions walkerOptions, FileNode fileNode) =
+                await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
+
+            VisualBasicCognitiveComplexityAnalyzer analyzer =
+                new VisualBasicCognitiveComplexityAnalyzer(methodDeclarationSyntax);
 
             return analyzer.ComplexityScore;
         }

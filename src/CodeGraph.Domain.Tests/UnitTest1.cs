@@ -1,10 +1,10 @@
-namespace CodeGraph.Domain.Tests;
-
-public class UnitTest1
+namespace CodeGraph.Domain.Tests
 {
-    [Fact]
-    public void Test1()
+    public class UnitTest1
     {
-
+        [Fact]
+        public void Test1()
+        {
+        }
     }
 }

@@ -1,8 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
-using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models;
-using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Abstract;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Strategies;
 using Microsoft.Extensions.Logging;
@@ -30,7 +28,7 @@ namespace CodeGraph.Domain.Features.SequenceUml
             string umlDescription = await sequenceUmlGenerator.GenerateUmlDescription(methodInvocationHierarchy);
 
             Console.WriteLine(umlDescription);
-            
+
             sw.Stop();
             Console.WriteLine(sw.Elapsed);
         }

@@ -15,8 +15,8 @@ namespace CodeGraph.Domain.Graph.TripleDefinitions
                 .SelectMany(a => a.GetTypes())
                 .Where
                 (
-                    x => x is { BaseType: not null, IsAbstract: false }
-                        && x.BaseType == typeof(Node) || x.BaseType == typeof(TypeNode)
+                    x => (x is { BaseType: not null, IsAbstract: false }
+                          && x.BaseType == typeof(Node)) || x.BaseType == typeof(TypeNode)
                 )
                 .Select(t => Activator.CreateInstance(t) as Node)!;
         }

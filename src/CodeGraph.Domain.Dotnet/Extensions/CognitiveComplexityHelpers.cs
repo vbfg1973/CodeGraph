@@ -28,11 +28,13 @@ namespace CodeGraph.Domain.Dotnet.Extensions
         /// <returns></returns>
         internal static SyntaxNode RemoveParentheses(this SyntaxNode node)
         {
-            var current = node;
+            SyntaxNode current = node;
             while (current.IsAnyKind(new[] { SyntaxKind.ParenthesizedExpression, SyntaxKind.ParenthesizedPattern }))
+            {
                 current = current.IsKind(SyntaxKind.ParenthesizedExpression)
                     ? ((ParenthesizedExpressionSyntax)current).Expression
                     : ((ParenthesizedPatternSyntax)current).Pattern;
+            }
 
             return current;
         }

@@ -30,9 +30,9 @@ namespace CodeGraph.Domain.Graph.Database
 
                 Stopwatch sw = new();
                 sw.Start();
-                
+
                 await RecreateIndices(session);
-                
+
                 await Console.Error.WriteLineAsync($"Inserting {triples.Count} triples...");
 
                 int count = 0;
