@@ -3,8 +3,7 @@ using CodeGraph.Domain.Graph.QueryModels.Queries;
 using CodeGraph.Domain.Graph.QueryModels.Results;
 using Microsoft.Extensions.Logging;
 
-namespace CodeGraph.Domain.Graph.Database.Repositories
-
+namespace CodeGraph.Domain.Graph.Database.Repositories.MethodRepositories
 {
     public class MethodRepository : IMethodRepository
     {

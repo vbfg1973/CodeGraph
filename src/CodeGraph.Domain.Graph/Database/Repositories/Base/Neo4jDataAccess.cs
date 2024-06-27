@@ -55,7 +55,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         {
             _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
 
-            T result = default(T);
+            T result = default;
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();
@@ -74,16 +74,13 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
             }
             catch (InvalidOperationException ex)
             {
-                if (ex.Message.Contains("The result set is empty"))
-                {
-                    result = default(T);
-                }
+                if (ex.Message.Contains("The result set is empty")) result = default;
             }
 
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was a problem while executing database query");
-                throw;                
+                throw;
             }
 
             return result;
@@ -97,7 +94,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         {
             _logger.LogTrace("{Query}", query.ReplaceLineEndings("").Replace("\t", ""));
 
-            T? result = default(T);
+            T? result = default;
             try
             {
                 parameters = parameters ?? new Dictionary<string, object>();
@@ -116,16 +113,13 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
             }
             catch (InvalidOperationException ex)
             {
-                if (ex.Message.Contains("The result set is empty"))
-                {
-                    result = default(T);
-                }
+                if (ex.Message.Contains("The result set is empty")) result = default;
             }
 
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was a problem while executing database query");
-                throw;                
+                throw;
             }
 
             return result;
@@ -153,7 +147,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
             {
                 parameters = parameters ?? new Dictionary<string, object>();
 
-                 result = await _session.ExecuteReadAsync(async tx =>
+                result = await _session.ExecuteReadAsync(async tx =>
                 {
                     List<T> data = new();
                     IResultCursor? res = await tx.RunAsync(query, parameters);
@@ -169,16 +163,13 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
             }
             catch (InvalidOperationException ex)
             {
-                if (ex.Message.Contains("The result set is empty"))
-                {
-                    result = Enumerable.Empty<T>().ToList();
-                }
+                if (ex.Message.Contains("The result set is empty")) result = Enumerable.Empty<T>().ToList();
             }
 
             catch (Exception ex)
             {
                 _logger.LogError(ex, "There was a problem while executing database query");
-                throw;                
+                throw;
             }
 
             return result;

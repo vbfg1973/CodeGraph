@@ -1,6 +1,7 @@
 ﻿using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Abstract;
 using CodeGraph.Domain.Graph.Database.Repositories;
+using CodeGraph.Domain.Graph.Database.Repositories.MethodRepositories;
 using CodeGraph.Domain.Graph.QueryModels.Enums;
 using CodeGraph.Domain.Graph.QueryModels.Queries;
 using CodeGraph.Domain.Graph.QueryModels.Results;

@@ -1,7 +1,7 @@
 ﻿using CodeGraph.Domain.Graph.QueryModels.Queries;
 using CodeGraph.Domain.Graph.QueryModels.Results;
 
-namespace CodeGraph.Domain.Graph.Database.Repositories
+namespace CodeGraph.Domain.Graph.Database.Repositories.MethodRepositories
 {
     public interface IMethodRepository
     {

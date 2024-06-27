@@ -1,4 +1,5 @@
 ﻿using CodeGraph.Domain.Graph.Database.Repositories;
+using CodeGraph.Domain.Graph.Database.Repositories.MethodRepositories;
 using CodeGraph.Domain.Graph.QueryModels.Results;
 using Microsoft.AspNetCore.Mvc;
 

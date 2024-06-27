@@ -1,5 +1,6 @@
 ﻿using CodeGraph.Domain.Graph.Database.Repositories;
 using CodeGraph.Domain.Graph.Database.Repositories.Base;
+using CodeGraph.Domain.Graph.Database.Repositories.MethodRepositories;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace CodeGraph.Domain.Graph

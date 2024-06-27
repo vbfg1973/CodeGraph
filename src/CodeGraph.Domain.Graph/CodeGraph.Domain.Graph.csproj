@@ -17,6 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <Folder Include="Database\Repositories\FileSystemRepositories\" />
         <Folder Include="TripleDefinitions\Invocation\Nodes\"/>
         <Folder Include="TripleDefinitions\Invocation\Relationships\"/>
         <Folder Include="TripleDefinitions\Relationships\Invocation\"/>
