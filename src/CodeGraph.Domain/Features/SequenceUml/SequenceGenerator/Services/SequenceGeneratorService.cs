@@ -24,7 +24,7 @@ namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services
         {
             _logger.LogTrace("{Method} {MethodFullName}", nameof(FindSequenceFromStartingMethod), methodFullName);
             MethodQueryResult methodQueryResult = await _methodRepository.LookupMethodByFullName(methodFullName);
-
+            _logger.LogDebug("{Method} {MethodFullName} {ResultMethodFullName}", nameof(FindSequenceFromStartingMethod), methodFullName, methodQueryResult.MethodFullName);
             return await FindSequenceFromMethod(methodQueryResult);
         }
 

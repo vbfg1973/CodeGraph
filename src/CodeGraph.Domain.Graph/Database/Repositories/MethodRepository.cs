@@ -32,6 +32,9 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                             """;
 
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
+            
+            _logger.LogTrace("{Method} {Query}", nameof(LookupMethodByFullName), query);
+            
             return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
         }
 
@@ -51,6 +54,9 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                             """;
 
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
+            
+            _logger.LogTrace("{Method} {Query}", nameof(LookupMethodByPk), query);
+            
             return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
         }
 
@@ -100,6 +106,9 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                    """;
 
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
+            
+            _logger.LogTrace("{Method} {Query}", nameof(InterfaceMethodImplementations), query);
+            
             return await _dataAccess.ExecuteReadDictionaryAsync<InterfaceMethodImplementationQueryResult>(query, "p",
                 parameters);
         }
@@ -108,33 +117,8 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
             MethodInvocationQuery? methodInvocationQuery = null)
         {
             string query = methodInvocationQuery == null
-                ? """
-                  MATCH (c)-[:HAS]-(cm:Method)-[:INVOKES]-(i:Invocation)-[:INVOCATION_OF]-(im)-[:HAS]-(pt)
-                  RETURN c.fullName AS CallingOwnerFullName,
-                         c.name AS CallingOwnerName,
-                         c.pk AS CallingOwnerPk,
-                         
-                         cm.fullName AS CallingOwnerMethodFullName,
-                         cm.name AS CallingOwnerMethodName,
-                         cm.pk AS CallingOwnerMethodPk,
-                         
-                  	     pt.fullName AS InvokedMethodOwnerFullName,
-                  	     pt.name AS InvokedMethodOwnerName,
-                  	     pt.pk AS InvokedMethodOwnerPk,
-                  	     
-                         im.fullName AS InvokedMethodFullName,
-                         im.name AS InvokedMethodName,
-                         im.pk AS InvokedMethodPk,
-                         im.returnType AS InvokedMethodReturnType,
-                         
-                  	     labels(pt)[0] AS InvokedMethodOwnerType,
-                  	     
-                  	     i.location AS Location
-                  ORDER BY cm.fullName,
-                           at.fullName
-                  """
-                : $"""
-                   MATCH (c)-[:HAS]-(cm:Method{Pk(methodInvocationQuery.MethodPk)})-[:INVOKES]-(i:Invocation)-[:INVOKED_AT]-(at:InvocationLocation)
+                ? $"""
+                   MATCH (c)-[:HAS]-(cm:Method)-[:INVOKES]-(i:Invocation)
                    MATCH (i)-[:INVOCATION_OF]-(im)-[:HAS]-(pt)
                    RETURN c.fullName AS CallingOwnerFullName,
                           c.name AS CallingOwnerName,
@@ -156,11 +140,38 @@ namespace CodeGraph.Domain.Graph.Database.Repositories
                    	     labels(pt)[0] AS InvokedMethodOwnerType,
                    	     
                    	     i.location AS Location
-                   ORDER BY cm.fullName,
-                            at.fullName
+                   ORDER BY cm.fullName
+                   """
+                : $"""
+                   MATCH (c)-[:HAS]-(cm:Method{Pk(methodInvocationQuery.MethodPk)})-[:INVOKES]-(i:Invocation)
+                   MATCH (i)-[:INVOCATION_OF]-(im)-[:HAS]-(pt)
+                   RETURN c.fullName AS CallingOwnerFullName,
+                          c.name AS CallingOwnerName,
+                          c.pk AS CallingOwnerPk,
+                          
+                          cm.fullName AS CallingOwnerMethodFullName,
+                          cm.name AS CallingOwnerMethodName,
+                          cm.pk AS CallingOwnerMethodPk,
+                          
+                   	     pt.fullName AS InvokedMethodOwnerFullName,
+                   	     pt.name AS InvokedMethodOwnerName,
+                   	     pt.pk AS InvokedMethodOwnerPk,
+                   	     
+                          im.fullName AS InvokedMethodFullName,
+                          im.name AS InvokedMethodName,
+                          im.pk AS InvokedMethodPk,
+                          im.returnType AS InvokedMethodReturnType,
+                          
+                   	     labels(pt)[0] AS InvokedMethodOwnerType,
+                   	     
+                   	     i.location AS Location
+                   ORDER BY cm.fullName
                    """;
 
             IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
+            
+            _logger.LogTrace("{Method} {Query}", nameof(MethodInvocations), query);
+            
             return await _dataAccess.ExecuteReadDictionaryAsync<MethodInvocationQueryResult>(query, "p", parameters);
         }
 

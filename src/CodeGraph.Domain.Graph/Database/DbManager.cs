@@ -31,22 +31,7 @@ namespace CodeGraph.Domain.Graph.Database
                 Stopwatch sw = new();
                 sw.Start();
                 
-                foreach (string label in NodeUtilities.NodeLabels())
-                {
-                    await session.ExecuteWriteAsync(async tx =>
-                    {
-                        string dropIndexQuery = $"DROP INDEX {label.ToLower()}_pk  IF EXISTS";
-                        await Console.Error.WriteLineAsync(dropIndexQuery);
-                        await tx.RunAsync(dropIndexQuery);
-                    });
-
-                    await session.ExecuteWriteAsync(async tx =>
-                    {
-                        string createIndexQuery = $"CREATE INDEX {label.ToLower()}_pk  FOR (n:{label}) ON (n.pk)";
-                        await Console.Error.WriteLineAsync(createIndexQuery);
-                        await tx.RunAsync(createIndexQuery);
-                    });
-                }
+                await RecreateIndices(session);
                 
                 await Console.Error.WriteLineAsync($"Inserting {triples.Count} triples...");
 
@@ -88,6 +73,26 @@ namespace CodeGraph.Domain.Graph.Database
             {
                 await session.CloseAsync();
                 await driver.DisposeAsync();
+            }
+        }
+
+        private static async Task RecreateIndices(IAsyncSession session)
+        {
+            foreach (string label in NodeUtilities.NodeLabels())
+            {
+                await session.ExecuteWriteAsync(async tx =>
+                {
+                    string dropIndexQuery = $"DROP INDEX {label.ToLower()}_pk  IF EXISTS";
+                    await Console.Error.WriteLineAsync(dropIndexQuery);
+                    await tx.RunAsync(dropIndexQuery);
+                });
+
+                await session.ExecuteWriteAsync(async tx =>
+                {
+                    string createIndexQuery = $"CREATE INDEX {label.ToLower()}_pk  FOR (n:{label}) ON (n.pk)";
+                    await Console.Error.WriteLineAsync(createIndexQuery);
+                    await tx.RunAsync(createIndexQuery);
+                });
             }
         }
     }

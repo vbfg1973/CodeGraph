@@ -22,12 +22,12 @@ namespace CodeGraph.Domain.Features.SequenceUml
             MethodInvocationHierarchy methodInvocationHierarchy =
                 await sequenceGeneratorService.FindSequenceFromStartingMethod(options.StartingMethodFullName);
 
-            // Console.WriteLine(JsonSerializer.Serialize(methodInvocationHierarchy,
-            //     new JsonSerializerOptions { WriteIndented = true }));
+            Console.WriteLine(JsonSerializer.Serialize(methodInvocationHierarchy,
+                new JsonSerializerOptions { WriteIndented = true }));
 
-            ISequenceUmlGenerator plant = new PlantUmlSequenceUmlGenerator();
+            ISequenceUmlGenerator sequenceUmlGenerator = new PlantUmlSequenceUmlGenerator();
 
-            string umlDescription = await plant.GenerateUmlDescription(methodInvocationHierarchy);
+            string umlDescription = await sequenceUmlGenerator.GenerateUmlDescription(methodInvocationHierarchy);
 
             Console.WriteLine(umlDescription);
             

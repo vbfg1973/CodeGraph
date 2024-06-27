@@ -63,7 +63,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
                 {
                     IResultCursor? res = await tx.RunAsync(query, parameters);
                     IRecord? record = await res.SingleAsync();
-                    _logger.LogTrace(JsonSerializer.Serialize(record, _options));
+                    _logger.LogTrace("{Method} {DatabaseResultBody}", nameof(ExecuteReadScalarAsync), JsonSerializer.Serialize(record, _options));
 
                     return JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(record, _options))!;
                 });
@@ -93,7 +93,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
                 {
                     IResultCursor? res = await tx.RunAsync(query, parameters);
                     IRecord? record = await res.SingleAsync();
-                    _logger.LogTrace(JsonSerializer.Serialize(record, _options));
+                    _logger.LogTrace("{Method} {DatabaseResultBody}", nameof(ExecuteWriteTransactionAsync), JsonSerializer.Serialize(record, _options));
 
                     return JsonSerializer.Deserialize<T>(JsonSerializer.Serialize(record, _options))!;
                 });
@@ -133,7 +133,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
                     IResultCursor? res = await tx.RunAsync(query, parameters);
                     List<IRecord>? records = await res.ToListAsync();
 
-                    _logger.LogTrace(JsonSerializer.Serialize(records, _options));
+                    _logger.LogTrace("{Method} {DatabaseResultBody}", nameof(ExecuteReadTransactionAsync), JsonSerializer.Serialize(records, _options));
 
                     data = JsonSerializer.Deserialize<List<T>>(JsonSerializer.Serialize(records, _options))!.ToList();
 
