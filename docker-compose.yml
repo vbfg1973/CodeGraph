@@ -22,10 +22,20 @@ services:
       context: src/CodeGraph.Ui
       dockerfile: Dockerfile
     environment:
-      - ASPNETCORE_URLS=http://*:5005
+      - EnvironmentType=dockercompose
       - ASPNETCORE_ENVIRONMENT=Development
     ports:
-      - "8080:80"
+      - "18080:80"
+  api:
+    image: codegraph/api
+    build:
+      context: src
+      dockerfile: Dockerfile-api
+    environment:
+      - EnvironmentType=dockercompose
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "18081:51770"
 
 volumes:
   codegraph-volume-data:

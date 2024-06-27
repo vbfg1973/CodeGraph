@@ -13,9 +13,14 @@
             Password = args[3];
         }
 
-        public string Host { get; }
-        public string Database { get; }
-        public string UserName { get; }
-        public string Password { get; }
+        public CredentialsConfig()
+        {
+        }
+
+        public string Host { get; init; }
+        public int Port { get; init; }
+        public string Database { get; init; }
+        public string UserName { get; init; }
+        public string Password { get; init; }
     }
 }
