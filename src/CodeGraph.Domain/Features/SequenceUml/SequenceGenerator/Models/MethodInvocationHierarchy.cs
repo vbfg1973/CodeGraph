@@ -1,4 +1,4 @@
-using CodeGraph.Domain.Graph.Database.Repositories.Methods.Results;
+using CodeGraph.Domain.Graph.Database.Repositories.Results;
 
 namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models
 {

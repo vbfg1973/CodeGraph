@@ -1,4 +1,5 @@
-﻿using CodeGraph.Domain.Features.ImportSolution;
+﻿using CodeGraph.Domain.Features.FolderHierarchy;
+using CodeGraph.Domain.Features.ImportSolution;
 using CodeGraph.Domain.Features.SequenceUml;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Abstract;
@@ -13,6 +14,7 @@ namespace CodeGraph.Domain
         {
             serviceCollection.AddTransient<ImportSolutionVerb>();
             serviceCollection.AddTransient<SequenceUmlVerb>();
+            serviceCollection.AddTransient<FolderHierarchyVerb>();
 
             return serviceCollection;
         }

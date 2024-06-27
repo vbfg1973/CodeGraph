@@ -1,5 +1,6 @@
 ﻿using CodeGraph.Domain.Graph.Database.Repositories;
-using CodeGraph.Domain.Graph.Database.Repositories.Base;
+using CodeGraph.Domain.Graph.Database.Repositories.Common;
+using CodeGraph.Domain.Graph.Database.Repositories.FileSystem;
 using CodeGraph.Domain.Graph.Database.Repositories.Methods;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +12,7 @@ namespace CodeGraph.Domain.Graph
         {
             serviceCollection.AddTransient<INeo4jDataAccess, Neo4jDataAccess>();
             serviceCollection.AddTransient<IMethodRepository, MethodRepository>();
+            serviceCollection.AddTransient<IFileSystemRepository, FileSystemRepository>();
 
             return serviceCollection;
         }

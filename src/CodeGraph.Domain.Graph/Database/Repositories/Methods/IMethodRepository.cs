@@ -1,5 +1,5 @@
 ﻿using CodeGraph.Domain.Graph.Database.Repositories.Methods.Queries;
-using CodeGraph.Domain.Graph.Database.Repositories.Methods.Results;
+using CodeGraph.Domain.Graph.Database.Repositories.Results;
 
 namespace CodeGraph.Domain.Graph.Database.Repositories.Methods
 {

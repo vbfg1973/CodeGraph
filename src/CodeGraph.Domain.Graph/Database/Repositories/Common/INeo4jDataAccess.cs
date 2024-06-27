@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Graph.Database.Repositories.Base
+﻿namespace CodeGraph.Domain.Graph.Database.Repositories.Common
 {
     public interface INeo4jDataAccess : IAsyncDisposable
     {

@@ -1,22 +1,16 @@
-﻿using CodeGraph.Domain.Graph.Database.Repositories.Base;
+﻿using CodeGraph.Domain.Graph.Database.Repositories.Common;
 using CodeGraph.Domain.Graph.Database.Repositories.Methods.Queries;
-using CodeGraph.Domain.Graph.Database.Repositories.Methods.Results;
+using CodeGraph.Domain.Graph.Database.Repositories.Results;
 using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Graph.Database.Repositories.Methods
 {
-    public class MethodRepository : IMethodRepository
+	public class MethodRepository(INeo4jDataAccess dataAccess, ILoggerFactory loggerFactory) : BaseRepository, IMethodRepository
     {
-        private readonly INeo4jDataAccess _dataAccess;
-        private readonly ILogger<MethodRepository> _logger;
+	    private readonly ILogger<MethodRepository> _logger = loggerFactory.CreateLogger<MethodRepository>();
 
-        public MethodRepository(INeo4jDataAccess dataAccess, ILoggerFactory loggerFactory)
-        {
-            _dataAccess = dataAccess;
-            _logger = loggerFactory.CreateLogger<MethodRepository>();
-        }
 
-        public async Task<MethodQueryResult?> LookupMethodByFullName(string fullName)
+	    public async Task<MethodQueryResult?> LookupMethodByFullName(string fullName)
         {
             string query = $"""
                             MATCH (t)-[:HAS]-(m:Method{FullName(fullName)})
@@ -34,7 +28,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Methods
 
             _logger.LogTrace("{Method} {Query}", nameof(LookupMethodByFullName), query);
 
-            return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
+            return await dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
         }
 
         public async Task<MethodQueryResult?> LookupMethodByPk(string pk)
@@ -56,7 +50,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Methods
 
             _logger.LogTrace("{Method} {Query}", nameof(LookupMethodByPk), query);
 
-            return await _dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
+            return await dataAccess.ExecuteReadScalarAsync<MethodQueryResult>(query, parameters);
         }
 
         public async Task<List<InterfaceMethodImplementationQueryResult>> InterfaceMethodImplementations(
@@ -108,7 +102,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Methods
 
             _logger.LogTrace("{Method} {Query}", nameof(InterfaceMethodImplementations), query);
 
-            return await _dataAccess.ExecuteReadDictionaryAsync<InterfaceMethodImplementationQueryResult>(query, "p",
+            return await dataAccess.ExecuteReadDictionaryAsync<InterfaceMethodImplementationQueryResult>(query, "p",
                 parameters);
         }
 
@@ -171,22 +165,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Methods
 
             _logger.LogTrace("{Method} {Query}", nameof(MethodInvocations), query);
 
-            return await _dataAccess.ExecuteReadDictionaryAsync<MethodInvocationQueryResult>(query, "p", parameters);
-        }
-
-        private string FullName(string fullName)
-        {
-            return string.IsNullOrEmpty(fullName) ? string.Empty : $" {{fullName: \"{fullName}\"}}";
-        }
-
-        private string Name(string name)
-        {
-            return string.IsNullOrEmpty(name) ? string.Empty : $" {{name: \"{name}\"}}";
-        }
-
-        private string Pk(string pk)
-        {
-            return string.IsNullOrEmpty(pk) ? string.Empty : $" {{pk: \"{pk}\"}}";
+            return await dataAccess.ExecuteReadDictionaryAsync<MethodInvocationQueryResult>(query, "p", parameters);
         }
     }
 }

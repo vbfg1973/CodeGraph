@@ -1,4 +1,5 @@
 ﻿using CodeGraph.Domain;
+using CodeGraph.Domain.Features.FolderHierarchy;
 using CodeGraph.Domain.Features.ImportSolution;
 using CodeGraph.Domain.Features.SequenceUml;
 using CodeGraph.Domain.Graph;
@@ -40,9 +41,17 @@ namespace CodeGraph
         {
             Parser.Default
                 .ParseArguments<
+                    FolderHierarchyOptions,
                     ImportSolutionOptions,
                     SequenceUmlOptions
                 >(args)
+                .WithParsed<FolderHierarchyOptions>(options =>
+                {
+                    FolderHierarchyVerb? verb = s_serviceProvider.GetService<FolderHierarchyVerb>();
+
+                    verb?.Run(options)
+                        .Wait();
+                })
                 .WithParsed<ImportSolutionOptions>(options =>
                 {
                     ImportSolutionVerb? verb = s_serviceProvider.GetService<ImportSolutionVerb>();
@@ -57,6 +66,7 @@ namespace CodeGraph
                     verb?.Run(options)
                         .Wait();
                 })
+
                 ;
         }
 
@@ -69,7 +79,14 @@ namespace CodeGraph
 
             s_serviceCollection.AddLogging(configure => configure.AddSerilog());
 
-            CredentialsConfig credentialsConfig = new("neo4j://localhost:7687;neo4j;neo4j;AdminPassword");
+            CredentialsConfig credentialsConfig = new()
+            {
+                Host = "localhost",
+                Port = 7687,
+                Database = "neo4j",
+                UserName = "neo4j",
+                Password = "AdminPassword"
+            };
 
             s_serviceCollection.AddSingleton(credentialsConfig);
 

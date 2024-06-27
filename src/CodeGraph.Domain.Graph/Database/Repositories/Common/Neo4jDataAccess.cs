@@ -2,12 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Neo4j.Driver;
 
-namespace CodeGraph.Domain.Graph.Database.Repositories.Base
+namespace CodeGraph.Domain.Graph.Database.Repositories.Common
 {
     public sealed class Neo4jDataAccess : INeo4jDataAccess
     {
-        private readonly string _database;
-
         private readonly ILogger<Neo4jDataAccess> _logger;
 
         private readonly JsonSerializerOptions _options = new()
@@ -23,11 +21,11 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Base
         public Neo4jDataAccess(CredentialsConfig credentialsConfig, ILoggerFactory loggerFactory)
         {
             _logger = loggerFactory.CreateLogger<Neo4jDataAccess>();
-            _database = credentialsConfig.Database ?? "neo4j";
+            string database = credentialsConfig.Database ?? "neo4j";
             IDriver driver = GraphDatabase.Driver($"neo4j://{credentialsConfig.Host}:{credentialsConfig.Port}",
                 AuthTokens.Basic(credentialsConfig.UserName, credentialsConfig.Password));
 
-            _session = driver.AsyncSession(o => o.WithDatabase(_database));
+            _session = driver.AsyncSession(o => o.WithDatabase(database));
         }
 
         /// <summary>
