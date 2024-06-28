@@ -1,5 +1,4 @@
-﻿using System.Runtime.InteropServices.JavaScript;
-using System.Text;
+﻿using System.Text;
 using System.Text.Json;
 using CodeGraph.Domain.Graph.Database.Repositories.FileSystem;
 using CodeGraph.Domain.Graph.Database.Repositories.FileSystem.Queries;
@@ -15,34 +14,35 @@ namespace CodeGraph.Domain.Features.FolderHierarchy
         [Option('f', nameof(FullName), HelpText = "Reveal folder Hierarchy starting at", Required = true)]
         public string FullName { get; set; } = null!;
     }
-    
+
     public class FolderHierarchyVerb(IFileSystemRepository fileSystemRepository, ILogger<FolderHierarchyVerb> logger)
     {
         public async Task Run(FolderHierarchyOptions options)
         {
-            FolderQueryByFullName queryFullName = new FolderQueryByFullName() { FullName = options.FullName };
+            FileSystemQueryByFullName queryFullName = new() { FullName = options.FullName };
 
-            FolderQueryResult result = await fileSystemRepository.GetFolder(queryFullName);
+            FileSystemQueryResult result = await fileSystemRepository.GetFileSystemEntry(queryFullName);
 
-            Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions() {WriteIndented = true}));
+            Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
 
-            var sb = new StringBuilder();
+            StringBuilder sb = new StringBuilder();
 
-            sb.AppendLine(result.FolderName);
-            
-            await GetHierarchy(result.FolderPk, sb);
+            sb.AppendLine(result.Name);
+
+            await GetHierarchy(result.Pk, sb);
 
             Console.WriteLine(sb.ToString());
         }
 
         private async Task GetHierarchy(string pkParent, StringBuilder sb, int depth = 0)
         {
-            List<FolderQueryResult> children = await fileSystemRepository.GetChildFoldersOf(new FolderQueryByPk() { Pk = pkParent });
+            List<FileSystemQueryResult> children =
+                await fileSystemRepository.GetChildrenOf(new FileSystemQueryByPk { Pk = pkParent });
 
-            foreach (var child in children)
+            foreach (FileSystemQueryResult child in children)
             {
-                sb.AppendLine($"{new String('\t', depth + 1)}{child.FolderName}");
-                await GetHierarchy(child.FolderPk, sb, depth + 1);
+                sb.AppendLine($"{new string('\t', depth + 1)}{child.Name}\t{child.Type}");
+                await GetHierarchy(child.Pk, sb, depth + 1);
             }
         }
     }
