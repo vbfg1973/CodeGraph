@@ -22,6 +22,7 @@ namespace CodeGraph.UiServer.Config
             return env switch
             {
                 "dockercompose" => ValidEnvironmentTypes.DockerCompose,
+                "local" => ValidEnvironmentTypes.Local,
                 _ => ValidEnvironmentTypes.Local
             };
         }
