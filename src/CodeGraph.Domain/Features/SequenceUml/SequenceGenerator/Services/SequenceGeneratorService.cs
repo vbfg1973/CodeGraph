@@ -1,10 +1,10 @@
-﻿using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models;
+﻿using CodeGraph.Domain.Common.Enums;
+using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Models;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services.Abstract;
 using CodeGraph.Domain.Graph.Database.Repositories;
 using CodeGraph.Domain.Graph.Database.Repositories.Methods;
 using CodeGraph.Domain.Graph.Database.Repositories.Methods.Queries;
 using CodeGraph.Domain.Graph.Database.Repositories.Results;
-using CodeGraph.Domain.Graph.QueryModels.Enums;
 using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services

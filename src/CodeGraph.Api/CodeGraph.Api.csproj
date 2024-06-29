@@ -19,6 +19,7 @@
     </ItemGroup>
 
     <ItemGroup>
+        <ProjectReference Include="..\CodeGraph.Clients\CodeGraph.Clients.csproj" />
         <ProjectReference Include="..\CodeGraph.Domain\CodeGraph.Domain.csproj"/>
     </ItemGroup>
 

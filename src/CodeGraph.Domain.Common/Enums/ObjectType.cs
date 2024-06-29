@@ -1,4 +1,4 @@
-namespace CodeGraph.Domain.Graph.QueryModels.Enums
+namespace CodeGraph.Domain.Common.Enums
 {
     public enum ObjectType
     {

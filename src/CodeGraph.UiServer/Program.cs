@@ -1,5 +1,5 @@
 using System.Text.Json;
-using CodeGraph.UiServer.Clients;
+using CodeGraph.Clients;
 using CodeGraph.UiServer.Config;
 using CodeGraph.UiServer.Data;
 using Serilog;
@@ -20,7 +20,7 @@ builder.Services.AddSingleton<WeatherForecastService>();
 Log.Debug("{AppSettings}", JsonSerializer.Serialize(appSettings));
 
 builder.Services.AddSingleton(appSettings.CodeGraphApi);
-builder.Services.AddHttpClient<CodeGraphApiClient>();
+builder.Services.AddHttpClient<CodeGraphMethodClient>();
 
 WebApplication app = builder.Build();
 

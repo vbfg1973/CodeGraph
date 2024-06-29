@@ -1,9 +1,9 @@
 ﻿@page "/fetchdata"
-@using CodeGraph.Domain.Graph.Database.Repositories.Results
-@using CodeGraph.UiServer.Clients
+@using CodeGraph.Clients
+@using CodeGraph.Clients.Dto.Methods
 @using CodeGraph.UiServer.Data
 @inject WeatherForecastService ForecastService
-@inject CodeGraphApiClient apiClient
+@inject CodeGraphMethodClient MethodClient
 
 <PageTitle>Weather forecast</PageTitle>
 
@@ -59,11 +59,11 @@ else
 
 @code {
     private WeatherForecast[]? _forecasts;
-    private MethodQueryResult? _methodQueryResult;
+    private MethodResultDto? _methodQueryResult;
 
     protected override async Task OnInitializedAsync()
     {
-        _methodQueryResult = await apiClient.GetMethodByPk(-938388909);
+        _methodQueryResult = await MethodClient.GetMethodByPk(-938388909);
         _forecasts = await ForecastService.GetForecastAsync(DateOnly.FromDateTime(DateTime.Now));
     }
 

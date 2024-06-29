@@ -1,5 +1,5 @@
 using System.Text.Json.Serialization;
-using CodeGraph.Domain.Graph.QueryModels.Enums;
+using CodeGraph.Domain.Common.Enums;
 
 namespace CodeGraph.Domain.Graph.Database.Repositories.Results
 {
