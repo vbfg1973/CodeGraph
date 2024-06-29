@@ -1,5 +1,5 @@
 ﻿using System.Text.Json.Serialization;
-using CodeGraph.Domain.Common.Enums;
+using CodeGraph.Common.Enums;
 
 namespace CodeGraph.Domain.Graph.Database.Repositories.Results
 {
@@ -7,6 +7,7 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Results
     {
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public FileSystemType Type { get; set; }
+
         public string FullName { get; init; } = null!;
         public string Name { get; init; } = null!;
         public string Pk { get; init; } = null!;

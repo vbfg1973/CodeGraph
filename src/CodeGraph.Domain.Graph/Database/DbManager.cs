@@ -1,5 +1,5 @@
 ﻿using System.Diagnostics;
-using CodeGraph.Domain.Common;
+using CodeGraph.Common;
 using CodeGraph.Domain.Graph.TripleDefinitions;
 using CodeGraph.Domain.Graph.TripleDefinitions.Triples.Abstract;
 using Neo4j.Driver;
@@ -15,7 +15,8 @@ namespace CodeGraph.Domain.Graph.Database
             if (credentials == null) throw new ArgumentException("Please, provide credentials.");
             Console.WriteLine($"Code Knowledge Graph use \"{credentials.Database}\" Neo4j database.");
             IDriver? driver =
-                GraphDatabase.Driver($"neo4j://{credentials.Host}:{credentials.Port}", AuthTokens.Basic(credentials.UserName, credentials.Password));
+                GraphDatabase.Driver($"neo4j://{credentials.Host}:{credentials.Port}",
+                    AuthTokens.Basic(credentials.UserName, credentials.Password));
             IAsyncSession? session = driver.AsyncSession(o => o.WithDatabase(credentials.Database));
             try
             {

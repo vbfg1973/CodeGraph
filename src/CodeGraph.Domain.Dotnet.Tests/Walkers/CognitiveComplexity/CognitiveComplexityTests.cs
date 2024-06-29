@@ -76,8 +76,7 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.CognitiveComplexity
             (WalkerOptions walkerOptions, FileNode fileNode) =
                 await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
 
-            CSharpCognitiveComplexityWalker analyzer =
-                new CSharpCognitiveComplexityWalker(methodDeclarationSyntax, walkerOptions);
+            CSharpCognitiveComplexityWalker analyzer = new(methodDeclarationSyntax, walkerOptions);
 
             return analyzer.ComplexityScore;
         }
@@ -93,8 +92,7 @@ namespace CodeGraph.Domain.Dotnet.Tests.Walkers.CognitiveComplexity
             (WalkerOptions walkerOptions, FileNode fileNode) =
                 await WalkerTestHelpers.GetWalkerOptions(_path, fileName);
 
-            VisualBasicCognitiveComplexityAnalyzer analyzer =
-                new VisualBasicCognitiveComplexityAnalyzer(methodDeclarationSyntax);
+            VisualBasicCognitiveComplexityAnalyzer analyzer = new(methodDeclarationSyntax);
 
             return analyzer.ComplexityScore;
         }

@@ -1,5 +1,4 @@
-﻿using CodeGraph.Domain.Graph.Database.Repositories;
-using CodeGraph.Domain.Graph.Database.Repositories.Methods;
+﻿using CodeGraph.Domain.Graph.Database.Repositories.Methods;
 using CodeGraph.Domain.Graph.Database.Repositories.Results;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,8 +8,8 @@ namespace CodeGraph.Api.Controllers.Methods
     [ApiController]
     public class MethodController : ControllerBase
     {
-        private readonly IMethodRepository _methodRepository;
         private readonly ILogger<MethodController> _logger;
+        private readonly IMethodRepository _methodRepository;
 
         public MethodController(IMethodRepository methodRepository, ILogger<MethodController> logger)
         {
@@ -23,24 +22,18 @@ namespace CodeGraph.Api.Controllers.Methods
         {
             MethodQueryResult? queryResult = await _methodRepository.LookupMethodByPk(pk.ToString());
 
-            if (queryResult == null)
-            {
-                return NotFound();
-            }
-            
+            if (queryResult == null) return NotFound();
+
             return Ok(queryResult);
         }
-        
+
         [HttpGet("fullName/{fullName}", Name = nameof(GetMethodsByFullName))]
         public async Task<ActionResult> GetMethodsByFullName(string fullName)
         {
             MethodQueryResult? queryResult = await _methodRepository.LookupMethodByFullName(fullName);
 
-            if (queryResult == null)
-            {
-                return NotFound();
-            }
-            
+            if (queryResult == null) return NotFound();
+
             return Ok(queryResult);
         }
     }

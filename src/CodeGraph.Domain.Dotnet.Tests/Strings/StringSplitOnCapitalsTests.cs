@@ -1,4 +1,4 @@
-﻿using CodeGraph.Domain.Common;
+﻿using CodeGraph.Common;
 using FluentAssertions;
 
 namespace CodeGraph.Domain.Dotnet.Tests.Strings

@@ -1,4 +1,4 @@
-﻿using CodeGraph.Domain.Common.Enums;
+﻿using CodeGraph.Common.Enums;
 
 namespace CodeGraph.Clients.Dto.Methods
 {
@@ -11,5 +11,5 @@ namespace CodeGraph.Clients.Dto.Methods
         string MethodName,
         int MethodPk,
         string MethodReturnType
-        );
+    );
 }

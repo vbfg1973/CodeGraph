@@ -5,12 +5,13 @@ using Microsoft.Extensions.Logging;
 
 namespace CodeGraph.Domain.Graph.Database.Repositories.Methods
 {
-	public class MethodRepository(INeo4jDataAccess dataAccess, ILoggerFactory loggerFactory) : BaseRepository, IMethodRepository
+    public class MethodRepository(INeo4jDataAccess dataAccess, ILoggerFactory loggerFactory)
+        : BaseRepository, IMethodRepository
     {
-	    private readonly ILogger<MethodRepository> _logger = loggerFactory.CreateLogger<MethodRepository>();
+        private readonly ILogger<MethodRepository> _logger = loggerFactory.CreateLogger<MethodRepository>();
 
 
-	    public async Task<MethodQueryResult?> LookupMethodByFullName(string fullName)
+        public async Task<MethodQueryResult?> LookupMethodByFullName(string fullName)
         {
             string query = $"""
                             MATCH (t)-[:HAS]-(m:Method{FullName(fullName)})

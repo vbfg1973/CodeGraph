@@ -13,7 +13,7 @@
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\CodeGraph.Domain.Common\CodeGraph.Domain.Common.csproj"/>
+        <ProjectReference Include="..\CodeGraph.Common\CodeGraph.Common.csproj"/>
     </ItemGroup>
 
     <ItemGroup>

@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Common.Enums
+﻿namespace CodeGraph.Common.Enums
 {
     public enum FileSystemType
     {

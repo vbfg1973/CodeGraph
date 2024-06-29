@@ -1,4 +1,4 @@
-﻿namespace CodeGraph.Domain.Common
+﻿namespace CodeGraph.Common
 {
     public static class IEnumerableExtensions
     {

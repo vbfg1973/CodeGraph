@@ -1,4 +1,4 @@
-﻿using CodeGraph.Domain.Common.Enums;
+﻿using CodeGraph.Common.Enums;
 
 namespace CodeGraph.Clients.Dto.FileSystem
 {

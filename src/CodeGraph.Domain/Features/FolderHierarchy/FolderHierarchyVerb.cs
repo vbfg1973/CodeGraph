@@ -25,7 +25,7 @@ namespace CodeGraph.Domain.Features.FolderHierarchy
 
             Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
 
             sb.AppendLine(result.Name);
 

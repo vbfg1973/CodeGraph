@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace CodeGraph.Domain.Common
+namespace CodeGraph.Common
 {
     public static partial class StringExtensions
     {

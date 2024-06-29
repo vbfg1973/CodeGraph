@@ -1,5 +1,5 @@
 ﻿using Annytab.Stemmer;
-using CodeGraph.Domain.Common;
+using CodeGraph.Common;
 using CodeGraph.Domain.Dotnet.Abstract;
 using CodeGraph.Domain.Dotnet.Extensions;
 using CodeGraph.Domain.Graph.TripleDefinitions.Nodes;

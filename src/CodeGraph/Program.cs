@@ -66,7 +66,6 @@ namespace CodeGraph
                     verb?.Run(options)
                         .Wait();
                 })
-
                 ;
         }
 
