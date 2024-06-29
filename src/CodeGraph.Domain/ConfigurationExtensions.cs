@@ -1,4 +1,5 @@
 ﻿using CodeGraph.Domain.Features.FolderHierarchy;
+using CodeGraph.Domain.Features.FolderHierarchy.Mappers;
 using CodeGraph.Domain.Features.ImportSolution;
 using CodeGraph.Domain.Features.SequenceUml;
 using CodeGraph.Domain.Features.SequenceUml.SequenceGenerator.Services;
@@ -22,6 +23,8 @@ namespace CodeGraph.Domain
         {
             serviceCollection.AddTransient<ISequenceGeneratorService, SequenceGeneratorService>();
 
+            serviceCollection.AddAutoMapper(AssemblyReference.Assembly);
+            
             return serviceCollection;
         }
     }

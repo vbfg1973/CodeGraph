@@ -9,7 +9,6 @@ namespace CodeGraph.Domain.Features.FolderHierarchy.Mappers
         public FileSystemResultMapper()
         {
             CreateMap<FileSystemQueryResult, FileSystemEntryDto>();
-            CreateMap<FileSystemEntryDto, FileSystemQueryResult>();
         }
     }
 }

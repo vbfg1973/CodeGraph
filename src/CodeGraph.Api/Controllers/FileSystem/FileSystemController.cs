@@ -1,4 +1,6 @@
-﻿using CodeGraph.Domain.Graph.Database.Repositories.FileSystem;
+﻿using AutoMapper;
+using CodeGraph.Clients.Dto.FileSystem;
+using CodeGraph.Domain.Graph.Database.Repositories.FileSystem;
 using CodeGraph.Domain.Graph.Database.Repositories.FileSystem.Queries;
 using CodeGraph.Domain.Graph.Database.Repositories.Results;
 using Microsoft.AspNetCore.Mvc;
@@ -7,7 +9,7 @@ namespace CodeGraph.Api.Controllers.FileSystem
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class FileSystemController(IFileSystemRepository fileSystemRepository, ILogger<FileSystemController> logger)
+    public class FileSystemController(IMapper mapper, IFileSystemRepository fileSystemRepository, ILogger<FileSystemController> logger)
         : ControllerBase
     {
         [HttpGet("root", Name = nameof(GetRootFolders))]
@@ -17,7 +19,9 @@ namespace CodeGraph.Api.Controllers.FileSystem
 
             if (rootFolders == null || !rootFolders.Any()) return NotFound();
 
-            return Ok(rootFolders);
+            var dtoRootFolders = mapper.Map<IEnumerable<FileSystemEntryDto>>(rootFolders);
+            
+            return Ok(dtoRootFolders);
         }
 
         [HttpGet("path/{path}", Name = nameof(GetFolderByPath))]
@@ -34,7 +38,9 @@ namespace CodeGraph.Api.Controllers.FileSystem
 
             if (fileSystemEntry == null) return NotFound();
 
-            return Ok(fileSystemEntry);
+            var dto = mapper.Map<FileSystemEntryDto>(fileSystemEntry);
+            
+            return Ok(dto);
         }
 
         [HttpGet("path/{path}/children", Name = nameof(GetChildrenByPath))]
@@ -50,7 +56,9 @@ namespace CodeGraph.Api.Controllers.FileSystem
 
             if (children == null) return NotFound();
 
-            return Ok(children);
+            var childrenDto = mapper.Map<IEnumerable<FileSystemEntryDto>>(children);
+            
+            return Ok(childrenDto);
         }
 
         [HttpGet("pk/{pk}", Name = nameof(GetFolderByPk))]
@@ -61,7 +69,9 @@ namespace CodeGraph.Api.Controllers.FileSystem
 
             if (fileSystemEntry == null) return NotFound();
 
-            return Ok(fileSystemEntry);
+            var dto = mapper.Map<FileSystemEntryDto>(fileSystemEntry);
+            
+            return Ok(dto);
         }
 
         [HttpGet("pk/{pk}/children", Name = nameof(GetChildrenByPk))]
@@ -72,7 +82,9 @@ namespace CodeGraph.Api.Controllers.FileSystem
 
             if (children == null) return NotFound();
 
-            return Ok(children);
+            var childrenDto = mapper.Map<IEnumerable<FileSystemEntryDto>>(children);
+            
+            return Ok(childrenDto);
         }
     }
 }
