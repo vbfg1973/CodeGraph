@@ -27,11 +27,7 @@ namespace CodeGraph.Api.Controllers.FileSystem
         [HttpGet("path/{path}", Name = nameof(GetFolderByPath))]
         public async Task<ActionResult> GetFolderByPath(string path)
         {
-            // Strip final path seperator if present. Windows or real OS
-            path = path
-                .Trim()
-                .TrimEnd('\\')
-                .TrimEnd('/');
+            path = PathHelpers.TrimPath(path);
 
             FileSystemQueryResult? fileSystemEntry =
                 await fileSystemRepository.GetFileSystemEntry(new FileSystemQueryByFullName { FullName = path });
@@ -46,6 +42,8 @@ namespace CodeGraph.Api.Controllers.FileSystem
         [HttpGet("path/{path}/children", Name = nameof(GetChildrenByPath))]
         public async Task<ActionResult> GetChildrenByPath(string path)
         {
+            path = PathHelpers.TrimPath(path);
+            
             FileSystemQueryResult? fileSystemEntry =
                 await fileSystemRepository.GetFileSystemEntry(new FileSystemQueryByFullName { FullName = path });
 
