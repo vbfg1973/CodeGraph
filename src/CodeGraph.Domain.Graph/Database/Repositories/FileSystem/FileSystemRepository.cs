@@ -82,5 +82,30 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.FileSystem
 
             return await dataAccess.ExecuteReadDictionaryAsync<FileSystemQueryResult>(query, "p", parameters);
         }
+        
+        public async Task<List<HierarchyFileSystemQueryResult>> GetFullHierarchy()
+        {
+            string query = $"""
+                            MATCH (parent:Folder)<-[INCLUDED_IN]-(child:Folder|File) 
+                            RETURN 
+                                LABELS(parent)[0] AS ParentType, 
+                                parent.fullName AS ParentFullName, 
+                                parent.name AS ParentName, 
+                                parent.pk AS ParentPk, 
+                                
+                                LABELS(child)[0] AS ChildType , 
+                                child.fullName AS ChildFullName, 
+                                child.name AS ChildName, 
+                                child.pk AS ChildPk 
+                                
+                                ORDER BY parent.fullName, child.fullName
+                            """;
+
+            IDictionary<string, object> parameters = new Dictionary<string, object> { { "searchString", "data" } };
+
+            _logger.LogTrace("{Method} {Query}", nameof(GetFullHierarchy), query);
+
+            return await dataAccess.ExecuteReadDictionaryAsync<HierarchyFileSystemQueryResult>(query, "p", parameters);
+        }
     }
 }

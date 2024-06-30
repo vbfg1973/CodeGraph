@@ -12,4 +12,21 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.Results
         public string Name { get; init; } = null!;
         public string Pk { get; init; } = null!;
     }
+    
+    public class HierarchyFileSystemQueryResult
+    {
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public FileSystemType ParentType { get; set; }
+
+        public string ParentFullName { get; init; } = null!;
+        public string ParentName { get; init; } = null!;
+        public string ParentPk { get; init; } = null!;
+        
+        [JsonConverter(typeof(JsonStringEnumConverter))]
+        public FileSystemType ChildType { get; set; }
+
+        public string ChildFullName { get; init; } = null!;
+        public string ChildName { get; init; } = null!;
+        public string ChildPk { get; init; } = null!;
+    }
 }

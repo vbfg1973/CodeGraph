@@ -9,5 +9,6 @@ namespace CodeGraph.Domain.Graph.Database.Repositories.FileSystem
         Task<FileSystemQueryResult?> GetFileSystemEntry(FileSystemQueryByPk fileSystemQueryByPk);
         Task<FileSystemQueryResult?> GetFileSystemEntry(FileSystemQueryByFullName fileSystemQueryByFullName);
         Task<List<FileSystemQueryResult>> GetChildrenOf(FileSystemQueryByPk fileSystemQueryByPk);
+        Task<List<HierarchyFileSystemQueryResult>> GetFullHierarchy();
     }
 }
