@@ -2,6 +2,7 @@ using System.Text.Json;
 using CodeGraph.Clients;
 using CodeGraph.UiServer.Config;
 using CodeGraph.UiServer.Data;
+using MudBlazor.Services;
 using Serilog;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
@@ -16,6 +17,8 @@ Log.Debug("{Configuration}", builder.Configuration.GetDebugView());
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<WeatherForecastService>();
+
+builder.Services.AddMudServices();
 
 Log.Debug("{AppSettings}", JsonSerializer.Serialize(appSettings));
 
