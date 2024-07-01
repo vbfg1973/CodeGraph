@@ -27,7 +27,7 @@ namespace CodeGraph.Api.Controllers.FileSystem
             return Ok(dtoRootFolders);
         }
 
-        [HttpGet("path", Name = nameof(GetFileSystemHierarchy))]
+        [HttpGet("hierarchy", Name = nameof(GetFileSystemHierarchy))]
         public async Task<ActionResult> GetFileSystemHierarchy()
         {
             var hierarchy = await fileSystemService.GetHierarchy();
@@ -37,7 +37,7 @@ namespace CodeGraph.Api.Controllers.FileSystem
             return Ok(dtos);
         }
         
-        [HttpGet("path/{path}", Name = nameof(GetFolderByPath))]
+        [HttpGet("hierarchy/{path}", Name = nameof(GetFolderByPath))]
         public async Task<ActionResult> GetFolderByPath(string path)
         {
             path = PathHelpers.TrimPath(path);
@@ -52,7 +52,7 @@ namespace CodeGraph.Api.Controllers.FileSystem
             return Ok(dto);
         }
 
-        [HttpGet("path/{path}/children", Name = nameof(GetChildrenByPath))]
+        [HttpGet("hierarchy/{path}/children", Name = nameof(GetChildrenByPath))]
         public async Task<ActionResult> GetChildrenByPath(string path)
         {
             path = PathHelpers.TrimPath(path);

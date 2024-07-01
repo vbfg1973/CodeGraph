@@ -2,6 +2,8 @@ using System.Text.Json;
 using CodeGraph.Clients;
 using CodeGraph.UiServer.Config;
 using CodeGraph.UiServer.Data;
+using Fluxor;
+using Fluxor.Blazor.Web.ReduxDevTools;
 using MudBlazor.Services;
 using Serilog;
 
@@ -22,8 +24,17 @@ builder.Services.AddMudServices();
 
 Log.Debug("{AppSettings}", JsonSerializer.Serialize(appSettings));
 
+builder.Services.AddFluxor(o =>
+{
+    o.ScanAssemblies(typeof(Program).Assembly);
+#if DEBUG
+    o.UseReduxDevTools();
+#endif
+});
+
 builder.Services.AddSingleton(appSettings.CodeGraphApi);
 builder.Services.AddHttpClient<CodeGraphMethodClient>();
+builder.Services.AddHttpClient<CodeGraphFileSystemClient>();
 
 WebApplication app = builder.Build();
 
