@@ -43,7 +43,7 @@ namespace CodeGraph.UiServer.Features.FileSystem
                 Loading = false
             };
         }
-        
+
         [ReducerMethod]
         public static FileSystemState OnSetTreeItems(FileSystemState state, FileSystemSetMappedTreeItems action)
         {
@@ -64,7 +64,7 @@ namespace CodeGraph.UiServer.Features.FileSystem
         }
 
         [ReducerMethod(typeof(FileSystemLoadHierarchyAction))]
-        public static FileSystemState OnLoadForecasts(FileSystemState state)
+        public static FileSystemState OnLoadFileSystem(FileSystemState state)
         {
             return state with
             {
@@ -73,7 +73,10 @@ namespace CodeGraph.UiServer.Features.FileSystem
         }
     }
 
-    public class FileSystemEffects(IState<FileSystemState> state, CodeGraphFileSystemClient fileSystemClient, ILogger<FileSystemEffects> logger)
+    public class FileSystemEffects(
+        IState<FileSystemState> state,
+        CodeGraphFileSystemClient fileSystemClient,
+        ILogger<FileSystemEffects> logger)
     {
         [EffectMethod(typeof(FileSystemLoadHierarchyAction))]
         public async Task LoadFileSystemHierarchies(IDispatcher dispatcher)
@@ -87,7 +90,7 @@ namespace CodeGraph.UiServer.Features.FileSystem
         [EffectMethod(typeof(FileSystemMapHierarchiesToTreeItems))]
         public async Task MapHierarchies(IDispatcher dispatcher)
         {
-            var treeItems = await HierarchyMapper.Map(state.Value.FileSystemHierarchies);
+            List<FileSystemTreeItemData> treeItems = await HierarchyMapper.Map(state.Value.FileSystemHierarchies);
             dispatcher.Dispatch(new FileSystemSetMappedTreeItems(treeItems.ToArray()));
         }
     }
@@ -95,9 +98,13 @@ namespace CodeGraph.UiServer.Features.FileSystem
     #region FileSystemActions
 
     public record FileSystemSetInitializedAction;
+
     public record FileSystemLoadHierarchyAction;
+
     public record FileSystemSetHierarchyAction(FileSystemHierarchyDto[] Hierarchies);
-    public record FileSystemMapHierarchiesToTreeItems();
+
+    public record FileSystemMapHierarchiesToTreeItems;
+
     public record FileSystemSetMappedTreeItems(FileSystemTreeItemData[] TreeItems);
 
     #endregion

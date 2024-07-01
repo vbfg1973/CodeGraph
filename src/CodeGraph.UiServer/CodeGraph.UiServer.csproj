@@ -27,6 +27,8 @@
 
     <ItemGroup>
       <_ContentIncludedByDefault Remove="Features\FileSystem\Components\FileSystemComponent.razor" />
+      <_ContentIncludedByDefault Remove="Features\Weather\WeatherComponent.razor" />
+      <_ContentIncludedByDefault Remove="Features\Counter\CounterComponent.razor" />
     </ItemGroup>
 
 </Project>

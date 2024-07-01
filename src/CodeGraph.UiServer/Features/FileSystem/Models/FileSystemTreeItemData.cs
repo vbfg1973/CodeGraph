@@ -6,12 +6,8 @@ namespace CodeGraph.UiServer.Features.FileSystem.Models
 {
     public class FileSystemTreeItemData : TreeItemData<string>
     {
-        public int? Number { get; init; }
-        public string FullName { get; init; }
-        public string Name { get; init; }
-        public int Pk { get; init; }
-
-        public FileSystemTreeItemData(FileSystemHierarchyDto fileSystemHierarchyDto, int? number = null) : base(fileSystemHierarchyDto.Name)
+        public FileSystemTreeItemData(FileSystemHierarchyDto fileSystemHierarchyDto, int? number = null) : base(
+            fileSystemHierarchyDto.Name)
         {
             Text = fileSystemHierarchyDto.Name;
             Name = fileSystemHierarchyDto.Name;
@@ -20,6 +16,11 @@ namespace CodeGraph.UiServer.Features.FileSystem.Models
             Icon = GetIcon(fileSystemHierarchyDto.Type);
             Number = number;
         }
+
+        public int? Number { get; init; }
+        public string FullName { get; init; }
+        public string Name { get; init; }
+        public int Pk { get; init; }
 
         private static string GetIcon(FileSystemType fileSystemType)
         {

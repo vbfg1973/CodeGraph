@@ -8,7 +8,7 @@ namespace CodeGraph.UiServer.Features.FileSystem.Helpers
     {
         public static async Task<List<FileSystemTreeItemData>> Map(IEnumerable<FileSystemHierarchyDto> hierarchies)
         {
-            List<FileSystemTreeItemData> treeItems = new List<FileSystemTreeItemData>();
+            List<FileSystemTreeItemData> treeItems = new();
 
             foreach (FileSystemHierarchyDto hierarchy in hierarchies.OrderBy(x => x.Name))
             {

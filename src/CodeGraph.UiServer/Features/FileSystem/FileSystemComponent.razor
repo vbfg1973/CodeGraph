@@ -1,5 +1,4 @@
 ﻿@using CodeGraph.Clients.Dto.FileSystem
-@using CodeGraph.Common.Enums
 @using CodeGraph.UiServer.Features.FileSystem.Models
 @using Fluxor
 @inherits Fluxor.Blazor.Web.Components.FluxorComponent
@@ -29,18 +28,14 @@ else
     </MudTreeView>
 }
 
-<br/>
-<MudButton class="btn btn-outline-info" @onclick="LoadHierarchies">Refresh Forecasts</MudButton>
-
 @code {
     private FileSystemHierarchyDto[] Hierarchies => FileSystemState.Value.FileSystemHierarchies;
     private bool Loading => FileSystemState.Value.Loading;
 
     public IReadOnlyCollection<string> SelectedValues { get; set; }
-    
+
     public Dictionary<string, int?> ValueMap { get; set; }
 
- 
 
     protected override async Task OnInitializedAsync()
     {
@@ -59,7 +54,5 @@ else
         Logger.LogDebug("{Method}", nameof(LoadHierarchies));
         Dispatcher.Dispatch(new FileSystemLoadHierarchyAction());
     }
-
-
 
 }
