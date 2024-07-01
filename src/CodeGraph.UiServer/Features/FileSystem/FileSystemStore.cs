@@ -1,6 +1,7 @@
-﻿using System.Text.Json;
-using CodeGraph.Clients;
+﻿using CodeGraph.Clients;
 using CodeGraph.Clients.Dto.FileSystem;
+using CodeGraph.UiServer.Features.FileSystem.Helpers;
+using CodeGraph.UiServer.Features.FileSystem.Models;
 using Fluxor;
 
 namespace CodeGraph.UiServer.Features.FileSystem
@@ -10,6 +11,7 @@ namespace CodeGraph.UiServer.Features.FileSystem
         public bool Initialized { get; init; }
         public bool Loading { get; init; }
         public FileSystemHierarchyDto[] FileSystemHierarchies { get; init; }
+        public FileSystemTreeItemData[] FileSystemTreeItemList { get; init; }
     }
 
     public class FileSystemFeature : Feature<FileSystemState>
@@ -41,6 +43,16 @@ namespace CodeGraph.UiServer.Features.FileSystem
                 Loading = false
             };
         }
+        
+        [ReducerMethod]
+        public static FileSystemState OnSetTreeItems(FileSystemState state, FileSystemSetMappedTreeItems action)
+        {
+            return state with
+            {
+                FileSystemTreeItemList = action.TreeItems,
+                Loading = false
+            };
+        }
 
         [ReducerMethod(typeof(FileSystemSetInitializedAction))]
         public static FileSystemState OnSetInitialized(FileSystemState state)
@@ -61,36 +73,32 @@ namespace CodeGraph.UiServer.Features.FileSystem
         }
     }
 
-    public class FileSystemEffects(CodeGraphFileSystemClient fileSystemClient, ILogger<FileSystemEffects> logger)
+    public class FileSystemEffects(IState<FileSystemState> state, CodeGraphFileSystemClient fileSystemClient, ILogger<FileSystemEffects> logger)
     {
         [EffectMethod(typeof(FileSystemLoadHierarchyAction))]
         public async Task LoadFileSystemHierarchies(IDispatcher dispatcher)
         {
             List<FileSystemHierarchyDto> hierarchies = await fileSystemClient.GetHierarchy();
-            
+
             dispatcher.Dispatch(new FileSystemSetHierarchyAction(hierarchies.ToArray()));
+            dispatcher.Dispatch(new FileSystemMapHierarchiesToTreeItems());
+        }
+
+        [EffectMethod(typeof(FileSystemMapHierarchiesToTreeItems))]
+        public async Task MapHierarchies(IDispatcher dispatcher)
+        {
+            var treeItems = await HierarchyMapper.Map(state.Value.FileSystemHierarchies);
+            dispatcher.Dispatch(new FileSystemSetMappedTreeItems(treeItems.ToArray()));
         }
     }
 
     #region FileSystemActions
 
-    public class FileSystemSetInitializedAction
-    {
-    }
-
-    public class FileSystemLoadHierarchyAction
-    {
-    }
-
-    public class FileSystemSetHierarchyAction
-    {
-        public FileSystemSetHierarchyAction(FileSystemHierarchyDto[] hierarchies)
-        {
-            Hierarchies = hierarchies;
-        }
-
-        public FileSystemHierarchyDto[] Hierarchies { get; }
-    }
+    public record FileSystemSetInitializedAction;
+    public record FileSystemLoadHierarchyAction;
+    public record FileSystemSetHierarchyAction(FileSystemHierarchyDto[] Hierarchies);
+    public record FileSystemMapHierarchiesToTreeItems();
+    public record FileSystemSetMappedTreeItems(FileSystemTreeItemData[] TreeItems);
 
     #endregion
 }
