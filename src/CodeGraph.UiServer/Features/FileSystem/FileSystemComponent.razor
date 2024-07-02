@@ -15,14 +15,14 @@
 }
 else
 {
-    <MudTreeView Items="FileSystemState.Value.FileSystemTreeItemList" SelectionMode="SelectionMode.SingleSelection" @bind-SelectedValues="SelectedValues">
+    <MudTreeView Items="FileSystemState.Value.FileSystemTreeItemList" SelectionMode="SelectionMode.SingleSelection" @bind-SelectedValue="SelectedValues">
         <ItemTemplate>
             <MudTreeViewItem @bind-Expanded="@context.Expanded"
                              Items="@context.Children"
                              Value="@context.Value"
                              Icon="@context.Icon"
                              Text="@context.Text"
-                             EndText="@((context as FileSystemTreeItemData)!.Number?.ToString())"
+                             EndText="@((context as FileSystemTreeItemData)!.Complexity.ToString())"
                              EndTextTypo="@Typo.caption"/>
         </ItemTemplate>
     </MudTreeView>
@@ -32,10 +32,7 @@ else
     private FileSystemHierarchyDto[] Hierarchies => FileSystemState.Value.FileSystemHierarchies;
     private bool Loading => FileSystemState.Value.Loading;
 
-    public IReadOnlyCollection<string> SelectedValues { get; set; }
-
-    public Dictionary<string, int?> ValueMap { get; set; }
-
+    public string? SelectedValues { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -54,5 +51,4 @@ else
         Logger.LogDebug("{Method}", nameof(LoadHierarchies));
         Dispatcher.Dispatch(new FileSystemLoadHierarchyAction());
     }
-
 }

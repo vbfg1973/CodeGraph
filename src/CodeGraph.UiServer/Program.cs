@@ -1,7 +1,6 @@
 using System.Text.Json;
 using CodeGraph.Clients;
 using CodeGraph.UiServer.Config;
-using CodeGraph.UiServer.Data;
 using Fluxor;
 using Fluxor.Blazor.Web.ReduxDevTools;
 using MudBlazor.Services;
@@ -18,8 +17,6 @@ Log.Debug("{Configuration}", builder.Configuration.GetDebugView());
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
-
 builder.Services.AddMudServices();
 
 Log.Debug("{AppSettings}", JsonSerializer.Serialize(appSettings));
