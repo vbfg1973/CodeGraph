@@ -15,8 +15,9 @@
 
         public CredentialsConfig()
         {
+            
         }
-
+        
         public string Host { get; init; }
         public int Port { get; init; }
         public string Database { get; init; }

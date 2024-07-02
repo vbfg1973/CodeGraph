@@ -10,22 +10,23 @@ namespace CodeGraph.Domain.Graph.Database
     {
         private const int BatchSize = 1000;
 
-        public static async Task InsertData(IList<Triple> triples, CredentialsConfig credentials, bool isDelete)
+        public static async Task InsertData(IList<Triple> triples, CredentialsConfig credentialsConfig, bool isDelete)
         {
-            if (credentials == null) throw new ArgumentException("Please, provide credentials.");
-            Console.WriteLine($"Code Knowledge Graph use \"{credentials.Database}\" Neo4j database.");
+            if (credentialsConfig == null) throw new ArgumentException("Please, provide credentials.");
+            Console.WriteLine($"Code Knowledge Graph use \"{credentialsConfig.Database}\" Neo4j database.");
+            
             IDriver? driver =
-                GraphDatabase.Driver($"neo4j://{credentials.Host}:{credentials.Port}", AuthTokens.Basic(credentials.UserName, credentials.Password));
-            IAsyncSession? session = driver.AsyncSession(o => o.WithDatabase(credentials.Database));
+                GraphDatabase.Driver(credentialsConfig.Host, AuthTokens.Basic(credentialsConfig.UserName, credentialsConfig.Password));
+            IAsyncSession? session = driver.AsyncSession(o => o.WithDatabase(credentialsConfig.Database));
             try
             {
                 if (isDelete)
                 {
                     await Console.Error.WriteLineAsync(
-                        $"Deleting graph data of \"{credentials.Database}\" database...");
+                        $"Deleting graph data of \"{credentialsConfig.Database}\" database...");
                     await session.RunAsync("MATCH (n) DETACH DELETE n;");
                     await Console.Error.WriteLineAsync(
-                        $"Deleting graph data of \"{credentials.Database}\" database complete.");
+                        $"Deleting graph data of \"{credentialsConfig.Database}\" database complete.");
                 }
 
                 Stopwatch sw = new();

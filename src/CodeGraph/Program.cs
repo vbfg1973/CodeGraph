@@ -1,4 +1,5 @@
-﻿using CodeGraph.Domain;
+﻿using System.Text.Json;
+using CodeGraph.Domain;
 using CodeGraph.Domain.Features.ImportSolution;
 using CodeGraph.Domain.Features.SequenceUml;
 using CodeGraph.Domain.Graph;
@@ -64,14 +65,14 @@ namespace CodeGraph
         {
             s_serviceCollection = new ServiceCollection();
 
-            // var appSettings = new AppSettings();
+            // AppSettings appSettings = new AppSettings();
             // s_configuration.Bind("Settings", appSettings);
 
             s_serviceCollection.AddLogging(configure => configure.AddSerilog());
 
-            CredentialsConfig credentialsConfig = new("neo4j://localhost:7687;neo4j;neo4j;AdminPassword");
+            // Log.Debug("{AppSettings}", JsonSerializer.Serialize(appSettings));
 
-            s_serviceCollection.AddSingleton(credentialsConfig);
+            s_serviceCollection.AddSingleton(new CredentialsConfig("neo4j://localhost:7687;neo4j;neo4j;AdminPassword"));
 
             s_serviceCollection.AddDatabase();
 
