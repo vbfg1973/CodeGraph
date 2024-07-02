@@ -17,6 +17,7 @@ namespace CodeGraph.Domain.Graph.Database
             
             IDriver? driver =
                 GraphDatabase.Driver(credentialsConfig.Host, AuthTokens.Basic(credentialsConfig.UserName, credentialsConfig.Password));
+            
             IAsyncSession? session = driver.AsyncSession(o => o.WithDatabase(credentialsConfig.Database));
             try
             {

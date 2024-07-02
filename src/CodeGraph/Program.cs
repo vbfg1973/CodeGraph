@@ -65,17 +65,16 @@ namespace CodeGraph
         {
             s_serviceCollection = new ServiceCollection();
 
-            // AppSettings appSettings = new AppSettings();
-            // s_configuration.Bind("Settings", appSettings);
+            AppSettings appSettings = new AppSettings();
+            s_configuration.Bind("Settings", appSettings);
 
             s_serviceCollection.AddLogging(configure => configure.AddSerilog());
 
             // Log.Debug("{AppSettings}", JsonSerializer.Serialize(appSettings));
 
-            s_serviceCollection.AddSingleton(new CredentialsConfig("neo4j://localhost:7687;neo4j;neo4j;AdminPassword"));
+            s_serviceCollection.AddSingleton(appSettings.Database);
 
             s_serviceCollection.AddDatabase();
-
             s_serviceCollection.AddDomainServices();
             s_serviceCollection.AddFeatureCommandLineVerbs();
 
